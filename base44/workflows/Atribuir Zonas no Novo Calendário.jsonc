@@ -1,0 +1,38 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "CalendarioRota"
+    }
+  },
+  "description": "Quando um novo calend\u00e1rio de rota \u00e9 criado, faz a varredura de todos os clientes e atribui \u00e0s zonas/calend\u00e1rios correspondentes (multi-zona).",
+  "name": "Atribuir Zonas no Novo Calend\u00e1rio",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "atribuir_zonas_novo_calendario",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "scan_clients": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "assignClientsToZones",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Varredura de clientes",
+            "description": "Atribui zonas a todos os clientes"
+          }
+        }
+      }
+    ]
+  }
+}

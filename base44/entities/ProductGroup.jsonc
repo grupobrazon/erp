@@ -1,0 +1,43 @@
+{
+  "name": "ProductGroup",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do grupo (Ex: Purificador de \u00c1gua Gelada)"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "Prefixo do c\u00f3digo gerado (Ex: P)"
+    },
+    "height": {
+      "type": "number",
+      "description": "Altura padr\u00e3o (cm) \u2014 usada na cota\u00e7\u00e3o de frete dos produtos do grupo"
+    },
+    "width": {
+      "type": "number",
+      "description": "Largura padr\u00e3o (cm) \u2014 usada na cota\u00e7\u00e3o de frete dos produtos do grupo"
+    },
+    "length": {
+      "type": "number",
+      "description": "Comprimento padr\u00e3o (cm) \u2014 usado na cota\u00e7\u00e3o de frete dos produtos do grupo"
+    },
+    "weight": {
+      "type": "number",
+      "description": "Peso padr\u00e3o (kg) \u2014 usado na cota\u00e7\u00e3o de frete dos produtos do grupo"
+    },
+    "cost": {
+      "type": "number",
+      "description": "Custo padr\u00e3o (R$) \u2014 replicado para subgrupos e produtos do grupo ao lan\u00e7ar custo"
+    },
+    "target_margin_percent": {
+      "type": "number",
+      "default": 0,
+      "description": "Margem de lucro alvo (%) para os produtos do grupo. Sobrescreve a margem global da config de precifica\u00e7\u00e3o. Replicada para subgrupos e produtos ao lan\u00e7ar margem."
+    }
+  },
+  "required": [
+    "name",
+    "prefix"
+  ]
+}

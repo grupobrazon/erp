@@ -1,0 +1,216 @@
+{
+  "name": "AgendamentoRota",
+  "type": "object",
+  "properties": {
+    "calendar_id": {
+      "type": "string",
+      "description": "ID do calend\u00e1rio ao qual este agendamento pertence"
+    },
+    "calendar_name": {
+      "type": "string",
+      "description": "Nome do calend\u00e1rio (cache)"
+    },
+    "calendar_color": {
+      "type": "string",
+      "description": "Cor do calend\u00e1rio (cache)"
+    },
+    "title": {
+      "type": "string",
+      "description": "T\u00edtulo do agendamento (ex: nome do cliente ou descri\u00e7\u00e3o)"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente (opcional)"
+    },
+    "client_phone": {
+      "type": "string",
+      "description": "Telefone do cliente (opcional)"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente vinculado (para valida\u00e7\u00e3o de pr\u00e9-agendamento por Regional)"
+    },
+    "regional": {
+      "type": "string",
+      "description": "Regional do cliente no momento do agendamento (cache \u2014 usada como Regional Base do per\u00edodo)"
+    },
+    "address": {
+      "type": "string",
+      "description": "Endere\u00e7o do atendimento (opcional)"
+    },
+    "city": {
+      "type": "string",
+      "description": "Cidade do atendimento (opcional)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do agendamento"
+    },
+    "time_type": {
+      "type": "string",
+      "enum": [
+        "Hor\u00e1rio Espec\u00edfico",
+        "Manh\u00e3",
+        "Tarde",
+        "Dia Inteiro"
+      ],
+      "default": "Dia Inteiro",
+      "description": "Tipo de hor\u00e1rio: Hor\u00e1rio Espec\u00edfico (com hora marcada), Manh\u00e3 (08h-12h), Tarde (13h-18h), Dia Inteiro"
+    },
+    "specific_time": {
+      "type": "string",
+      "description": "Hor\u00e1rio espec\u00edfico (HH:MM) \u2014 usado apenas quando time_type = 'Hor\u00e1rio Espec\u00edfico'"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 60,
+      "description": "Dura\u00e7\u00e3o em minutos (usado para hor\u00e1rio espec\u00edfico)"
+    },
+    "service_id": {
+      "type": "string",
+      "description": "ID do servi\u00e7o selecionado (do calend\u00e1rio)"
+    },
+    "service_name": {
+      "type": "string",
+      "description": "Nome do servi\u00e7o selecionado (cache)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es do agendamento"
+    },
+    "service_detail_types": {
+      "type": "array",
+      "description": "Tipos de servi\u00e7o detalhados pelo vendedor (o que ser\u00e1 feito na casa do cliente). Repassado da venda para o agendamento para o t\u00e9cnico saber o que executar.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "service_type_id": {
+            "type": "string"
+          },
+          "service_type_name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "service_detail_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o do detalhamento do servi\u00e7o (repassada da venda para o agendamento)"
+    },
+    "relocation_note": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o de remanejamento gerada automaticamente quando um cliente de carro foi priorizado sobre clientes de moto que estavam ocupando slots de carro. O p\u00f3s-venda deve remanejar o(s) cliente(s) de moto para outra data."
+    },
+    "sale_id": {
+      "type": "string",
+      "description": "ID da venda que originou o agendamento (vinculado pelo vendedor ao agendar pela venda)"
+    },
+    "sale_order_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido da venda (cache \u2014 exibido na agenda junto ao agendamento)"
+    },
+    "os_id": {
+      "type": "string",
+      "description": "ID da Ordem de Servi\u00e7o vinculada (preenchido automaticamente quando a OS \u00e9 gerada)"
+    },
+    "os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS vinculada (cache \u2014 exibido na agenda)"
+    },
+    "technician_id": {
+      "type": "string",
+      "description": "ID do t\u00e9cnico atribu\u00eddo ao agendamento (pela log\u00edstica/p\u00f3s-venda dentro da OS)"
+    },
+    "technician_name": {
+      "type": "string",
+      "description": "Nome do t\u00e9cnico atribu\u00eddo (cache)"
+    },
+    "vehicle_type": {
+      "type": "string",
+      "enum": [
+        "Moto",
+        "Carro"
+      ],
+      "description": "Ve\u00edculo necess\u00e1rio para o atendimento (selecionado pelo vendedor ao agendar). Define a capacidade do dia (moto vs carro)."
+    },
+    "pre_schedule_type": {
+      "type": "string",
+      "enum": [
+        "Normal",
+        "Dia Inteiro",
+        "Meio Per\u00edodo",
+        "2 Hor\u00e1rios",
+        "3 Hor\u00e1rios"
+      ],
+      "default": "Normal",
+      "description": "Tipo de pr\u00e9-agendamento solicitado pelo vendedor: Normal = 1 hor\u00e1rio padr\u00e3o | Dia Inteiro = cliente precisa da agenda fechada o dia todo | Meio Per\u00edodo = bloqueia meio per\u00edodo (manh\u00e3 OU tarde) | 2 Hor\u00e1rios = cliente precisa de 2 hor\u00e1rios no dia | 3 Hor\u00e1rios = cliente precisa de 3 hor\u00e1rios no dia"
+    },
+    "pre_schedule_reason": {
+      "type": "string",
+      "description": "Justificativa do vendedor para o pr\u00e9-agendamento especial (obrigat\u00f3rio quando pre_schedule_type != Normal)"
+    },
+    "pending_approval": {
+      "type": "boolean",
+      "default": false,
+      "description": "Agendamento em data diferente da regi\u00e3o \u2014 exige aprova\u00e7\u00e3o do supervisor/p\u00f3s-venda. Alerta de calend\u00e1rio separado dos demais alertas do sistema."
+    },
+    "approval_reason": {
+      "type": "string",
+      "description": "Justificativa do vendedor para agendar em data diferente da regi\u00e3o (quando pending_approval = true)"
+    },
+    "approved_by": {
+      "type": "string",
+      "description": "Nome de quem aprovou o agendamento excepcional (supervisor/p\u00f3s-venda)"
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da aprova\u00e7\u00e3o"
+    },
+    "schedule_history": {
+      "type": "array",
+      "description": "Hist\u00f3rico de altera\u00e7\u00f5es de data/per\u00edodo/calend\u00e1rio (append-only). Preserva a agenda sugestiva original do vendedor quando a log\u00edstica/p\u00f3s-venda altera.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "time_type": {
+            "type": "string"
+          },
+          "calendar_name": {
+            "type": "string"
+          },
+          "changed_by": {
+            "type": "string"
+          },
+          "changed_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Agendado",
+        "Confirmado",
+        "Conclu\u00eddo",
+        "Cancelado",
+        "Bloqueado"
+      ],
+      "default": "Agendado",
+      "description": "Status do agendamento. 'Bloqueado' = dia/per\u00edodo bloqueado para atendimento (n\u00e3o permite novos agendamentos)."
+    }
+  },
+  "required": [
+    "calendar_id",
+    "title",
+    "date",
+    "time_type"
+  ]
+}

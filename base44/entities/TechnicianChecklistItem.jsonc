@@ -1,0 +1,45 @@
+{
+  "name": "TechnicianChecklistItem",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do item de checklist (ex: Adesiva\u00e7\u00e3o do produto, Situa\u00e7\u00e3o do equipamento)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descri\u00e7\u00e3o/instru\u00e7\u00f5es do item de checklist"
+    },
+    "options": {
+      "type": "array",
+      "description": "Op\u00e7\u00f5es de resposta que o t\u00e9cnico pode selecionar (ex: Adesiva\u00e7\u00e3o Brazon, Adesiva\u00e7\u00e3o antiga Maxfilter, Sem adesiva\u00e7\u00e3o)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Item ativo para exibi\u00e7\u00e3o no checklist do t\u00e9cnico"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Ordem de exibi\u00e7\u00e3o no checklist"
+    },
+    "applies_to": {
+      "type": "string",
+      "enum": [
+        "Todos",
+        "Entrega",
+        "Entrega + Instala\u00e7\u00e3o",
+        "Manuten\u00e7\u00e3o/Garantia"
+      ],
+      "default": "Todos",
+      "description": "Tipo de OS pai em que este item de checklist aparece"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

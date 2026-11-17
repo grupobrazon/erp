@@ -1,0 +1,60 @@
+{
+  "name": "Address",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente"
+    },
+    "label": {
+      "type": "string",
+      "description": "Tipo: Matriz, Filial, Resid\u00eancia, etc."
+    },
+    "zip_code": {
+      "type": "string"
+    },
+    "street": {
+      "type": "string"
+    },
+    "number": {
+      "type": "string"
+    },
+    "complement": {
+      "type": "string"
+    },
+    "neighborhood": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "route_zone_id": {
+      "type": "string",
+      "description": "ID da zona de rota atribu\u00edda a este endere\u00e7o (calculada automaticamente)"
+    },
+    "route_zone_name": {
+      "type": "string",
+      "description": "Nome da zona de rota (cache)"
+    },
+    "route_calendar_id": {
+      "type": "string",
+      "description": "ID do calend\u00e1rio de rota (cache)"
+    },
+    "route_calendar_name": {
+      "type": "string",
+      "description": "Nome do calend\u00e1rio de rota (cache)"
+    }
+  },
+  "required": [
+    "client_id",
+    "street",
+    "city",
+    "state"
+  ]
+}

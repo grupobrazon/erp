@@ -1,0 +1,40 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "RouteZone"
+    }
+  },
+  "description": "Quando uma nova zona de rota \u00e9 criada (via IA ou manual), faz a varredura dos clientes das cidades da nova zona e os atribui (multi-zona).",
+  "name": "Atribuir Zonas na Nova Zona",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "atribuir_zonas_nova_zona",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "scan_clients": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "assignClientsToZones",
+            "args": {
+              "cities": "${ .trigger.data.cities }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Varredura de clientes",
+            "description": "Atribui zonas aos clientes das cidades da nova zona"
+          }
+        }
+      }
+    ]
+  }
+}

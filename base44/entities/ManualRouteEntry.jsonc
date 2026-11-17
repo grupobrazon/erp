@@ -1,0 +1,75 @@
+{
+  "name": "ManualRouteEntry",
+  "type": "object",
+  "properties": {
+    "technician_name": {
+      "type": "string",
+      "description": "Nome do t\u00e9cnico (cache)"
+    },
+    "technician_id": {
+      "type": "string",
+      "description": "ID do t\u00e9cnico"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do deslocamento"
+    },
+    "start_address": {
+      "type": "string",
+      "description": "Endere\u00e7o de partida"
+    },
+    "start_lat": {
+      "type": "number",
+      "description": "Latitude do ponto de partida"
+    },
+    "start_lng": {
+      "type": "number",
+      "description": "Longitude do ponto de partida"
+    },
+    "start_captured_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da captura do ponto de partida"
+    },
+    "end_address": {
+      "type": "string",
+      "description": "Endere\u00e7o de chegada"
+    },
+    "end_lat": {
+      "type": "number",
+      "description": "Latitude do ponto de chegada"
+    },
+    "end_lng": {
+      "type": "number",
+      "description": "Longitude do ponto de chegada"
+    },
+    "end_captured_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da captura do ponto de chegada"
+    },
+    "km_traveled": {
+      "type": "number",
+      "description": "KM rodados (estimativa por linha reta entre os pontos)"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Motivo do deslocamento (treinamento, levar produto na transportadora, etc.)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Em Andamento",
+        "Conclu\u00edda"
+      ],
+      "default": "Em Andamento",
+      "description": "Status do lan\u00e7amento de rota manual"
+    }
+  },
+  "required": [
+    "technician_name",
+    "date",
+    "reason"
+  ]
+}

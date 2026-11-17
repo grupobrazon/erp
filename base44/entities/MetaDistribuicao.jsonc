@@ -1,0 +1,97 @@
+{
+  "name": "MetaDistribuicao",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da meta"
+    },
+    "batch_ids": {
+      "type": "array",
+      "description": "IDs dos lotes de distribui\u00e7\u00e3o inclu\u00eddos na meta",
+      "items": {
+        "type": "string"
+      }
+    },
+    "batch_protocols": {
+      "type": "array",
+      "description": "Protocolos dos lotes (cache para exibi\u00e7\u00e3o)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "goal_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data limite (prazo) da meta"
+    },
+    "brand_tickets": {
+      "type": "object",
+      "description": "Mapa marca -> ticket m\u00e9dio (R$) usado na previs\u00e3o de faturamento (potencial da carteira)",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "gatilhos": {
+      "type": "array",
+      "description": "Gatilhos de comiss\u00e3o (faixas de faturamento em R$), ordenados por threshold crescente. A vendedora recebe o % de comiss\u00e3o do gatilho MAIS ALTO que atingir, aplicado sobre o faturamento realizado. O potencial (100% da carteira) \u00e9 apenas refer\u00eancia.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "type": "number",
+            "description": "Faturamento (R$) necess\u00e1rio para atingir o gatilho"
+          },
+          "commission_percent": {
+            "type": "number",
+            "description": "% de comiss\u00e3o sobre o faturamento realizado ao atingir este gatilho"
+          }
+        }
+      }
+    },
+    "sellers": {
+      "type": "array",
+      "description": "Vendedoras no escopo da meta (derivadas dos clientes dos lotes selecionados)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "seller_id": {
+            "type": "string"
+          },
+          "seller_name": {
+            "type": "string",
+            "description": "Nome da vendedora (cache)"
+          },
+          "target_percent": {
+            "type": "number",
+            "default": 100,
+            "description": "(Legado) Percentual do faturamento previsto considerado como meta batida. Substitu\u00eddo pelos gatilhos de comiss\u00e3o."
+          }
+        }
+      }
+    },
+    "forecast_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Previs\u00e3o total de faturamento / potencial da carteira (calculada ao salvar)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Ativa",
+        "Conclu\u00edda",
+        "Arquivada"
+      ],
+      "default": "Ativa",
+      "description": "Status da meta"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es"
+    }
+  },
+  "required": [
+    "name",
+    "goal_date"
+  ]
+}

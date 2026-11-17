@@ -1,0 +1,87 @@
+{
+  "name": "Agendamento",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "description": "Token \u00fanico para o link p\u00fablico de agendamento (crypto.randomUUID)"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente (cache)"
+    },
+    "client_phone": {
+      "type": "string",
+      "description": "Telefone do cliente (cache, para mensagem de WhatsApp)"
+    },
+    "equipment_id": {
+      "type": "string",
+      "description": "ID do equipamento (purificador) \u2014 opcional"
+    },
+    "equipment_code": {
+      "type": "string",
+      "description": "C\u00f3digo do patrim\u00f4nio (cache)"
+    },
+    "purifier_model": {
+      "type": "string",
+      "description": "Modelo/nome do purificador (cache)"
+    },
+    "seller_id": {
+      "type": "string",
+      "description": "ID de quem gerou o link"
+    },
+    "seller_name": {
+      "type": "string",
+      "description": "Nome de quem gerou o link (cache)"
+    },
+    "scheduled_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data escolhida pelo cliente"
+    },
+    "window": {
+      "type": "string",
+      "enum": [
+        "Manh\u00e3",
+        "Tarde"
+      ],
+      "description": "Janela escolhida pelo cliente (Manh\u00e3 08h-12h | Tarde 13h-18h)"
+    },
+    "client_obs": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o deixada pelo cliente ao agendar"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Agendado",
+        "Cancelado",
+        "Convertido"
+      ],
+      "default": "Pendente",
+      "description": "Pendente = link gerado, aguardando cliente marcar; Agendado = cliente marcou; Convertido = vendedor criou o pedido de venda; Cancelado = descartado"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que o cliente confirmou o agendamento"
+    },
+    "converted_sale_id": {
+      "type": "string",
+      "description": "ID da venda criada a partir deste agendamento"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es internas"
+    }
+  },
+  "required": [
+    "token",
+    "client_id"
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "name": "RouteConfig",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Identificador da configura\u00e7\u00e3o"
+    },
+    "work_start_time": {
+      "type": "string",
+      "description": "Hor\u00e1rio de in\u00edcio do expediente (HH:MM)",
+      "default": "08:00"
+    },
+    "work_end_time": {
+      "type": "string",
+      "description": "Hor\u00e1rio de fim do expediente (HH:MM)",
+      "default": "18:00"
+    },
+    "lunch_start_time": {
+      "type": "string",
+      "description": "In\u00edcio do hor\u00e1rio de almo\u00e7o (HH:MM)",
+      "default": "12:00"
+    },
+    "lunch_duration_minutes": {
+      "type": "number",
+      "description": "Dura\u00e7\u00e3o do almo\u00e7o em minutos",
+      "default": 60
+    },
+    "default_service_duration_entrega": {
+      "type": "number",
+      "description": "Tempo padr\u00e3o de atendimento para Entrega (minutos)",
+      "default": 45
+    },
+    "default_service_duration_instalacao": {
+      "type": "number",
+      "description": "Tempo padr\u00e3o de atendimento para Entrega+Instala\u00e7\u00e3o (minutos)",
+      "default": 90
+    },
+    "default_service_duration_manutencao": {
+      "type": "number",
+      "description": "Tempo padr\u00e3o de atendimento para Manuten\u00e7\u00e3o/Garantia (minutos)",
+      "default": 60
+    },
+    "travel_buffer_minutes": {
+      "type": "number",
+      "description": "Margem de tempo extra entre atendimentos (minutos)",
+      "default": 15
+    },
+    "preparation_minutes": {
+      "type": "number",
+      "description": "Tempo de prepara\u00e7\u00e3o do t\u00e9cnico na empresa antes de sair para a primeira parada (minutos). Ex: 30 min para organizar produtos/equipamentos.",
+      "default": 30
+    },
+    "departure_street": {
+      "type": "string",
+      "description": "Logradouro do escrit\u00f3rio (ponto de partida dos t\u00e9cnicos)"
+    },
+    "departure_number": {
+      "type": "string",
+      "description": "N\u00famero do escrit\u00f3rio"
+    },
+    "departure_neighborhood": {
+      "type": "string",
+      "description": "Bairro do escrit\u00f3rio"
+    },
+    "departure_city": {
+      "type": "string",
+      "description": "Cidade do escrit\u00f3rio"
+    },
+    "departure_state": {
+      "type": "string",
+      "description": "UF do escrit\u00f3rio"
+    },
+    "departure_zip": {
+      "type": "string",
+      "description": "CEP do escrit\u00f3rio"
+    },
+    "departure_lat": {
+      "type": "number",
+      "description": "Latitude do escrit\u00f3rio (geocodificada)"
+    },
+    "departure_lng": {
+      "type": "number",
+      "description": "Longitude do escrit\u00f3rio (geocodificada)"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

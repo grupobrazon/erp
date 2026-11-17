@@ -1,0 +1,44 @@
+{
+  "name": "Sincronizar Recebimentos do T\u00e9cnico",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "sincronizar_recebimentos_tecnico",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sincronizar": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "syncTechnicianReceipts"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Sincronizar recebimentos",
+            "description": "Aplica recebimentos do t\u00e9cnico nas vendas"
+          }
+        }
+      }
+    ]
+  },
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "*/30 * * * *",
+      "one_time_date": null,
+      "timezone": "America/Sao_Paulo",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Baixa automaticamente os pagamentos pendentes das vendas usando os dados financeiros das OSs do T\u00e9cnico (forma, parcelas, condi\u00e7\u00e3o e comprovante), apenas quando a OS atende o crit\u00e9rio obrigat\u00f3rio e o valor recebido bate com o pendente \u2014 diverg\u00eancias ficam de fora para auditoria."
+}

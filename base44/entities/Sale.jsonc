@@ -1,0 +1,955 @@
+{
+  "name": "Sale",
+  "type": "object",
+  "properties": {
+    "order_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido (P001)"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "first_status_change_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da 1\u00aa mudan\u00e7a de status da venda (quando ela saiu de Or\u00e7amento). Gravada uma \u00fanica vez e nunca alterada \u2014 mesmo que o financeiro devolva a venda para Or\u00e7amento. \u00c9 a base do Dashboard Comercial para agrupar o m\u00eas. Vazio = venda ainda em Or\u00e7amento ou registro antigo sem o dado (nesses casos o dash usa a data da venda)."
+    },
+    "seller_id": {
+      "type": "string"
+    },
+    "seller_name": {
+      "type": "string"
+    },
+    "billing_location_id": {
+      "type": "string"
+    },
+    "billing_location_name": {
+      "type": "string"
+    },
+    "stock_location_id": {
+      "type": "string"
+    },
+    "stock_location_name": {
+      "type": "string"
+    },
+    "linked_equipment_id": {
+      "type": "string",
+      "description": "ID do equipamento vinculado (venda de troca de refil originada do painel de manuten\u00e7\u00e3o)"
+    },
+    "linked_equipment_code": {
+      "type": "string",
+      "description": "C\u00f3digo do patrim\u00f4nio vinculado (cache)"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "generate_equipment": {
+            "type": "boolean"
+          },
+          "purifier_model": {
+            "type": "string",
+            "description": "Modelo do purificador ao qual a pe\u00e7a se refere (apenas para produtos do grupo Pe\u00e7as e Componentes). Opcional."
+          }
+        }
+      }
+    },
+    "services": {
+      "type": "array",
+      "description": "Itens de servi\u00e7o (LC 116) do pedido",
+      "items": {
+        "type": "object",
+        "properties": {
+          "service_id": {
+            "type": "string"
+          },
+          "service_name": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "description": "C\u00f3digo LC 116 (cache)"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "total_services": {
+      "type": "number",
+      "default": 0,
+      "description": "Total dos servi\u00e7os (subtotal de servi\u00e7os)"
+    },
+    "additions": {
+      "type": "number",
+      "default": 0,
+      "description": "Acrescimos"
+    },
+    "discount": {
+      "type": "number",
+      "default": 0,
+      "description": "Desconto"
+    },
+    "freight": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor do frete (soma das cota\u00e7\u00f5es dos volumes)"
+    },
+    "freight_exempt": {
+      "type": "boolean",
+      "default": false,
+      "description": "Frete isentado pelo vendedor (transformado em desconto)"
+    },
+    "freight_exempt_value": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor do frete isentado (para relat\u00f3rios)"
+    },
+    "displacement_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Taxa de deslocamento cobrada do cliente (vendas abaixo de R$ 150,00 nas modalidades Entrega/Entrega+Instala\u00e7\u00e3o)"
+    },
+    "quote_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Cota\u00e7\u00e3o de frete realizada (obrigat\u00f3rio para modalidade Envio)"
+    },
+    "selected_service": {
+      "type": "string",
+      "description": "Servi\u00e7o de frete selecionado (Ex: SEDEX, PAC) \u2014 aplicado a todos os volumes"
+    },
+    "selected_carrier": {
+      "type": "string",
+      "description": "Transportadora selecionada (Ex: Correios, Jadlog)"
+    },
+    "packing_mode": {
+      "type": "string",
+      "enum": [
+        "per_item",
+        "unify_all"
+      ],
+      "default": "per_item",
+      "description": "Modo de empacotamento: per_item = cada item decide (agrupado ou individual) | unify_all = todos os itens em 1 volume \u00fanico (embalagem especial, dimens\u00f5es manuais)"
+    },
+    "item_packing": {
+      "type": "object",
+      "description": "Configura\u00e7\u00e3o por item (quando packing_mode=per_item). Chave = \u00edndice do item, valor = 'grouped' (quantidade em 1 volume) ou 'individual' (1 volume por unidade)",
+      "additionalProperties": {
+        "type": "string",
+        "enum": [
+          "grouped",
+          "individual"
+        ]
+      }
+    },
+    "shipping_volumes": {
+      "type": "array",
+      "description": "Volumes de frete calculados a partir dos itens e do modo de empacotamento \u2014 cada volume gera uma cota\u00e7\u00e3o/etiqueta independente no Melhor Envio",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "number",
+            "description": "N\u00famero do volume (1, 2, 3...)"
+          },
+          "product_id": {
+            "type": "string",
+            "description": "Produto do volume (null quando unify_all)"
+          },
+          "product_name": {
+            "type": "string",
+            "description": "Nome exibido do volume"
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Quantidade de unidades neste volume"
+          },
+          "height": {
+            "type": "number",
+            "description": "Altura (cm)"
+          },
+          "width": {
+            "type": "number",
+            "description": "Largura (cm)"
+          },
+          "length": {
+            "type": "number",
+            "description": "Comprimento (cm)"
+          },
+          "weight": {
+            "type": "number",
+            "description": "Peso (kg)"
+          },
+          "insurance_value": {
+            "type": "number",
+            "description": "Valor declarado para seguro"
+          },
+          "label_tag": {
+            "type": "string",
+            "description": "Identifica\u00e7\u00e3o do volume na etiqueta (Ex: Vol. 1 \u2014 Purificador iPure x2)"
+          },
+          "custom_dimensions": {
+            "type": "boolean",
+            "default": false,
+            "description": "Dimens\u00f5es editadas manualmente pelo vendedor"
+          }
+        }
+      }
+    },
+    "shipping_quote_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "company_name": {
+            "type": "string"
+          },
+          "service_name": {
+            "type": "string"
+          },
+          "service_id": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "delivery_time": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "selected": {
+            "type": "boolean"
+          },
+          "volumes_count": {
+            "type": "number",
+            "description": "Quantos volumes compuseram a cota\u00e7\u00e3o"
+          }
+        }
+      },
+      "description": "Hist\u00f3rico de cota\u00e7\u00f5es de frete"
+    },
+    "delivery_modality": {
+      "type": "string",
+      "enum": [
+        "Envio",
+        "Entrega Pr\u00f3pria",
+        "Entrega + Instala\u00e7\u00e3o"
+      ],
+      "default": "Entrega Pr\u00f3pria",
+      "description": "Modalidade de entrega"
+    },
+    "received_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor recebido"
+    },
+    "change_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Troco"
+    },
+    "total": {
+      "type": "number",
+      "description": "Total dos itens"
+    },
+    "grand_total": {
+      "type": "number",
+      "description": "Total geral (itens + servi\u00e7os + acrescimos + frete + taxa de deslocamento - desconto)"
+    },
+    "delivery_different": {
+      "type": "boolean",
+      "default": false,
+      "description": "Endereco de entrega diferente do faturamento"
+    },
+    "billing_address": {
+      "type": "object",
+      "properties": {
+        "zip_code": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "complement": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "delivery_address": {
+      "type": "object",
+      "properties": {
+        "zip_code": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "complement": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "delivery_route_zone_id": {
+      "type": "string",
+      "description": "ID da zona de rota atribu\u00edda ao endere\u00e7o de entrega (quando delivery_different = true). Calculada automaticamente ao cadastrar o endere\u00e7o."
+    },
+    "delivery_route_zone_name": {
+      "type": "string",
+      "description": "Nome da zona de rota do endere\u00e7o de entrega (cache)"
+    },
+    "delivery_route_calendar_id": {
+      "type": "string",
+      "description": "ID do calend\u00e1rio de rota do endere\u00e7o de entrega (cache)"
+    },
+    "delivery_route_calendar_name": {
+      "type": "string",
+      "description": "Nome do calend\u00e1rio de rota do endere\u00e7o de entrega (cache)"
+    },
+    "billing_forecast": {
+      "type": "string",
+      "format": "date",
+      "description": "Previsao de faturamento"
+    },
+    "payments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition_id": {
+            "type": "string"
+          },
+          "condition_name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "receipt_url": {
+            "type": "string",
+            "description": "URL do comprovante anexado"
+          },
+          "payment_status": {
+            "type": "string",
+            "enum": [
+              "Realizada",
+              "Pendente"
+            ],
+            "default": "Pendente",
+            "description": "Status do pagamento"
+          },
+          "payment_moment": {
+            "type": "string",
+            "enum": [
+              "Antecipada",
+              "Na Entrega",
+              "Na Instala\u00e7\u00e3o"
+            ],
+            "description": "Momento do pagamento (quando pendente)"
+          }
+        }
+      }
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "Or\u00e7amento",
+        "Confirmada",
+        "Pagamento Aprovado",
+        "Em OS",
+        "Faturada",
+        "Conclu\u00edda",
+        "Cancelada"
+      ],
+      "default": "Or\u00e7amento",
+      "description": "Etapa da venda: Total = Or\u00e7amento \u2192 Confirmada \u2192 Pagamento Aprovado \u2192 Em OS \u2192 Conclu\u00edda | Parcial = Or\u00e7amento \u2192 Confirmada \u2192 Em OS \u2192 Pagamento Aprovado \u2192 Faturada \u2192 Conclu\u00edda"
+    },
+    "confirmation_type": {
+      "type": "string",
+      "enum": [
+        "Total",
+        "Parcial"
+      ],
+      "description": "Total = 100% pago (aguarda financeiro) | Parcial = pagamentos pendentes na entrega/instala\u00e7\u00e3o (libera OS imediato)"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Confirmada",
+        "Cancelada"
+      ],
+      "default": "Confirmada"
+    },
+    "cr_preferred_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Relacionamento: Data espec\u00edfica de atendimento"
+    },
+    "cr_scheduling_type": {
+      "type": "string",
+      "enum": [
+        "Data Espec\u00edfica",
+        "Flex\u00edvel"
+      ],
+      "description": "Relacionamento: Tipo de agendamento"
+    },
+    "cr_week_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Relacionamento: Semana de (quando Flex\u00edvel)"
+    },
+    "cr_period": {
+      "type": "string",
+      "enum": [
+        "Manh\u00e3",
+        "Tarde",
+        "Dia Inteiro"
+      ],
+      "description": "Relacionamento: Prefer\u00eancia de per\u00edodo"
+    },
+    "cr_weekdays": {
+      "type": "array",
+      "description": "Relacionamento: Dias da semana dispon\u00edveis",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cr_time_range": {
+      "type": "string",
+      "description": "Relacionamento: Hor\u00e1rio espec\u00edfico solicitado"
+    },
+    "cr_shipping_deadline": {
+      "type": "string",
+      "format": "date",
+      "description": "Relacionamento: Enviar at\u00e9 (prazo de expedi\u00e7\u00e3o)"
+    },
+    "cr_delivery_deadline": {
+      "type": "string",
+      "format": "date",
+      "description": "Relacionamento: Cliente quer receber at\u00e9"
+    },
+    "cr_notes": {
+      "type": "string",
+      "description": "Relacionamento: Observa\u00e7\u00f5es sobre previs\u00e3o de entrega/atendimento"
+    },
+    "service_detail_types": {
+      "type": "array",
+      "description": "Tipos de servi\u00e7o detalhados pelo vendedor (o que ser\u00e1 feito na casa do cliente). Obrigat\u00f3rio para modalidades Entrega Pr\u00f3pria e Entrega + Instala\u00e7\u00e3o. Permite m\u00faltiplos tipos.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "service_type_id": {
+            "type": "string",
+            "description": "ID do tipo de servi\u00e7o (entidade ServiceType)"
+          },
+          "service_type_name": {
+            "type": "string",
+            "description": "Nome do tipo de servi\u00e7o (cache)"
+          }
+        }
+      }
+    },
+    "service_detail_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o obrigat\u00f3ria do detalhamento do servi\u00e7o \u2014 o que o t\u00e9cnico precisa saber sobre o atendimento na casa do cliente"
+    },
+    "supervisor_logs": {
+      "type": "array",
+      "description": "Hist\u00f3rico de estornos realizados por supervisor (append-only)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "user_name": {
+            "type": "string"
+          },
+          "previous_stage": {
+            "type": "string"
+          },
+          "previous_confirmation_type": {
+            "type": "string"
+          },
+          "reversed_os_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "C\u00f3digos das OS estornadas"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Justificativa do estorno"
+          }
+        }
+      }
+    },
+    "is_counter_sale": {
+      "type": "boolean",
+      "default": false,
+      "description": "Venda de balc\u00e3o (sem cliente identificado, sem OS, pagamento \u00e0 vista no balc\u00e3o)"
+    },
+    "counter_sale_signature_url": {
+      "type": "string",
+      "description": "Assinatura do cliente na retirada do produto no balc\u00e3o"
+    },
+    "cancellation_status": {
+      "type": "string",
+      "enum": [
+        "N\u00e3o Solicitado",
+        "Aguardando Aprova\u00e7\u00e3o",
+        "Cancelada",
+        "Aguardando Retorno Log\u00edstico",
+        "Aguardando Recebimento",
+        "Aguardando Estorno Financeiro",
+        "Aguardando Cancelamento NF-e",
+        "Cancelamento Conclu\u00eddo"
+      ],
+      "default": "N\u00e3o Solicitado",
+      "description": "Status do fluxo de cancelamento"
+    },
+    "cancellation_requested_by": {
+      "type": "string",
+      "description": "Nome de quem solicitou o cancelamento (vendedor)"
+    },
+    "cancellation_requested_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da solicita\u00e7\u00e3o de cancelamento"
+    },
+    "cancellation_reason": {
+      "type": "string",
+      "description": "Motivo do cancelamento"
+    },
+    "cancellation_approved_by": {
+      "type": "string",
+      "description": "Nome do gerente que aprovou o cancelamento"
+    },
+    "cancellation_approved_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da aprova\u00e7\u00e3o do cancelamento"
+    },
+    "cancellation_dispatched": {
+      "type": "boolean",
+      "default": false,
+      "description": "A mercadoria j\u00e1 havia sido despachada/entregue quando o cancelamento foi aprovado"
+    },
+    "cancellation_needs_stock_return": {
+      "type": "boolean",
+      "default": false,
+      "description": "A mercadoria precisa retornar para o estoque (true quando foi despachada)"
+    },
+    "cancellation_reverse_tracking_code": {
+      "type": "string",
+      "description": "C\u00f3digo de rastreio reverso (postagem de devolu\u00e7\u00e3o)"
+    },
+    "cancellation_reverse_carrier": {
+      "type": "string",
+      "description": "Transportadora do envio reverso"
+    },
+    "cancellation_collection_type": {
+      "type": "string",
+      "enum": [
+        "Postagem pelo Cliente",
+        "Coleta pelo T\u00e9cnico"
+      ],
+      "description": "Tipo de coleta da mercadoria para retorno"
+    },
+    "cancellation_stock_received_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data em que a mercadoria retornada deu entrada no estoque"
+    },
+    "cancellation_stock_received_by": {
+      "type": "string",
+      "description": "Nome de quem confirmou o recebimento da mercadoria"
+    },
+    "cancellation_refund_forecast_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Previs\u00e3o de estorno financeiro definido pelo financeiro"
+    },
+    "cancellation_refund_completed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data em que o estorno financeiro foi realizado"
+    },
+    "cancellation_refund_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor do estorno realizado"
+    },
+    "cancellation_refund_receipt_url": {
+      "type": "string",
+      "description": "URL do comprovante de estorno anexado pelo financeiro (compatibilidade \u2014 primeiro arquivo)"
+    },
+    "cancellation_refund_receipt_urls": {
+      "type": "array",
+      "description": "Lista de URLs dos comprovantes de estorno anexados pelo financeiro",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cancellation_refund_method": {
+      "type": "string",
+      "enum": [
+        "PIX",
+        "Transfer\u00eancia Banc\u00e1ria",
+        "Dinheiro",
+        "Outro"
+      ],
+      "description": "Forma de reembolso utilizada pelo financeiro"
+    },
+    "cancellation_refund_details": {
+      "type": "string",
+      "description": "Dados do reembolso (chave PIX, conta banc\u00e1ria, etc.)"
+    },
+    "cancellation_refund_completed_by": {
+      "type": "string",
+      "description": "Nome de quem realizou o estorno financeiro"
+    },
+    "cancellation_equipment_reverted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Data de manuten\u00e7\u00e3o do equipamento foi estornada"
+    },
+    "cancellation_equipment_revert_notes": {
+      "type": "string",
+      "description": "Notas sobre o estorno da data de manuten\u00e7\u00e3o"
+    },
+    "cancellation_nfe_requested_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data em que o cancelamento da NF-e foi solicitado"
+    },
+    "cancellation_nfe_completed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data em que o cancelamento da NF-e foi conclu\u00eddo"
+    },
+    "cancellation_completed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data em que o cancelamento foi 100% conclu\u00eddo"
+    },
+    "cancellation_history": {
+      "type": "array",
+      "description": "Hist\u00f3rico de eventos do fluxo de cancelamento (append-only)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "priority_alert": {
+      "type": "string",
+      "enum": [
+        "Cr\u00edtico",
+        "Muito Cr\u00edtico"
+      ],
+      "description": "Alerta de prioridade de envio/expedi\u00e7\u00e3o (produtos atrasados)"
+    },
+    "priority_alert_note": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o do alerta de prioridade"
+    },
+    "priority_alert_set_by": {
+      "type": "string",
+      "description": "Nome de quem definiu o alerta"
+    },
+    "priority_alert_set_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que o alerta foi definido"
+    },
+    "expedition_forecast_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Previs\u00e3o de expedi\u00e7\u00e3o do pedido (data prometida ao cliente para a expedi\u00e7\u00e3o)"
+    },
+    "priority_alert_new_forecast_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Nova previs\u00e3o de expedi\u00e7\u00e3o definida no alerta de prioridade (quando o alerta sobe a produ\u00e7\u00e3o)"
+    },
+    "is_exchange": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pedido de troca \u2014 gerado a partir de uma OS Reversa com resolu\u00e7\u00e3o 'Troca'. Valor zerado (sem cobran\u00e7a). Vincula ao pedido original e \u00e0 OS Reversa."
+    },
+    "exchange_parent_sale_id": {
+      "type": "string",
+      "description": "ID do pedido original que gerou a troca"
+    },
+    "exchange_parent_sale_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido original (cache)"
+    },
+    "exchange_reverse_os_id": {
+      "type": "string",
+      "description": "ID da OS Reversa que originou este pedido de troca"
+    },
+    "exchange_reverse_os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS Reversa (cache)"
+    },
+    "exchange_reason": {
+      "type": "string",
+      "description": "Motivo/justificativa da troca (ex: voltagem errada, produto defeituoso)"
+    },
+    "exchange_anticipated": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pedido de troca antecipado \u2014 gerado antes da mercadoria devolvida chegar \u00e0 empresa. A produ\u00e7\u00e3o foi iniciada antes do recebimento da devolu\u00e7\u00e3o."
+    },
+    "requote_diff_status": {
+      "type": "string",
+      "enum": [
+        "N\u00e3o Aplic\u00e1vel",
+        "Pendente Aprova\u00e7\u00e3o",
+        "Aprovado",
+        "Rejeitado"
+      ],
+      "default": "N\u00e3o Aplic\u00e1vel",
+      "description": "Status da aprova\u00e7\u00e3o da diferen\u00e7a de frete gerada pela recota\u00e7\u00e3o (altera\u00e7\u00e3o de empacotamento p\u00f3s-faturamento). Pendente Aprova\u00e7\u00e3o = aguardando supervisor/adm | Aprovado = diferen\u00e7a aplicada (adicional por erro de cota\u00e7\u00e3o) | Rejeitado = recota\u00e7\u00e3o descartada"
+    },
+    "requote_diff_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Diferen\u00e7a de frete gerada pela recota\u00e7\u00e3o (novo frete - frete original). Valor positivo = frete aumentou (adicional por erro de cota\u00e7\u00e3o)."
+    },
+    "requote_original_freight": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor do frete original antes da recota\u00e7\u00e3o (cache para relat\u00f3rio)"
+    },
+    "requote_new_freight": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor do novo frete ap\u00f3s recota\u00e7\u00e3o (cache para relat\u00f3rio)"
+    },
+    "requote_original_carrier": {
+      "type": "string",
+      "description": "Transportadora original antes da recota\u00e7\u00e3o (cache)"
+    },
+    "requote_original_volumes_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Quantidade de volumes antes da recota\u00e7\u00e3o (cache)"
+    },
+    "requote_new_volumes_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Quantidade de volumes ap\u00f3s a recota\u00e7\u00e3o (cache)"
+    },
+    "requote_reason": {
+      "type": "string",
+      "description": "Motivo da recota\u00e7\u00e3o (ex: erro de cota\u00e7\u00e3o \u2014 volumes incorretos, empacotamento errado)"
+    },
+    "requote_requested_by": {
+      "type": "string",
+      "description": "Nome de quem solicitou a recota\u00e7\u00e3o (log\u00edstica/p\u00f3s-venda)"
+    },
+    "requote_requested_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da solicita\u00e7\u00e3o de recota\u00e7\u00e3o"
+    },
+    "requote_approved_by": {
+      "type": "string",
+      "description": "Nome do supervisor/adm que aprovou a diferen\u00e7a de frete da recota\u00e7\u00e3o"
+    },
+    "requote_approved_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da aprova\u00e7\u00e3o da diferen\u00e7a de frete da recota\u00e7\u00e3o"
+    },
+    "requote_rejected_by": {
+      "type": "string",
+      "description": "Nome do supervisor/adm que rejeitou a recota\u00e7\u00e3o"
+    },
+    "requote_rejected_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da rejei\u00e7\u00e3o da recota\u00e7\u00e3o"
+    },
+    "requote_reject_reason": {
+      "type": "string",
+      "description": "Motivo da rejei\u00e7\u00e3o da recota\u00e7\u00e3o"
+    },
+    "is_technician_sale": {
+      "type": "boolean",
+      "default": false,
+      "description": "Venda gerada pelo t\u00e9cnico na casa do cliente (venda avulsa de acess\u00f3rios/pe\u00e7as). N\u00e3o gera OS \u2014 j\u00e1 vem de uma OS existente. Vai direto para aprova\u00e7\u00e3o financeira e faturamento."
+    },
+    "technician_os_id": {
+      "type": "string",
+      "description": "ID da OS do T\u00e9cnico que originou esta venda (quando is_technician_sale = true)"
+    },
+    "technician_os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS do T\u00e9cnico (cache)"
+    },
+    "technician_id": {
+      "type": "string",
+      "description": "ID do t\u00e9cnico que realizou a venda"
+    },
+    "technician_name": {
+      "type": "string",
+      "description": "Nome do t\u00e9cnico que realizou a venda (cache)"
+    },
+    "value_adjust_history": {
+      "type": "array",
+      "description": "Hist\u00f3rico de ajustes de valor feitos pelo p\u00f3s-venda (append-only). Registra cada corre\u00e7\u00e3o de valor dos pagamentos da venda, com valores antes/depois e quem ajustou.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actor": {
+            "type": "string",
+            "description": "Nome de quem realizou o ajuste"
+          },
+          "order_code": {
+            "type": "string",
+            "description": "C\u00f3digo da OS que motivou o ajuste"
+          },
+          "previous_payments_total": {
+            "type": "number"
+          },
+          "new_payments_total": {
+            "type": "number"
+          },
+          "previous_grand_total": {
+            "type": "number"
+          },
+          "new_grand_total": {
+            "type": "number"
+          },
+          "payments_snapshot": {
+            "type": "array",
+            "description": "Pagamentos ap\u00f3s o ajuste (condi\u00e7\u00e3o, valor, status)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "condition_name": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "number"
+                },
+                "payment_status": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "reason": {
+            "type": "string",
+            "description": "Motivo do ajuste (ex: motivo da reprova\u00e7\u00e3o financeira)"
+          }
+        }
+      }
+    },
+    "is_resale": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pedido de revenda \u2014 venda para revendedor. Marcado manualmente pelo administrador no detalhe do pedido (bot\u00e3o Marcar como revenda). Pedidos sem a marca contam como venda direta no Dashboard Comercial."
+    },
+    "resale_marked_by": {
+      "type": "string",
+      "description": "Nome do administrador que marcou o pedido como revenda"
+    },
+    "resale_marked_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que o pedido foi marcado como revenda (vazio quando desmarcado)"
+    }
+  },
+  "required": [
+    "client_id",
+    "date"
+  ]
+}

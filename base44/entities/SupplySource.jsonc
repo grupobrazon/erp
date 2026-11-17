@@ -1,0 +1,13 @@
+{
+  "name": "SupplySource",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da fonte de fornecimento (Ex: Maxfilter, Fornecimento Terceiro)"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

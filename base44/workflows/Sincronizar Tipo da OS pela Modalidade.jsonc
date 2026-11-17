@@ -1,0 +1,40 @@
+{
+  "name": "Sincronizar Tipo da OS pela Modalidade",
+  "description": "Quando a modalidade de entrega da venda muda, atualiza o tipo da OS principal (Envio \u2192 Expedi\u00e7\u00e3o, Entrega Pr\u00f3pria \u2192 Entrega, Entrega + Instala\u00e7\u00e3o \u2192 Entrega + Instala\u00e7\u00e3o), desde que a OS ainda n\u00e3o tenha entrado em rota, gerado etiqueta ou sido faturada.",
+  "trigger": {
+    "condition": "${ .trigger.changed_fields | index(\"delivery_modality\") != null }",
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "update"
+      ],
+      "entity_name": "Sale"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "sincronizar_tipo_os_modalidade",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sync_os_type": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "syncServiceOrderTypeFromSale",
+            "args": {
+              "sale_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Sincronizar tipo da OS",
+            "description": "Acompanha a modalidade da venda"
+          }
+        }
+      }
+    ]
+  }
+}

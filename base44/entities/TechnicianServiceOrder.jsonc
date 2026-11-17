@@ -1,0 +1,327 @@
+{
+  "name": "TechnicianServiceOrder",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS do T\u00e9cnico (TOS000001) \u2014 gerado automaticamente"
+    },
+    "parent_os_id": {
+      "type": "string",
+      "description": "ID da OS pai (entrega ou manuten\u00e7\u00e3o/garantia) \u00e0 qual esta OS do t\u00e9cnico est\u00e1 vinculada"
+    },
+    "parent_os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS pai (cache)"
+    },
+    "parent_os_type": {
+      "type": "string",
+      "enum": [
+        "Entrega",
+        "Entrega + Instala\u00e7\u00e3o",
+        "Manuten\u00e7\u00e3o/Garantia"
+      ],
+      "description": "Tipo da OS pai"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente (cache)"
+    },
+    "sale_id": {
+      "type": "string",
+      "description": "ID da venda vinculada (herdado da OS pai)"
+    },
+    "sale_order_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido (cache)"
+    },
+    "appointment_id": {
+      "type": "string",
+      "description": "ID do agendamento na agenda de rotas (pr\u00e9-requisito obrigat\u00f3rio \u2014 a OS do t\u00e9cnico n\u00e3o pode ser gerada sem agendamento pr\u00e9vio)"
+    },
+    "appointment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do agendamento (cache)"
+    },
+    "appointment_time_type": {
+      "type": "string",
+      "description": "Tipo de hor\u00e1rio do agendamento (cache)"
+    },
+    "appointment_specific_time": {
+      "type": "string",
+      "description": "Hor\u00e1rio espec\u00edfico do agendamento (cache)"
+    },
+    "technician_id": {
+      "type": "string",
+      "description": "ID do t\u00e9cnico respons\u00e1vel"
+    },
+    "technician_name": {
+      "type": "string",
+      "description": "Nome do t\u00e9cnico (cache)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Em Execu\u00e7\u00e3o",
+        "Conclu\u00edda T\u00e9cnico",
+        "Atendimento Interrompido",
+        "Atendido Parcialmente",
+        "Aguardando Faturamento - P\u00f3s",
+        "Finalizada",
+        "Cancelada"
+      ],
+      "default": "Pendente",
+      "description": "Status da OS do t\u00e9cnico: Pendente \u2192 Em Execu\u00e7\u00e3o \u2192 Conclu\u00edda T\u00e9cnico \u2192 Aguardando Faturamento - P\u00f3s \u2192 Finalizada | Atendido Parcialmente / Atendimento Interrompido (exce\u00e7\u00f5es de campo) | Cancelada"
+    },
+    "not_completed_reason": {
+      "type": "string",
+      "description": "Motivo de n\u00e3o conclus\u00e3o ou atendimento parcial (ex: cliente n\u00e3o estava em casa, aparelho com defeito, necessita retorno)"
+    },
+    "km_displacement": {
+      "type": "number",
+      "description": "KM de deslocamento at\u00e9 o cliente (preenchido na gera\u00e7\u00e3o da rota a partir da dist\u00e2ncia entre paradas)"
+    },
+    "items_to_deliver": {
+      "type": "array",
+      "description": "Itens a serem entregues (para OS de entrega/instala\u00e7\u00e3o \u2014 puxado do pedido)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "service_detail_types": {
+      "type": "array",
+      "description": "Tipos de servi\u00e7o detalhados pelo vendedor (puxado da venda/agendamento)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "service_type_id": {
+            "type": "string"
+          },
+          "service_type_name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "service_detail_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es do detalhamento do servi\u00e7o (puxado da venda/agendamento)"
+    },
+    "technician_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es preenchidas pelo t\u00e9cnico durante o atendimento"
+    },
+    "pending_payment_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor a receber na casa do cliente (puxado da venda)"
+    },
+    "payment_condition_id": {
+      "type": "string",
+      "description": "ID da condi\u00e7\u00e3o de pagamento selecionada"
+    },
+    "payment_condition_name": {
+      "type": "string",
+      "description": "Nome da condi\u00e7\u00e3o de pagamento (cache)"
+    },
+    "received_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor recebido pelo t\u00e9cnico na casa do cliente"
+    },
+    "received_method": {
+      "type": "string",
+      "enum": [
+        "PIX",
+        "Cart\u00e3o de D\u00e9bito",
+        "Cart\u00e3o de Cr\u00e9dito",
+        "Dinheiro"
+      ],
+      "description": "Forma de recebimento na casa do cliente (in loco \u2014 maquininha ou dinheiro)"
+    },
+    "received_installments": {
+      "type": "number",
+      "description": "N\u00famero de parcelas no cart\u00e3o de cr\u00e9dito (maquininha) \u2014 apenas quando received_method = Cart\u00e3o de Cr\u00e9dito"
+    },
+    "payment_receipt_url": {
+      "type": "string",
+      "description": "Foto do comprovante de pagamento anexada pelo t\u00e9cnico"
+    },
+    "final_service_photos": {
+      "type": "array",
+      "description": "Fotos finais do servi\u00e7o executado e do produto do cliente",
+      "items": {
+        "type": "string"
+      }
+    },
+    "checklist_results": {
+      "type": "array",
+      "description": "Resultados do checklist preenchido pelo t\u00e9cnico (itens parametriz\u00e1veis)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "item_name": {
+            "type": "string"
+          },
+          "selected_option": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "client_full_name": {
+      "type": "string",
+      "description": "Nome completo de quem recebeu o atendimento na casa do cliente"
+    },
+    "client_document": {
+      "type": "string",
+      "description": "Documento de identifica\u00e7\u00e3o (RG ou CPF) de quem recebeu o atendimento"
+    },
+    "client_signature_url": {
+      "type": "string",
+      "description": "Assinatura virtual do cliente (upload da imagem capturada no aplicativo)"
+    },
+    "technician_signature_url": {
+      "type": "string",
+      "description": "Assinatura virtual do t\u00e9cnico (upload da imagem capturada no aplicativo)"
+    },
+    "location_lat": {
+      "type": "number",
+      "description": "Latitude do local exato onde o t\u00e9cnico executou o atendimento"
+    },
+    "location_lng": {
+      "type": "number",
+      "description": "Longitude do local exato onde o t\u00e9cnico executou o atendimento"
+    },
+    "location_captured_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da captura da localiza\u00e7\u00e3o"
+    },
+    "technician_sale_items": {
+      "type": "array",
+      "description": "Itens vendidos pelo t\u00e9cnico na casa do cliente (venda avulsa \u2014 acess\u00f3rios, pe\u00e7as, etc.)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "technician_sale_payment_method": {
+      "type": "string",
+      "description": "Forma de pagamento da venda do t\u00e9cnico (PIX, Cart\u00e3o de D\u00e9bito, Cart\u00e3o de Cr\u00e9dito, Dinheiro)"
+    },
+    "technician_sale_installments": {
+      "type": "number",
+      "description": "N\u00famero de parcelas no cart\u00e3o de cr\u00e9dito (maquininha) \u2014 apenas quando technician_sale_payment_method = Cart\u00e3o de Cr\u00e9dito"
+    },
+    "technician_sale_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Total da venda do t\u00e9cnico"
+    },
+    "technician_sale_signature_url": {
+      "type": "string",
+      "description": "Comprovante de pagamento da venda do t\u00e9cnico (foto/anexo do comprovante \u2014 obrigat\u00f3rio quando houver valor de venda)"
+    },
+    "technician_sale_id": {
+      "type": "string",
+      "description": "ID da venda gerada automaticamente pelo sistema quando o t\u00e9cnico lan\u00e7ou produtos (venda em nome do t\u00e9cnico, vinculada a esta OS, sem gerar nova OS)"
+    },
+    "technician_sale_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido de venda gerado pelo t\u00e9cnico (cache)"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora de conclus\u00e3o da OS do t\u00e9cnico"
+    },
+    "review_history": {
+      "type": "array",
+      "description": "Hist\u00f3rico de revis\u00f5es do p\u00f3s-venda (append-only). Registra cada a\u00e7\u00e3o de revis\u00e3o: conclus\u00e3o para faturamento, reagendamento ou cancelamento, preservando o motivo anterior do atendimento parcial/interrompido.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actor": {
+            "type": "string",
+            "description": "Nome de quem realizou a revis\u00e3o"
+          },
+          "previous_status": {
+            "type": "string",
+            "description": "Status anterior da OS do t\u00e9cnico"
+          },
+          "new_status": {
+            "type": "string",
+            "description": "Novo status definido na revis\u00e3o"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "Conclu\u00edda para Faturamento",
+              "Reagendada",
+              "Cancelada"
+            ],
+            "description": "A\u00e7\u00e3o executada pelo p\u00f3s-venda"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Motivo do atendimento parcial/interrompido ou justificativa da revis\u00e3o"
+          }
+        }
+      }
+    },
+    "technician_snapshot": {
+      "type": "object",
+      "description": "C\u00f3pia dos dados preenchidos pelo t\u00e9cnico no momento da conclus\u00e3o (snapshot). Usada pelo p\u00f3s-vendas para resetar a OS \u00e0 vers\u00e3o original do t\u00e9cnico antes do faturamento.",
+      "properties": {}
+    }
+  },
+  "required": [
+    "code",
+    "parent_os_id",
+    "client_id"
+  ]
+}

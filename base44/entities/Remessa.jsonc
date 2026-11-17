@@ -1,0 +1,269 @@
+{
+  "name": "Remessa",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "C\u00f3digo da remessa (REM000001) \u2014 gerado automaticamente"
+    },
+    "remessa_type": {
+      "type": "string",
+      "enum": [
+        "Demonstra\u00e7\u00e3o",
+        "Remessa",
+        "Consigna\u00e7\u00e3o",
+        "Devolu\u00e7\u00e3o",
+        "Retorno"
+      ],
+      "description": "Tipo da opera\u00e7\u00e3o de remessa"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "delivery_modality": {
+      "type": "string",
+      "enum": [
+        "Envio",
+        "Entrega Pr\u00f3pria",
+        "Entrega + Instala\u00e7\u00e3o"
+      ],
+      "default": "Envio"
+    },
+    "delivery_address": {
+      "type": "object",
+      "properties": {
+        "zip_code": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "billing_location_id": {
+      "type": "string"
+    },
+    "billing_location_name": {
+      "type": "string"
+    },
+    "freight": {
+      "type": "number",
+      "default": 0
+    },
+    "discount": {
+      "type": "number",
+      "default": 0
+    },
+    "grand_total": {
+      "type": "number"
+    },
+    "cfop_code": {
+      "type": "string",
+      "description": "CFOP selecionado (nunca de categoria Venda)"
+    },
+    "natureza_operacao": {
+      "type": "string",
+      "description": "Natureza da opera\u00e7\u00e3o (ex: Remessa de mercadoria para demonstra\u00e7\u00e3o)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Rascunho",
+        "Aprovada",
+        "Aguardando Financeiro",
+        "Aprovada Financeiro",
+        "Faturada",
+        "Cancelada"
+      ],
+      "default": "Rascunho",
+      "description": "Status da remessa. Fluxo: Rascunho \u2192 Aguardando Financeiro \u2192 Aprovada Financeiro \u2192 Faturada. 'Aprovada' \u00e9 legado (transi\u00e7\u00e3o manual para financeiro)."
+    },
+    "return_status": {
+      "type": "string",
+      "enum": [
+        "N\u00e3o Aplic\u00e1vel",
+        "Pendente Retorno",
+        "Retornado"
+      ],
+      "default": "N\u00e3o Aplic\u00e1vel",
+      "description": "Controle de retorno da mercadoria (demonstra\u00e7\u00e3o/consigna\u00e7\u00e3o)"
+    },
+    "return_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "return_nfe_ref": {
+      "type": "string",
+      "description": "Ref da NF-e de retorno/devolu\u00e7\u00e3o"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "priority_alert": {
+      "type": "string",
+      "enum": [
+        "Cr\u00edtico",
+        "Muito Cr\u00edtico"
+      ],
+      "description": "Alerta de prioridade de envio/expedi\u00e7\u00e3o (produtos atrasados)"
+    },
+    "priority_alert_note": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o do alerta de prioridade"
+    },
+    "priority_alert_set_by": {
+      "type": "string",
+      "description": "Nome de quem definiu o alerta"
+    },
+    "priority_alert_set_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que o alerta foi definido"
+    },
+    "priority_alert_new_forecast_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Nova previs\u00e3o de expedi\u00e7\u00e3o definida no alerta de prioridade"
+    },
+    "financial_approved_by": {
+      "type": "string",
+      "description": "Nome de quem aprovou o envio no financeiro"
+    },
+    "financial_approval_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da aprova\u00e7\u00e3o financeira"
+    },
+    "os_id": {
+      "type": "string",
+      "description": "ID da OS gerada a partir desta remessa"
+    },
+    "os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS gerada (cache)"
+    },
+    "invoice_type": {
+      "type": "string",
+      "enum": [
+        "Nota Fiscal",
+        "Nota Simples"
+      ],
+      "description": "Tipo de faturamento da remessa"
+    },
+    "nota_simples_number": {
+      "type": "string",
+      "description": "N\u00famero da Nota Simples (s\u00e9rie-sequencial)"
+    },
+    "nota_simples_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data da Nota Simples"
+    },
+    "nfe_transmitted": {
+      "type": "boolean",
+      "default": false
+    },
+    "nfe_status": {
+      "type": "string"
+    },
+    "nfe_ref": {
+      "type": "string"
+    },
+    "nfe_serie": {
+      "type": "string"
+    },
+    "nfe_chave": {
+      "type": "string"
+    },
+    "nfe_danfe_url": {
+      "type": "string"
+    },
+    "nfe_mensagem_sefaz": {
+      "type": "string"
+    },
+    "invoice_number": {
+      "type": "string"
+    },
+    "invoice_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "nfe_cancelled": {
+      "type": "boolean",
+      "default": false
+    },
+    "nfe_cancel_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nfe_cancel_reason": {
+      "type": "string"
+    },
+    "nfe_cce_history": {
+      "type": "array",
+      "description": "Hist\u00f3rico de cartas de corre\u00e7\u00e3o (CC-e)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "correction": {
+            "type": "string"
+          },
+          "protocol": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "remessa_type",
+    "client_id",
+    "date"
+  ]
+}

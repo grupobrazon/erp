@@ -1,0 +1,72 @@
+{
+  "name": "BillingLocation",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do local de faturamento"
+    },
+    "cnpj": {
+      "type": "string",
+      "description": "CNPJ"
+    },
+    "state_registration": {
+      "type": "string",
+      "description": "Inscri\u00e7\u00e3o Estadual (ou ISENTO)"
+    },
+    "municipal_registration": {
+      "type": "string",
+      "description": "Inscri\u00e7\u00e3o Municipal"
+    },
+    "tax_regime": {
+      "type": "string",
+      "enum": [
+        "Simples Nacional",
+        "Simples Nacional - Sublimite",
+        "Lucro Presumido",
+        "Lucro Real",
+        "Regime Normal"
+      ],
+      "default": "Simples Nacional",
+      "description": "Regime Tribut\u00e1rio (CRT)"
+    },
+    "cnae": {
+      "type": "string",
+      "description": "C\u00f3digo CNAE principal"
+    },
+    "ibge_code": {
+      "type": "string",
+      "description": "C\u00f3digo IBGE do munic\u00edpio"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-mail para envio de notas"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefone"
+    },
+    "zip_code": {
+      "type": "string"
+    },
+    "street": {
+      "type": "string"
+    },
+    "number": {
+      "type": "string"
+    },
+    "neighborhood": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "cnpj"
+  ]
+}

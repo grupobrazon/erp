@@ -1,0 +1,115 @@
+{
+  "name": "Technician",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do t\u00e9cnico"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefone de contato"
+    },
+    "vehicle_type": {
+      "type": "string",
+      "enum": [
+        "Carro",
+        "Moto"
+      ],
+      "default": "Carro",
+      "description": "Tipo de ve\u00edculo do t\u00e9cnico \u2014 afeta o tempo de deslocamento no tr\u00e2nsito (moto \u00e9 mais r\u00e1pida)"
+    },
+    "allocated_locations": {
+      "type": "array",
+      "description": "Locais (cidade/estado) onde o t\u00e9cnico est\u00e1 alocado para entregas e instala\u00e7\u00f5es",
+      "items": {
+        "type": "string"
+      }
+    },
+    "calendar_ids": {
+      "type": "array",
+      "description": "Calend\u00e1rios de rota aos quais o t\u00e9cnico est\u00e1 vinculado. Quando preenchido (e sem zone_id espec\u00edfico), o t\u00e9cnico atende TODAS as zonas de todos os calend\u00e1rios vinculados (ex: Grande BH + Contagem).",
+      "items": {
+        "type": "string"
+      }
+    },
+    "calendar_names": {
+      "type": "array",
+      "description": "Nomes dos calend\u00e1rios de rota (cache)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "region_id": {
+      "type": "string",
+      "description": "ID da regi\u00e3o de rota atribu\u00edda ao t\u00e9cnico (compatibilidade)"
+    },
+    "region_name": {
+      "type": "string",
+      "description": "Nome da regi\u00e3o de rota (cache)"
+    },
+    "zone_id": {
+      "type": "string",
+      "description": "ID da zona de rota espec\u00edfica atribu\u00edda ao t\u00e9cnico (opcional). Quando preenchido, o t\u00e9cnico atende SOMENTE esta zona. Quando vazio + calendar_ids preenchido, atende todas as zonas dos calend\u00e1rios vinculados."
+    },
+    "zone_name": {
+      "type": "string",
+      "description": "Nome da zona de rota (cache)"
+    },
+    "available_days": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "seg",
+          "ter",
+          "qua",
+          "qui",
+          "sex",
+          "sab",
+          "dom"
+        ]
+      },
+      "description": "Dias da semana em que o t\u00e9cnico est\u00e1 dispon\u00edvel (vazio = todos os dias ativos da zona)"
+    },
+    "home_street": {
+      "type": "string",
+      "description": "Logradouro da moradia do t\u00e9cnico (destino final da rota)"
+    },
+    "home_number": {
+      "type": "string",
+      "description": "N\u00famero da moradia"
+    },
+    "home_neighborhood": {
+      "type": "string",
+      "description": "Bairro da moradia"
+    },
+    "home_city": {
+      "type": "string",
+      "description": "Cidade da moradia"
+    },
+    "home_state": {
+      "type": "string",
+      "description": "UF da moradia"
+    },
+    "home_zip": {
+      "type": "string",
+      "description": "CEP da moradia"
+    },
+    "home_lat": {
+      "type": "number",
+      "description": "Latitude da moradia (geocodificada)"
+    },
+    "home_lng": {
+      "type": "number",
+      "description": "Longitude da moradia (geocodificada)"
+    },
+    "google_calendar_id": {
+      "type": "string",
+      "description": "ID da agenda dedicada 'Brazon' no Google Calendar do t\u00e9cnico (criada automaticamente na primeira sincroniza\u00e7\u00e3o)"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

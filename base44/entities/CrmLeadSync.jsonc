@@ -1,0 +1,79 @@
+{
+  "name": "CrmLeadSync",
+  "type": "object",
+  "properties": {
+    "sale_id": {
+      "type": "string",
+      "description": "ID da venda enviada ao CRM"
+    },
+    "order_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido (P001)"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente (lead) enviado"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente/lead (cache)"
+    },
+    "stage": {
+      "type": "string",
+      "description": "Etapa da venda no momento do envio"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Enviado",
+        "Erro"
+      ],
+      "default": "Enviado",
+      "description": "Enviado = webhook aceitou os dados | Erro = o CRM recusou ou houve falha de conex\u00e3o (permite novo envio)"
+    },
+    "http_status": {
+      "type": "number",
+      "description": "Status HTTP devolvido pelo webhook do CRM"
+    },
+    "mensagem": {
+      "type": "string",
+      "description": "Mensagem de erro devolvida pelo CRM (vazio quando o envio foi aceito)"
+    },
+    "payload_resumido": {
+      "type": "object",
+      "description": "Dados do lead/venda enviados ao CRM (para auditoria)",
+      "additionalProperties": true
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do envio"
+    }
+  },
+  "required": [
+    "sale_id",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

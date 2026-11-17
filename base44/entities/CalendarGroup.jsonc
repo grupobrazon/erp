@@ -1,0 +1,52 @@
+{
+  "name": "CalendarGroup",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do grupo de calend\u00e1rios (ex: Equipe BH, Equipe Interior)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descri\u00e7\u00e3o do grupo"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Grupo ativo"
+    },
+    "technicians": {
+      "type": "array",
+      "description": "Pool de t\u00e9cnicos compartilhado entre todos os calend\u00e1rios do grupo. O dia \u00e9 dividido pela quantidade de t\u00e9cnicos deste pool \u2014 cada t\u00e9cnico atende apenas uma regi\u00e3o (calend\u00e1rio) por dia.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "technician_id": {
+            "type": "string",
+            "description": "ID do t\u00e9cnico (entidade Technician)"
+          },
+          "technician_name": {
+            "type": "string",
+            "description": "Nome do t\u00e9cnico (cache)"
+          },
+          "vehicle_type": {
+            "type": "string",
+            "enum": [
+              "Moto",
+              "Carro"
+            ],
+            "description": "Ve\u00edculo do t\u00e9cnico neste grupo"
+          }
+        }
+      }
+    },
+    "technicians_count": {
+      "type": "number",
+      "default": 1,
+      "description": "Quantos t\u00e9cnicos no pool (derivado de technicians)"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

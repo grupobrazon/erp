@@ -1,0 +1,45 @@
+{
+  "name": "Rastreio Melhor Envio",
+  "description": "A cada 10 minutos, consulta o status dos envios no Melhor Envio pelo shipment_id e atualiza o status das OS (generated \u2192 Etiqueta Gerada / Postagem Pendente, posted \u2192 Em Transporte, delivered \u2192 Entregue), preenche o c\u00f3digo de rastreio quando liberado e registra as mudan\u00e7as no hist\u00f3rico da OS",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "*/10 * * * *",
+      "one_time_date": null,
+      "timezone": "America/Sao_Paulo",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "rastreio_melhor_envio",
+      "version": "1.1",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sync_tracking": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "syncMelhorEnvioTracking",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Consultar rastreio no Melhor Envio",
+            "description": "Atualiza o status das OS com etiquetas ativas (a cada 10 min)"
+          }
+        }
+      }
+    ]
+  }
+}

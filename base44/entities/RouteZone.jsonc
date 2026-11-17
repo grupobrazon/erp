@@ -1,0 +1,109 @@
+{
+  "name": "RouteZone",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da zona (ex: SP Central, Campinas, ABC Paulista, Grande BH Norte, Zona Sul de BH)"
+    },
+    "region_id": {
+      "type": "string",
+      "description": "ID da regi\u00e3o pai"
+    },
+    "region_name": {
+      "type": "string",
+      "description": "Nome da regi\u00e3o (cache)"
+    },
+    "calendar_id": {
+      "type": "string",
+      "description": "ID do calend\u00e1rio de rota ao qual esta zona pertence (v\u00ednculo direto calend\u00e1rio \u2192 zona)"
+    },
+    "calendar_name": {
+      "type": "string",
+      "description": "Nome do calend\u00e1rio (cache)"
+    },
+    "state": {
+      "type": "string",
+      "description": "Estado/UF principal da zona"
+    },
+    "cities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Cidades atendidas pela zona (lista expl\u00edcita). Deixe vazio se usar raio."
+    },
+    "use_radius": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se verdadeiro, a zona atende todas as cidades dentro do raio definido a partir da cidade central"
+    },
+    "center_city": {
+      "type": "string",
+      "description": "Cidade central para c\u00e1lculo de raio (ex: Belo Horizonte, S\u00e3o Paulo)"
+    },
+    "center_state": {
+      "type": "string",
+      "description": "UF da cidade central (ex: MG, SP)"
+    },
+    "radius_km": {
+      "type": "number",
+      "description": "Raio de atendimento em km a partir da cidade central (ex: 150)"
+    },
+    "center_lat": {
+      "type": "number",
+      "description": "Latitude da cidade central (geocodificada automaticamente)"
+    },
+    "center_lng": {
+      "type": "number",
+      "description": "Longitude da cidade central (geocodificada automaticamente)"
+    },
+    "daily_capacity": {
+      "type": "number",
+      "default": 1,
+      "description": "Quantos t\u00e9cnicos dispon\u00edveis por dia na zona (padr\u00e3o)"
+    },
+    "active_days": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "seg",
+          "ter",
+          "qua",
+          "qui",
+          "sex",
+          "sab",
+          "dom"
+        ]
+      },
+      "description": "Dias da semana com atendimento ativo",
+      "default": [
+        "seg",
+        "ter",
+        "qua",
+        "qui",
+        "sex"
+      ]
+    },
+    "color": {
+      "type": "string",
+      "description": "Cor para identifica\u00e7\u00e3o visual no painel (ex: blue, green, amber)"
+    },
+    "service_duration_entrega_override": {
+      "type": "number",
+      "description": "Override de tempo de atendimento para Entrega nesta zona (minutos). Vazio = usa o global."
+    },
+    "service_duration_instalacao_override": {
+      "type": "number",
+      "description": "Override de tempo de atendimento para Entrega+Instala\u00e7\u00e3o nesta zona (minutos). Vazio = usa o global."
+    },
+    "service_duration_manutencao_override": {
+      "type": "number",
+      "description": "Override de tempo de atendimento para Manuten\u00e7\u00e3o/Garantia nesta zona (minutos). Vazio = usa o global."
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

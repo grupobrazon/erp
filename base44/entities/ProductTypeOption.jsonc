@@ -1,0 +1,13 @@
+{
+  "name": "ProductTypeOption",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do tipo de produto (Ex: Acabado, Semi-acabado)"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

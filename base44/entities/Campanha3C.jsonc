@@ -1,0 +1,109 @@
+{
+  "name": "Campanha3C",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da campanha no discador 3C Plus"
+    },
+    "campaign_id_3c": {
+      "type": "string",
+      "description": "ID da campanha no 3C Plus (preenchido ap\u00f3s cria\u00e7\u00e3o/envio)"
+    },
+    "seller_id": {
+      "type": "string",
+      "description": "ID da vendedora respons\u00e1vel pelos clientes da campanha"
+    },
+    "seller_name": {
+      "type": "string",
+      "description": "Nome da vendedora (cache)"
+    },
+    "distribution_batch_id": {
+      "type": "string",
+      "description": "ID do lote de distribui\u00e7\u00e3o que originou a campanha"
+    },
+    "batch_protocol": {
+      "type": "string",
+      "description": "Protocolo do lote (cache)"
+    },
+    "client_ids": {
+      "type": "array",
+      "description": "IDs dos clientes enviados para a campanha",
+      "items": {
+        "type": "string"
+      }
+    },
+    "client_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Quantidade de clientes enviados"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Enviada",
+        "Em Discagem",
+        "Conclu\u00edda",
+        "Erro"
+      ],
+      "default": "Pendente",
+      "description": "Status da campanha no discador"
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do envio da lista para o 3C Plus"
+    },
+    "webhook_token": {
+      "type": "string",
+      "description": "Token \u00fanico para receber resultados de chamadas via webhook"
+    },
+    "metrics": {
+      "type": "object",
+      "description": "M\u00e9tricas agregadas das chamadas (atualizadas via webhook)",
+      "properties": {
+        "total_calls": {
+          "type": "number",
+          "default": 0
+        },
+        "atendidas": {
+          "type": "number",
+          "default": 0
+        },
+        "nao_atendidas": {
+          "type": "number",
+          "default": 0
+        },
+        "ocupado": {
+          "type": "number",
+          "default": 0
+        },
+        "caixa_postal": {
+          "type": "number",
+          "default": 0
+        },
+        "invalido": {
+          "type": "number",
+          "default": 0
+        }
+      }
+    },
+    "last_result_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do \u00faltimo resultado de chamada recebido"
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Mensagem de erro (quando status=Erro)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

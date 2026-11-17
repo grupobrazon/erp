@@ -1,0 +1,45 @@
+{
+  "name": "RegionalMapping",
+  "type": "object",
+  "properties": {
+    "municipality": {
+      "type": "string",
+      "description": "Munic\u00edpio (ex: Guarulhos, Osasco, Barueri)"
+    },
+    "state": {
+      "type": "string",
+      "default": "SP",
+      "description": "UF do munic\u00edpio"
+    },
+    "regional": {
+      "type": "string",
+      "description": "Regional atribu\u00edda ao munic\u00edpio (ex: MET \u2013 Guarulhos, MET \u2013 ABC, MET \u2013 Barueri)"
+    }
+  },
+  "required": [
+    "municipality",
+    "regional"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

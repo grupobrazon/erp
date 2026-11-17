@@ -1,0 +1,45 @@
+{
+  "name": "Lembrete de Ades\u00e3o VIP",
+  "description": "A cada 15 minutos verifica quem recebeu o link de ades\u00e3o VIP pela automa\u00e7\u00e3o h\u00e1 mais de 4 horas e ainda n\u00e3o assinou o termo, e envia o lembrete no WhatsApp.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "*/15 * * * *",
+      "one_time_date": null,
+      "timezone": "America/Sao_Paulo",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "lembrete_adesao_vip",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "enviar_lembrete": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "vipFollowupReminder",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Enviar lembrete de ades\u00e3o",
+            "description": "Links parados h\u00e1 mais de 4 horas"
+          }
+        }
+      }
+    ]
+  }
+}
