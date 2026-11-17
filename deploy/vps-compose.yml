@@ -1,10 +1,10 @@
 # ERP Brazon na VPS da Hostinger (gerenciador Docker / docker compose).
 # Não precisa do código no servidor: o serviço "source" baixa o repositório
 # grupobrazon/erp com uma chave de implantação (somente leitura) e os demais
-# serviços montam o site e as funções a partir dele. Para atualizar: reimplantar.
+# serviços montam o site e as funções a partir dele. A chave é criada na própria
+# VPS na primeira execução; a pública aparece no log do serviço "source". Para atualizar: reimplantar.
 #
 # Variáveis (painel do projeto na Hostinger):
-#   DEPLOY_KEY                chave privada da implantação, em base64 (uma linha)
 #   GIT_REF                   branch a publicar (padrão: main)
 #   VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY   (públicas)
 #   SUPABASE_SERVICE_ROLE_KEY, GHL_API_TOKEN, ghl_location_id, GOOGLE_MAPS_API_KEY,
@@ -17,14 +17,20 @@ services:
     image: alpine/git:2.47.2
     restart: "no"
     environment:
-      DEPLOY_KEY: ${DEPLOY_KEY}
       GIT_REF: ${GIT_REF:-main}
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
         set -e
+        # A chave de implantação é gerada na própria VPS e fica só no volume "deploy-key".
+        if [ ! -f /keys/id_ed25519 ]; then
+          command -v ssh-keygen >/dev/null || apk add --no-cache openssh-keygen >/dev/null
+          ssh-keygen -q -t ed25519 -N "" -C "vps-hostinger-erp" -f /keys/id_ed25519
+        fi
+        echo "Chave pública desta VPS (cadastre em GitHub > grupobrazon/erp > Settings > Deploy keys, somente leitura):"
+        cat /keys/id_ed25519.pub
         mkdir -p /root/.ssh
-        printf '%s' "$$DEPLOY_KEY" | base64 -d > /root/.ssh/id_ed25519
+        cp /keys/id_ed25519 /root/.ssh/id_ed25519
         chmod 600 /root/.ssh/id_ed25519
         echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' > /root/.ssh/known_hosts
         if [ -d /src/.git ]; then
@@ -37,6 +43,7 @@ services:
         echo "Versão publicada: $$(git -C /src log -1 --format='%h %s')"
     volumes:
       - src:/src
+      - deploy-key:/keys
 
   web-build:
     image: node:20-alpine
@@ -96,6 +103,7 @@ services:
         aliases: [erp-web]
 
 volumes:
+  deploy-key:
   src:
   dist:
   deno-cache:
