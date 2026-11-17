@@ -1,0 +1,34 @@
+// Servidor das funções do ERP. Rotas: POST /functions/<nome>, GET /functions/_health.
+import { registry } from "./functions/registry.ts";
+import { B44Error } from "./b44.ts";
+
+const PORT = Number(Deno.env.get("PORT") ?? "8000");
+
+function json(body: unknown, status = 200) {
+  return Response.json(body, { status });
+}
+
+Deno.serve({ port: PORT, hostname: "0.0.0.0" }, async (req) => {
+  const { pathname } = new URL(req.url);
+  const m = pathname.match(/^\/functions\/([A-Za-z0-9_-]+)\/?$/);
+  if (!m) return json({ error: "Rota não encontrada" }, 404);
+  const name = m[1];
+
+  if (name === "_health") {
+    return json({ ok: true, migradas: Object.keys(registry).length });
+  }
+  const load = registry[name];
+  if (!load) {
+    return json({ error: `A função "${name}" ainda não foi migrada para o novo servidor.` }, 501);
+  }
+  try {
+    const mod = await load();
+    return await mod.default(req);
+  } catch (err) {
+    const status = err instanceof B44Error ? err.status : 500;
+    console.error(`[${name}]`, err);
+    return json({ error: (err as Error).message || "Erro interno" }, status);
+  }
+});
+
+console.log(`Funções do ERP ouvindo na porta ${PORT}`);

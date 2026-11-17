@@ -1,6 +1,7 @@
 # ERP Brazon
 
-ERP da Brazon (React + Vite), migrado da Base44 para Supabase + Cloudflare.
+ERP da Brazon (React + Vite), migrado da Base44. Banco no Supabase (São Paulo); site e funções
+na VPS da Hostinger com Easypanel. Publicação: [docs/DEPLOY-EASYPANEL.md](docs/DEPLOY-EASYPANEL.md).
 
 ## Rodar localmente
 
@@ -17,7 +18,10 @@ ERP da Brazon (React + Vite), migrado da Base44 para Supabase + Cloudflare.
 - `src/api/entityColumns.js` — gerado de `base44/entities` por `tools/gen_entity_columns.py`.
 - `supabase/migrations/` — esquema do banco. A migração das entidades é gerada por
   `tools/gen_schema.py` a partir de `base44/entities/*.jsonc`.
-- `base44/functions/` — funções de backend originais, ainda a portar para `supabase/functions/`.
+- `server/` — servidor Deno das funções de backend (`/functions/<nome>`); `server/b44.ts` traz o
+  equivalente ao `createClientFromRequest` da Base44.
+- `base44/functions/` — funções originais, migradas uma a uma para `server/functions/`.
+- `docker-compose.yml` e `deploy/` — contêineres do site (nginx) e das funções (Deno) para o Easypanel.
 
 ## Banco (projeto `erp-brazon`, São Paulo)
 

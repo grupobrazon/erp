@@ -87,10 +87,13 @@ test('functions.invoke devolve {data,status} e lança erro com response', async 
       status: ok ? 200 : 422, headers: { 'content-type': 'application/json' } });
   };
   const f = createFunctions({ sb: fakeSb([]), url: 'https://x.supabase.co', anonKey: 'anon' });
+  const g = createFunctions({ sb: fakeSb([]), url: 'https://x.supabase.co', anonKey: 'anon', functionsUrl: '/functions/' });
   const r = await f.invoke('emitNFe', { id: 1 });
   assert.deepEqual(r.data, { ok: 1 });
   assert.equal(r.status, 200);
   assert.equal(calls[0].url, 'https://x.supabase.co/functions/v1/emitNFe');
   assert.equal(calls[0].opt.headers.Authorization, 'Bearer tok');
+  await g.invoke('getCommercialDashboard', {});
+  assert.equal(calls.at(-1).url, '/functions/getCommercialDashboard');
   await assert.rejects(f.invoke('falha'), (err) => err.status === 422 && err.message === 'deu ruim' && err.response.data.error === 'deu ruim');
 });

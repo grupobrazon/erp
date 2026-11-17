@@ -1,0 +1,41 @@
+# ERP Brazon na VPS (Easypanel > serviço Compose).
+# O banco fica no Supabase; aqui rodam o site (web) e as funções (functions).
+# Domínio: no Easypanel, aponte sistemabrazon.com.br para o serviço "web", porta 80.
+services:
+  web:
+    build:
+      context: .
+      dockerfile: deploy/web.Dockerfile
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+        VITE_FUNCTIONS_URL: /functions
+    restart: unless-stopped
+    depends_on:
+      - functions
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  functions:
+    build:
+      context: .
+      dockerfile: deploy/functions.Dockerfile
+    restart: unless-stopped
+    environment:
+      SUPABASE_URL: ${VITE_SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      GHL_API_TOKEN: ${GHL_API_TOKEN}
+      ghl_location_id: ${ghl_location_id}
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+      FOCUSNFE_TOKEN: ${FOCUSNFE_TOKEN}
+      MELHOR_ENVIO_TOKEN: ${MELHOR_ENVIO_TOKEN}
+      MELHOR_ENVIO_USER_AGENT: ${MELHOR_ENVIO_USER_AGENT}
+    healthcheck:
+      test: ["CMD", "deno", "eval", "const r = await fetch('http://127.0.0.1:8000/functions/_health'); if (!r.ok) Deno.exit(1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

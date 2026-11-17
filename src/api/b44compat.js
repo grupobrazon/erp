@@ -192,12 +192,14 @@ export function createEntities(sb) {
 }
 
 // Chamada às Edge Functions no formato do axios usado pela Base44: { data, status, headers }.
-export function createFunctions({ sb, url, anonKey }) {
+// functionsUrl: base das funções. Na VPS (Easypanel) é '/functions', servido pelo mesmo domínio do site.
+export function createFunctions({ sb, url, anonKey, functionsUrl }) {
+  const base = (functionsUrl || `${url}/functions/v1`).replace(/\/$/, '');
   return {
     async invoke(name, payload = {}) {
       const { data: { session } = {} } = await sb.auth.getSession();
       const isForm = typeof FormData !== 'undefined' && payload instanceof FormData;
-      const res = await fetch(`${url}/functions/v1/${name}`, {
+      const res = await fetch(`${base}/${name}`, {
         method: 'POST',
         headers: {
           apikey: anonKey,

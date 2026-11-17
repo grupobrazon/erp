@@ -21,7 +21,11 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce' },
 });
 
-const functions = createFunctions({ sb: supabase, url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY });
+// Funções de backend: rodam no servidor da VPS, no mesmo domínio do site (/functions).
+const FUNCTIONS_URL = import.meta.env.VITE_FUNCTIONS_URL || '/functions';
+const functions = createFunctions({
+  sb: supabase, url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY, functionsUrl: FUNCTIONS_URL,
+});
 
 // Nomes de provedor usados pelo app -> nomes do Supabase.
 const PROVIDERS = { google: 'google', microsoft: 'azure', facebook: 'facebook', apple: 'apple' };
