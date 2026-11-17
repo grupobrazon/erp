@@ -1,0 +1,105 @@
+# ERP Brazon na VPS da Hostinger (gerenciador Docker / docker compose).
+# Não precisa do código no servidor: o serviço "source" baixa o repositório
+# grupobrazon/erp com uma chave de implantação (somente leitura) e os demais
+# serviços montam o site e as funções a partir dele. Para atualizar: reimplantar.
+#
+# Variáveis (painel do projeto na Hostinger):
+#   DEPLOY_KEY                chave privada da implantação, em base64 (uma linha)
+#   GIT_REF                   branch a publicar (padrão: main)
+#   VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY   (públicas)
+#   SUPABASE_SERVICE_ROLE_KEY, GHL_API_TOKEN, ghl_location_id, GOOGLE_MAPS_API_KEY,
+#   FOCUSNFE_TOKEN, MELHOR_ENVIO_TOKEN, MELHOR_ENVIO_USER_AGENT   (segredos)
+#
+# O HTTPS fica no Caddy da VPS, que alcança o site pela rede "edge" no nome erp-web:80.
+
+services:
+  source:
+    image: alpine/git:2.47.2
+    restart: "no"
+    environment:
+      DEPLOY_KEY: ${DEPLOY_KEY}
+      GIT_REF: ${GIT_REF:-main}
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        mkdir -p /root/.ssh
+        printf '%s' "$$DEPLOY_KEY" | base64 -d > /root/.ssh/id_ed25519
+        chmod 600 /root/.ssh/id_ed25519
+        echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' > /root/.ssh/known_hosts
+        if [ -d /src/.git ]; then
+          git -C /src fetch --depth 1 origin "$$GIT_REF"
+          git -C /src reset --hard FETCH_HEAD
+          git -C /src clean -fdx -e node_modules
+        else
+          git clone --depth 1 --branch "$$GIT_REF" git@github.com:grupobrazon/erp.git /src
+        fi
+        echo "Versão publicada: $$(git -C /src log -1 --format='%h %s')"
+    volumes:
+      - src:/src
+
+  web-build:
+    image: node:20-alpine
+    restart: "no"
+    depends_on:
+      source:
+        condition: service_completed_successfully
+    working_dir: /src
+    environment:
+      VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+      VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+      VITE_FUNCTIONS_URL: /functions
+    command: ["sh", "-c", "npm ci --no-audit --no-fund && npm run build && rm -rf /dist/* && cp -r dist/. /dist/ && echo 'Site compilado'"]
+    volumes:
+      - src:/src
+      - dist:/dist
+
+  functions:
+    image: denoland/deno:2.9.6
+    restart: unless-stopped
+    depends_on:
+      source:
+        condition: service_completed_successfully
+    working_dir: /src
+    environment:
+      PORT: "8000"
+      DENO_DIR: /deno-dir
+      SUPABASE_URL: ${VITE_SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      GHL_API_TOKEN: ${GHL_API_TOKEN}
+      ghl_location_id: ${ghl_location_id}
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+      FOCUSNFE_TOKEN: ${FOCUSNFE_TOKEN}
+      MELHOR_ENVIO_TOKEN: ${MELHOR_ENVIO_TOKEN}
+      MELHOR_ENVIO_USER_AGENT: ${MELHOR_ENVIO_USER_AGENT}
+    command: ["deno", "run", "--node-modules-dir=none", "--allow-net", "--allow-env", "--allow-read", "--allow-write=/deno-dir", "server/main.ts"]
+    volumes:
+      - src:/src:ro
+      - deno-cache:/deno-dir
+
+  web:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      web-build:
+        condition: service_completed_successfully
+      functions:
+        condition: service_started
+    command: ["sh", "-c", "cp /src/deploy/nginx.conf /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
+    volumes:
+      - src:/src:ro
+      - dist:/usr/share/nginx/html:ro
+    networks:
+      default: {}
+      edge:
+        aliases: [erp-web]
+
+volumes:
+  src:
+  dist:
+  deno-cache:
+
+networks:
+  edge:
+    name: edge
