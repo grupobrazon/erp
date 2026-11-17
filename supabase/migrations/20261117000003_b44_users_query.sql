@@ -69,6 +69,7 @@ begin
   end if;
   return new;
 end $$;
+revoke execute on function public.b44_on_auth_user() from anon, authenticated;
 create trigger b44_on_auth_user after insert on auth.users
   for each row execute function public.b44_on_auth_user();
 

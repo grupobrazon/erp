@@ -1,7 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { appParams } from '@/lib/app-params';
-import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';
 
 const AuthContext = createContext();
 
@@ -16,67 +14,24 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     checkAppState();
+    // Login, logout e renovação de sessão (inclusive a volta do Google/Microsoft).
+    return base44.auth.onChange((event) => {
+      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') checkAppState();
+    });
   }, []);
 
+  // Sem a Base44 não há "public settings": basta saber se existe sessão no Supabase.
   const checkAppState = async () => {
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
-      
-      // First, check app public settings (with token if available)
-      // This will tell us if auth is required, user not registered, etc.
-      const appClient = createAxiosClient({
-        baseURL: `/api/apps/public`,
-        headers: {
-          'X-App-Id': appParams.appId
-        },
-        token: appParams.token, // Include token if available
-        interceptResponses: true
-      });
-      
-      try {
-        const publicSettings = await appClient.get(`/prod/public-settings/by-id/${appParams.appId}`);
-        setAppPublicSettings(publicSettings);
-        
-        // If we got the app public settings successfully, check if user is authenticated
-        if (appParams.token) {
-          await checkUserAuth();
-        } else {
-          setIsLoadingAuth(false);
-          setIsAuthenticated(false);
-          setAuthChecked(true);
-        }
-        setIsLoadingPublicSettings(false);
-      } catch (appError) {
-        console.error('App state check failed:', appError);
-        
-        // Handle app-level errors
-        if (appError.status === 403 && appError.data?.extra_data?.reason) {
-          const reason = appError.data.extra_data.reason;
-          if (reason === 'auth_required') {
-            setAuthError({
-              type: 'auth_required',
-              message: 'Authentication required'
-            });
-          } else if (reason === 'user_not_registered') {
-            setAuthError({
-              type: 'user_not_registered',
-              message: 'User not registered for this app'
-            });
-          } else {
-            setAuthError({
-              type: reason,
-              message: appError.message
-            });
-          }
-        } else {
-          setAuthError({
-            type: 'unknown',
-            message: appError.message || 'Failed to load app'
-          });
-        }
-        setIsLoadingPublicSettings(false);
+      setAppPublicSettings({ id: 'erp-brazon', public_settings: {} });
+      if (await base44.auth.isAuthenticated()) {
+        await checkUserAuth();
+      } else {
         setIsLoadingAuth(false);
+        setIsAuthenticated(false);
+        setAuthChecked(true);
       }
     } catch (error) {
       console.error('Unexpected error:', error);
@@ -84,8 +39,9 @@ export const AuthProvider = ({ children }) => {
         type: 'unknown',
         message: error.message || 'An unexpected error occurred'
       });
-      setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
+    } finally {
+      setIsLoadingPublicSettings(false);
     }
   };
 
@@ -105,7 +61,12 @@ export const AuthProvider = ({ children }) => {
       setAuthChecked(true);
       
       // If user auth fails, it might be an expired token
-      if (error.status === 401 || error.status === 403) {
+      if (error.status === 403) {
+        setAuthError({
+          type: 'user_not_registered',
+          message: error.message
+        });
+      } else if (error.status === 401) {
         setAuthError({
           type: 'auth_required',
           message: 'Authentication required'

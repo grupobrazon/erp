@@ -1,39 +1,32 @@
-**Welcome to your Base44 project** 
+# ERP Brazon
 
-**About**
+ERP da Brazon (React + Vite), migrado da Base44 para Supabase + Cloudflare.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+## Rodar localmente
 
-This project contains everything you need to run your app locally.
+1. `npm install`
+2. Copie `.env.example` para `.env.local` (já traz a URL e a chave publicável do Supabase).
+3. `npm run dev`
 
-**Edit the code in your local development environment**
+## Como está organizado
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+- `src/api/base44Client.js` — cliente com a mesma interface do SDK da Base44 (`base44.entities.X`,
+  `base44.auth`, `base44.functions.invoke`, `base44.integrations.Core`), agora sobre o Supabase.
+  As telas continuam chamando `base44.*` sem mudança.
+- `src/api/b44compat.js` — a tradução para o Supabase (consultas, tipos, uploads, Edge Functions).
+- `src/api/entityColumns.js` — gerado de `base44/entities` por `tools/gen_entity_columns.py`.
+- `supabase/migrations/` — esquema do banco. A migração das entidades é gerada por
+  `tools/gen_schema.py` a partir de `base44/entities/*.jsonc`.
+- `base44/functions/` — funções de backend originais, ainda a portar para `supabase/functions/`.
 
-**Prerequisites:** 
+## Banco (projeto `erp-brazon`, São Paulo)
 
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+- Uma tabela por entidade, com os campos automáticos da Base44 (`id` de 24 caracteres,
+  `created_date`, `updated_date`, `created_by`, `created_by_id`).
+- Filtros no formato da Base44 (`$in`, `$or`, `$regex`...) pela função `b44_find`.
+- Regras de acesso por perfil em todas as tabelas; novo login sem convite fica bloqueado
+  até um admin liberar.
 
-```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
+## Testes
 
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
-```
-
-Run the app: `npm run dev`
-
-**Publish your changes**
-
-Open [Base44.com](http://Base44.com) and click on Publish.
-
-**Docs & Support**
-
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
-
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+`npm test` — camada de compatibilidade com um Supabase simulado.
