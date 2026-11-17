@@ -1,7 +1,7 @@
 # ERP Brazon
 
 ERP da Brazon (React + Vite), migrado da Base44. Banco no Supabase (São Paulo); site e funções
-na VPS da Hostinger com Easypanel. Publicação: [docs/DEPLOY-EASYPANEL.md](docs/DEPLOY-EASYPANEL.md).
+na VPS da Hostinger (Docker). Publicação: [docs/DEPLOY-VPS.md](docs/DEPLOY-VPS.md).
 
 ## Rodar localmente
 
