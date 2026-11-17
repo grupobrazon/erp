@@ -1,0 +1,251 @@
+{
+  "name": "TechnicianRoute",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "C\u00f3digo da rota (R000001)"
+    },
+    "technician": {
+      "type": "string",
+      "description": "Nome do t\u00e9cnico respons\u00e1vel (cache)"
+    },
+    "technician_id": {
+      "type": "string",
+      "description": "ID do t\u00e9cnico respons\u00e1vel (entidade Technician)"
+    },
+    "calendar_id": {
+      "type": "string",
+      "description": "ID do calend\u00e1rio de rota de origem"
+    },
+    "calendar_name": {
+      "type": "string",
+      "description": "Nome do calend\u00e1rio (cache)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data planejada da rota"
+    },
+    "period": {
+      "type": "string",
+      "enum": [
+        "Manh\u00e3",
+        "Tarde",
+        "Dia Inteiro"
+      ],
+      "default": "Dia Inteiro",
+      "description": "Per\u00edodo da rota"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Planejada",
+        "Liberada para App",
+        "Em Andamento",
+        "Conclu\u00edda",
+        "Cancelada"
+      ],
+      "default": "Planejada",
+      "description": "Status da rota"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es da rota"
+    },
+    "departure_address": {
+      "type": "string",
+      "description": "Endere\u00e7o de partida (empresa) \u2014 de onde o t\u00e9cnico sai"
+    },
+    "departure_lat": {
+      "type": "number",
+      "description": "Latitude do ponto de partida"
+    },
+    "departure_lng": {
+      "type": "number",
+      "description": "Longitude do ponto de partida"
+    },
+    "departure_time": {
+      "type": "string",
+      "description": "Hor\u00e1rio previsto de sa\u00edda do ponto de partida (HH:MM) \u2014 calculado a partir do hor\u00e1rio alvo de chegada na primeira parada"
+    },
+    "arrival_address": {
+      "type": "string",
+      "description": "Endere\u00e7o de chegada (empresa, casa do t\u00e9cnico ou endere\u00e7o personalizado) \u2014 onde o t\u00e9cnico encerra o dia"
+    },
+    "arrival_lat": {
+      "type": "number",
+      "description": "Latitude do ponto de chegada"
+    },
+    "arrival_lng": {
+      "type": "number",
+      "description": "Longitude do ponto de chegada"
+    },
+    "end_point_type": {
+      "type": "string",
+      "enum": [
+        "empresa",
+        "casa",
+        "custom"
+      ],
+      "description": "Onde o t\u00e9cnico encerra o dia: empresa (voltou para o escrit\u00f3rio), casa (foi direto para casa) ou custom (endere\u00e7o de retorno personalizado informado na gera\u00e7\u00e3o da rota)"
+    },
+    "stops": {
+      "type": "array",
+      "description": "Paradas otimizadas da rota com timeline (ordem de visita calculada pelo Google Maps)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "number",
+            "description": "Ordem de visita (1, 2, 3...)"
+          },
+          "os_id": {
+            "type": "string"
+          },
+          "os_code": {
+            "type": "string"
+          },
+          "tos_id": {
+            "type": "string",
+            "description": "ID da OS do T\u00e9cnico vinculada"
+          },
+          "tos_code": {
+            "type": "string"
+          },
+          "client_name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "description": "Endere\u00e7o completo da parada"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lng": {
+            "type": "number"
+          },
+          "service_type": {
+            "type": "string",
+            "description": "Tipo da OS (Entrega, Entrega + Instala\u00e7\u00e3o)"
+          },
+          "service_duration_min": {
+            "type": "number",
+            "description": "Tempo estimado de atendimento (minutos)"
+          },
+          "travel_from_prev_min": {
+            "type": "number",
+            "description": "Tempo de deslocamento da parada anterior at\u00e9 esta (minutos)"
+          },
+          "distance_from_prev_km": {
+            "type": "number",
+            "description": "Dist\u00e2ncia da parada anterior at\u00e9 esta (km)"
+          },
+          "arrival_time": {
+            "type": "string",
+            "description": "Hor\u00e1rio previsto de chegada (HH:MM)"
+          },
+          "service_start_time": {
+            "type": "string",
+            "description": "Hor\u00e1rio previsto de in\u00edcio do atendimento (HH:MM)"
+          },
+          "departure_time": {
+            "type": "string",
+            "description": "Hor\u00e1rio previsto de sa\u00edda (HH:MM)"
+          },
+          "appointment_id": {
+            "type": "string",
+            "description": "ID do agendamento vinculado"
+          },
+          "has_payment": {
+            "type": "boolean"
+          },
+          "payment_amount": {
+            "type": "number"
+          },
+          "checked_in": {
+            "type": "boolean",
+            "default": false,
+            "description": "T\u00e9cnico fez check-in nesta parada"
+          },
+          "checkin_lat": {
+            "type": "number"
+          },
+          "checkin_lng": {
+            "type": "number"
+          },
+          "checkin_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "total_distance_km": {
+      "type": "number",
+      "description": "Dist\u00e2ncia total da rota (km) \u2014 soma de todos os trechos"
+    },
+    "total_travel_min": {
+      "type": "number",
+      "description": "Tempo total de deslocamento (minutos)"
+    },
+    "total_service_min": {
+      "type": "number",
+      "description": "Tempo total de atendimento (minutos)"
+    },
+    "estimated_end_time": {
+      "type": "string",
+      "description": "Hor\u00e1rio previsto de t\u00e9rmino da rota (HH:MM)"
+    },
+    "optimized": {
+      "type": "boolean",
+      "default": false,
+      "description": "Rota otimizada pelo Google Maps Directions API"
+    },
+    "released_to_app": {
+      "type": "boolean",
+      "default": false,
+      "description": "Rota liberada para o aplicativo do t\u00e9cnico (vis\u00edvel no app do t\u00e9cnico)"
+    },
+    "released_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que a rota foi liberada para o app"
+    },
+    "checkin_lat": {
+      "type": "number",
+      "description": "Latitude do check-in inicial da rota (sa\u00edda da empresa)"
+    },
+    "checkin_lng": {
+      "type": "number",
+      "description": "Longitude do check-in inicial da rota"
+    },
+    "checkin_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do check-in inicial"
+    },
+    "checkout_lat": {
+      "type": "number",
+      "description": "Latitude do check-out final (encerramento na empresa, casa ou endere\u00e7o personalizado)"
+    },
+    "checkout_lng": {
+      "type": "number",
+      "description": "Longitude do check-out final"
+    },
+    "checkout_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do check-out final"
+    },
+    "total_km_tracked": {
+      "type": "number",
+      "description": "KM total rodado pelo t\u00e9cnico (calculado a partir dos check-ins em cada parada)"
+    }
+  },
+  "required": [
+    "technician",
+    "date"
+  ]
+}

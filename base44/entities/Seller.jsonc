@@ -1,0 +1,44 @@
+{
+  "name": "Seller",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do vendedor"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "URL da foto do vendedor (recorte quadrado do rosto)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Vendedor ativo. Quando inativado, some dos seletores de nova venda e do dashboard de meses futuros, mas permanece no dashboard dos meses em que teve vendas (hist\u00f3rico preservado)."
+    },
+    "inactive_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data em que o vendedor foi inativado (m\u00eas de refer\u00eancia para ocult\u00e1-lo do dashboard daqui para frente)"
+    },
+    "meta_clientes": {
+      "type": "number",
+      "default": 0,
+      "description": "Meta de clientes/atendimentos distribu\u00eddos para a vendedora"
+    },
+    "threec_user_id": {
+      "type": "string",
+      "description": "ID do usu\u00e1rio (agente) no 3C Plus vinculado a esta vendedora"
+    },
+    "threec_extension": {
+      "type": "string",
+      "description": "Ramal do usu\u00e1rio no 3C Plus (cache)"
+    },
+    "threec_agent_token": {
+      "type": "string",
+      "description": "Token de API do agente no 3C Plus (obtido em Configura\u00e7\u00f5es > Usu\u00e1rios > op\u00e7\u00f5es avan\u00e7adas). Necess\u00e1rio para login no discador, Socket.io e WebRTC."
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

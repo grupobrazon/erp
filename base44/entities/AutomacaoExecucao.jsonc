@@ -1,0 +1,123 @@
+{
+  "name": "AutomacaoExecucao",
+  "type": "object",
+  "properties": {
+    "automacao_id": {
+      "type": "string",
+      "description": "ID da automa\u00e7\u00e3o executada"
+    },
+    "automacao_nome": {
+      "type": "string",
+      "description": "Snapshot do nome da automa\u00e7\u00e3o"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "sucesso",
+        "erro",
+        "parado"
+      ],
+      "description": "Status final da execu\u00e7\u00e3o"
+    },
+    "gatilho_tipo": {
+      "type": "string",
+      "description": "Tipo do gatilho: webhook/cron/entidade/manual"
+    },
+    "payload_entrada": {
+      "type": "object",
+      "description": "Payload recebido no disparo",
+      "additionalProperties": true
+    },
+    "payload_saida": {
+      "type": "object",
+      "description": "Payload final de sa\u00edda",
+      "additionalProperties": true
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp de in\u00edcio"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp de t\u00e9rmino"
+    },
+    "duracao_ms": {
+      "type": "number",
+      "default": 0,
+      "description": "Dura\u00e7\u00e3o em milissegundos"
+    },
+    "nos_log": {
+      "type": "array",
+      "description": "Log detalhado por n\u00f3 executado",
+      "items": {
+        "type": "object",
+        "properties": {
+          "node_id": {
+            "type": "string"
+          },
+          "node_type": {
+            "type": "string"
+          },
+          "node_label": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finished_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duracao_ms": {
+            "type": "number"
+          },
+          "output": {
+            "additionalProperties": true
+          },
+          "erro": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "erro_geral": {
+      "type": "string",
+      "description": "Mensagem de erro geral (se status=erro)"
+    }
+  },
+  "required": [
+    "automacao_id",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

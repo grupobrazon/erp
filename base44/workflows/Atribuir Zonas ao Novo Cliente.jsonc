@@ -1,0 +1,40 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "Client"
+    }
+  },
+  "description": "Quando um novo cliente \u00e9 cadastrado, verifica todas as zonas e calend\u00e1rios de rota e atribui as correspondentes ao endere\u00e7o do cliente (multi-zona).",
+  "name": "Atribuir Zonas ao Novo Cliente",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "atribuir_zonas_novo_cliente",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "assign_zones": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "assignClientsToZones",
+            "args": {
+              "client_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Atribuir zonas",
+            "description": "Cruza endere\u00e7o do cliente com zonas"
+          }
+        }
+      }
+    ]
+  }
+}

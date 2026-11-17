@@ -1,0 +1,262 @@
+{
+  "name": "SystemSetting",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da configura\u00e7\u00e3o"
+    },
+    "nfe_serie": {
+      "type": "string",
+      "description": "S\u00e9rie da nota fiscal"
+    },
+    "nfe_certificate_url": {
+      "type": "string",
+      "description": "URL do certificado digital (PFX/P12) enviado"
+    },
+    "nfe_certificate_password": {
+      "type": "string",
+      "description": "Senha do certificado digital"
+    },
+    "nfe_environment": {
+      "type": "string",
+      "enum": [
+        "Homologa\u00e7\u00e3o",
+        "Produ\u00e7\u00e3o"
+      ],
+      "default": "Homologa\u00e7\u00e3o",
+      "description": "Ambiente de emiss\u00e3o da NF-e"
+    },
+    "nfe_provider": {
+      "type": "string",
+      "description": "Provedor de NF-e (NFe.io, Focus NFe, etc.) \u2014 para emiss\u00e3o real futura"
+    },
+    "nfe_provider_api_key": {
+      "type": "string",
+      "description": "API key do provedor de NF-e \u2014 para emiss\u00e3o real futura"
+    },
+    "natureza_operacao": {
+      "type": "string",
+      "description": "Natureza da opera\u00e7\u00e3o padr\u00e3o da NF-e (ex: Venda de mercadoria)",
+      "default": "Venda de mercadoria"
+    },
+    "cfop_internal": {
+      "type": "string",
+      "description": "CFOP para venda dentro do estado (ex: 5102)",
+      "default": "5102"
+    },
+    "cfop_interestadual": {
+      "type": "string",
+      "description": "CFOP para venda interestadual (ex: 6102)",
+      "default": "6102"
+    },
+    "csosn_default": {
+      "type": "string",
+      "description": "CSOSN padr\u00e3o do ICMS para Simples Nacional (ex: 102)",
+      "default": "102"
+    },
+    "pis_cst": {
+      "type": "string",
+      "description": "CST do PIS para Simples Nacional (ex: 08)",
+      "default": "08"
+    },
+    "cofins_cst": {
+      "type": "string",
+      "description": "CST do COFINS para Simples Nacional (ex: 07)",
+      "default": "07"
+    },
+    "ncm_padrao": {
+      "type": "string",
+      "description": "NCM padr\u00e3o quando o produto n\u00e3o tiver NCM cadastrado (ex: 84212100)",
+      "default": "84212100"
+    },
+    "presenca_comprador": {
+      "type": "number",
+      "description": "Presen\u00e7a do comprador: 1 Presencial, 2 Internet, 9 Outros",
+      "default": 2
+    },
+    "threec_api_token": {
+      "type": "string",
+      "description": "Token da API do 3C Plus (obtido em Configura\u00e7\u00f5es > API no painel do 3C Plus). Usado para autenticar as chamadas \u00e0 API (sync de listas, m\u00e9tricas)."
+    },
+    "threec_webhook_token": {
+      "type": "string",
+      "description": "Token fixo inclu\u00eddo na URL do webhook cadastrada no painel do 3C Plus. O webhook valida este token para aceitar os eventos de chamada."
+    },
+    "threec_base_url": {
+      "type": "string",
+      "description": "URL base da API do 3C Plus. Padr\u00e3o: http://app.3c.fluxoti.com.br/api/v1 \u2014 defina apenas se o dom\u00ednio da sua conta for diferente."
+    },
+    "threec_domain": {
+      "type": "string",
+      "description": "Dom\u00ednio da empresa no 3C Plus (ex: brazon.3c.plus). Usado para carregar o WebRTC (softphone) via iframe e conectar o Socket.io para receber eventos em tempo real (cliente atendeu, chamada encerrada, etc.)."
+    },
+    "ghl_location_id": {
+      "type": "string",
+      "description": "Location ID da sub-conta no GoHighLevel (LeadConnector). Obrigat\u00f3rio para todas as chamadas da API do GHL."
+    },
+    "ghl_auto_sync": {
+      "type": "boolean",
+      "default": false,
+      "description": "Sincroniza\u00e7\u00e3o autom\u00e1tica (pull) do GHL ativada via workflow agendado"
+    },
+    "ghl_webhook_token": {
+      "type": "string",
+      "description": "Token fixo inclu\u00eddo na URL do webhook do GHL. O webhook valida este token para aceitar eventos do GHL."
+    },
+    "ghl_last_pull_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do \u00faltimo pull (enriquecimento) realizado do GHL"
+    },
+    "ghl_last_pull_summary": {
+      "type": "object",
+      "description": "Resumo do \u00faltimo pull (contatos lidos, v\u00ednculos feitos por e-mail e por telefone e v\u00ednculos amb\u00edguos que ficaram sem v\u00ednculo)",
+      "properties": {
+        "contacts_fetched": {
+          "type": "number"
+        },
+        "matched": {
+          "type": "number"
+        },
+        "updated": {
+          "type": "number"
+        },
+        "by_email": {
+          "type": "number"
+        },
+        "by_phone": {
+          "type": "number"
+        },
+        "ambiguous": {
+          "type": "number"
+        }
+      }
+    },
+    "maintenance_msg_send_part": {
+      "type": "string",
+      "description": "Modelo de mensagem para o cliente quando uma pe\u00e7a/produto ser\u00e1 enviada para an\u00e1lise. Vari\u00e1veis: {cliente}, {os_codigo}, {produto}, {endereco}, {prazo}",
+      "default": "Ol\u00e1 {cliente}! \ud83d\udce6\n\nRegistramos sua solicita\u00e7\u00e3o de an\u00e1lise t\u00e9cnica. Para verificar o seu equipamento, enviaremos o(s) seguinte(s) produto(s):\n\n*{produto}*\n\nSua Ordem de Servi\u00e7o: *{os_codigo}*\n\nO produto ser\u00e1 enviado para:\n{endereco}\n\nPrevis\u00e3o de envio: {prazo}\n\nAssim que o produto for postado, enviaremos o c\u00f3digo de rastreio. Qualquer d\u00favida, estamos \u00e0 disposi\u00e7\u00e3o!\n\n*Brazon Purificadores*"
+    },
+    "maintenance_msg_send_technician": {
+      "type": "string",
+      "description": "Modelo de mensagem para o cliente quando um t\u00e9cnico ir\u00e1 \u00e0 casa para an\u00e1lise. Vari\u00e1veis: {cliente}, {os_codigo}, {data}, {periodo}, {endereco}",
+      "default": "Ol\u00e1 {cliente}! \ud83d\udd27\n\nRegistramos sua solicita\u00e7\u00e3o de an\u00e1lise t\u00e9cnica. Um dos nossos t\u00e9cnicos ir\u00e1 at\u00e9 a sua resid\u00eancia para avaliar o equipamento.\n\nSua Ordem de Servi\u00e7o: *{os_codigo}*\n\n\ud83d\udcc5 *Data:* {data}\n\u23f0 *Per\u00edodo:* {periodo}\n\ud83d\udccd *Endere\u00e7o:* {endereco}\n\nO t\u00e9cnico far\u00e1 a an\u00e1lise do equipamento para identificar se o problema \u00e9 coberto pela garantia ou se ser\u00e1 necess\u00e1rio cobran\u00e7a de servi\u00e7o.\n\nQualquer d\u00favida, estamos \u00e0 disposi\u00e7\u00e3o!\n\n*Brazon Purificadores*"
+    },
+    "route_msg_intermediate_stops": {
+      "type": "string",
+      "description": "Modelo de mensagem enviado ao t\u00e9cnico quando sua rota cont\u00e9m paradas intermedi\u00e1rias (sem OS). Vari\u00e1veis: {tecnico}, {rota_codigo}, {data}, {paradas}, {total_paradas}",
+      "default": "Ol\u00e1 {tecnico}! \ud83d\ude9a\n\nSua rota *{rota_codigo}* do dia *{data}* cont\u00e9m *{total_paradas} parada(s) intermedi\u00e1ria(s)* antes dos atendimentos:\n\n{paradas}\n\n\ud83d\udccd *Importante:* Voc\u00ea precisa fazer check-in em cada parada intermedi\u00e1ria (bot\u00e3o \"Check-in\" no app). O GPS registra o ponto exato e o KM total da rota \u00e9 calculado a partir desses check-ins.\n\nSem o check-in nas paradas, o KM rodado n\u00e3o ser\u00e1 contabilizado corretamente.\n\n*Brazon Purificadores*"
+    },
+    "vip_reply_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Liga a resposta autom\u00e1tica para quem clica no bot\u00e3o \"QUERO SER VIP\" da campanha de WhatsApp (Atlas/GHL)."
+    },
+    "vip_reply_promotion_id": {
+      "type": "string",
+      "description": "ID do programa VIP usado para gerar o link de ades\u00e3o da resposta autom\u00e1tica"
+    },
+    "vip_reply_promotion_name": {
+      "type": "string",
+      "description": "Nome do programa VIP (cache)"
+    },
+    "vip_reply_campaign_tag": {
+      "type": "string",
+      "description": "Tag do contato no CRM que identifica a campanha (ex: Campanha 02). Em branco = responde qualquer contato que clicar no bot\u00e3o.",
+      "default": "Campanha 02"
+    },
+    "vip_reply_image_url": {
+      "type": "string",
+      "description": "URL p\u00fablica da imagem enviada junto com a resposta autom\u00e1tica VIP"
+    },
+    "vip_reply_audio_url": {
+      "type": "string",
+      "description": "URL p\u00fablica do \u00e1udio enviado junto com a resposta autom\u00e1tica VIP"
+    },
+    "vip_reply_message": {
+      "type": "string",
+      "description": "Mensagem da resposta autom\u00e1tica VIP. Vari\u00e1veis: {cliente}, {link}",
+      "default": "Ol\u00e1 {cliente}! \ud83d\udc99\n\nQue bom ter voc\u00ea com a gente! Sua ades\u00e3o ao Programa Cliente VIP Brazon garante desconto vital\u00edcio na troca de refil do seu purificador.\n\nOu\u00e7a o \u00e1udio e veja a imagem abaixo. Depois \u00e9 s\u00f3 abrir o link, conferir seus dados e assinar o termo digitalmente:\n\n\ud83d\udd17 {link}\n\nQualquer d\u00favida, \u00e9 s\u00f3 responder esta mensagem."
+    },
+    "vip_sweep_cursor": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Cursor da varredura da campanha VIP: data da conversa mais antiga j\u00e1 lida. A varredura continua o hist\u00f3rico a partir daqui e volta ao presente quando alcan\u00e7a 30 dias atr\u00e1s."
+    },
+    "noconf_reply_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Liga a resposta autom\u00e1tica para quem responde \u00e0 campanha que n\u00e3o tem condi\u00e7\u00f5es no momento (clique no bot\u00e3o \"SEM CONDI\u00c7\u00d5ES AGORA\"): o sistema devolve a condi\u00e7\u00e3o especial de troca de refil."
+    },
+    "noconf_reply_message": {
+      "type": "string",
+      "description": "Mensagem da resposta autom\u00e1tica de recupera\u00e7\u00e3o enviada a quem n\u00e3o tem condi\u00e7\u00f5es agora. Vari\u00e1veis: {cliente}",
+      "default": "\ud83d\udc99 Entendemos perfeitamente! Sabemos que nem sempre o momento financeiro \u00e9 o mais favor\u00e1vel, e \u00e9 justamente por isso que queremos te apresentar uma condi\u00e7\u00e3o especial! \ud83d\ude0a\n\n\u2728 Com o VIP Brazon, conseguimos facilitar a troca do seu refil:\n\n\u2705 De R$ 295,00 por apenas R$ 236,00, com 20% de desconto!\n\n\u2705 Parcelamento em at\u00e9 4x de R$ 59,00 sem juros!\n\n\u2705 20% de desconto vital\u00edcio em todas as suas pr\u00f3ximas trocas de refil!\n\n\ud83d\udc99 Essa \u00e9 uma condi\u00e7\u00e3o in\u00e9dita da Brazon, criada para ajudar voc\u00ea a manter a manuten\u00e7\u00e3o do seu purificador em dia, com mais economia!\n\nAdquirindo seu refil ainda neste m\u00eas de outubro, voc\u00ea garante sua entrada no Grupo VIP Brazon e esse benef\u00edcio para sempre! \ud83d\ude0d\n\nVamos aproveitar essa oportunidade e facilitar sua troca de refil? \ud83d\udc99"
+    },
+    "noconf_reply_sent_marker": {
+      "type": "string",
+      "description": "Marca interna da \u00faltima mensagem de recupera\u00e7\u00e3o enviada (evita responder duas vezes o mesmo cliente)"
+    },
+    "vip_reminder_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Lembrete autom\u00e1tico de ades\u00e3o (4 horas depois do link de ades\u00e3o). Ligado/desligado na Gest\u00e3o de Campanhas Atlas. Campo vazio = ligado."
+    },
+    "vip_welcome_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Boas-vindas autom\u00e1ticas no WhatsApp quando o cliente assina um link de ades\u00e3o gerado pela automa\u00e7\u00e3o da campanha. Ligado/desligado na Gest\u00e3o de Campanhas Atlas. Campo vazio = ligado."
+    },
+    "vip_welcome_msg_instalacao": {
+      "type": "string",
+      "description": "Modelo das boas-vindas VIP para cliente atendido por rota de t\u00e9cnico (DDD 31 e 11), com instala\u00e7\u00e3o gratuita. Vari\u00e1veis: {cliente}, {endereco}. Vazio = modelo padr\u00e3o do sistema."
+    },
+    "vip_welcome_msg_frete": {
+      "type": "string",
+      "description": "Modelo das boas-vindas VIP para cliente atendido por transportadora (demais DDDs), com desconto no frete. Vari\u00e1veis: {cliente}, {endereco}. Vazio = modelo padr\u00e3o do sistema."
+    },
+    "vip_reminder_message": {
+      "type": "string",
+      "description": "Modelo do lembrete de ades\u00e3o enviado 4 horas depois do link autom\u00e1tico para quem ainda n\u00e3o assinou. Vari\u00e1vel: {cliente}. Vazio = modelo padr\u00e3o do sistema."
+    },
+    "romaneio_tracking_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Liga o aviso autom\u00e1tico de rastreio no WhatsApp quando a mercadoria \u00e9 despachada no romaneio. Ligado/desligado na tela de Configura\u00e7\u00f5es (Aviso de rastreio no despacho)."
+    },
+    "romaneio_window_template_id": {
+      "type": "string",
+      "description": "ID do modelo aprovado de WhatsApp usado para iniciar a conversa quando a janela do Meta est\u00e1 fechada (pergunta se o cliente pode falar agora)"
+    },
+    "romaneio_window_message": {
+      "type": "string",
+      "description": "Mensagem usada para perguntar se o cliente pode falar agora, quando n\u00e3o h\u00e1 modelo aprovado configurado"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

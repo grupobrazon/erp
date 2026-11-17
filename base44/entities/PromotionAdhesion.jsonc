@@ -1,0 +1,219 @@
+{
+  "name": "PromotionAdhesion",
+  "type": "object",
+  "properties": {
+    "promotion_id": {
+      "type": "string",
+      "description": "ID do programa/promo\u00e7\u00e3o"
+    },
+    "promotion_name": {
+      "type": "string",
+      "description": "Nome do programa (cache)"
+    },
+    "promotion_category": {
+      "type": "string",
+      "description": "Categoria do programa (cache \u2014 Programa VIP, Promo\u00e7\u00e3o de Desconto, Campanha Sazonal)"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente convidado a aderir"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente (pr\u00e9-preenchido no link)"
+    },
+    "client_document": {
+      "type": "string",
+      "description": "CPF/CNPJ do cliente (pr\u00e9-preenchido no link)"
+    },
+    "client_email": {
+      "type": "string",
+      "description": "E-mail do cliente (pr\u00e9-preenchido no link)"
+    },
+    "client_phone": {
+      "type": "string",
+      "description": "WhatsApp do cliente (pr\u00e9-preenchido no link)"
+    },
+    "token": {
+      "type": "string",
+      "description": "C\u00f3digo de ades\u00e3o que comp\u00f5e o link externo (ex: VIP-7F3A2C9D). Usado para consultar/assinar o termo sem login."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Link Gerado",
+        "Aceita",
+        "Cancelada"
+      ],
+      "default": "Link Gerado",
+      "description": "Situa\u00e7\u00e3o da ades\u00e3o: Link Gerado (aguardando o cliente) \u2192 Aceita (termo assinado digitalmente) ou Cancelada"
+    },
+    "generated_by": {
+      "type": "string",
+      "description": "Nome do vendedor que gerou o link"
+    },
+    "generated_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que o link foi gerado"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do \u00faltimo envio do termo por e-mail ou WhatsApp"
+    },
+    "sent_to": {
+      "type": "string",
+      "description": "Destino do \u00faltimo envio (e-mail ou WhatsApp)"
+    },
+    "verification_code": {
+      "type": "string",
+      "description": "C\u00f3digo de verifica\u00e7\u00e3o enviado por e-mail ao cliente (6 d\u00edgitos)"
+    },
+    "code_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Validade do c\u00f3digo de verifica\u00e7\u00e3o"
+    },
+    "code_attempts": {
+      "type": "number",
+      "default": 0,
+      "description": "Tentativas incorretas do c\u00f3digo de verifica\u00e7\u00e3o"
+    },
+    "accepted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do aceite digital do termo"
+    },
+    "accepted_name": {
+      "type": "string",
+      "description": "Nome completo confirmado no aceite"
+    },
+    "accepted_document": {
+      "type": "string",
+      "description": "CPF/CNPJ confirmado no aceite"
+    },
+    "accepted_email": {
+      "type": "string",
+      "description": "E-mail validado por c\u00f3digo no aceite"
+    },
+    "accepted_phone": {
+      "type": "string",
+      "description": "WhatsApp confirmado no aceite"
+    },
+    "signature_url": {
+      "type": "string",
+      "description": "URI da assinatura digital do cliente (armazenada de forma privada; exibida por link assinado)"
+    },
+    "accepted_discount_percent": {
+      "type": "number",
+      "description": "Percentual de desconto concedido no momento do aceite (snapshot)"
+    },
+    "accepted_campaign": {
+      "type": "string",
+      "description": "Campanha vigente no momento do aceite (snapshot)"
+    },
+    "welcome_sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que a mensagem autom\u00e1tica de boas-vindas ao VIP foi enviada no WhatsApp (apenas links gerados pela automa\u00e7\u00e3o da campanha). Vazio = ainda n\u00e3o recebeu \u2014 usado para n\u00e3o repetir a mensagem."
+    },
+    "followup_sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do lembrete de ades\u00e3o enviado 4 horas depois do link, quando o cliente ainda n\u00e3o assinou o termo. Marcado j\u00e1 na primeira tentativa para n\u00e3o insistir a cada execu\u00e7\u00e3o \u2014 quando o envio falha, o motivo fica registrado no log de integra\u00e7\u00e3o."
+    },
+    "terms_snapshot": {
+      "type": "string",
+      "description": "C\u00f3pia do termo de ades\u00e3o aceito pelo cliente (vers\u00e3o assinada)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es internas sobre a ades\u00e3o"
+    }
+  },
+  "required": [
+    "promotion_id",
+    "client_id",
+    "token"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "supervisor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendedor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "pos_vendas"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "supervisor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendedor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "pos_vendas"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "supervisor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendedor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "pos_vendas"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

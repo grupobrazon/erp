@@ -1,0 +1,61 @@
+{
+  "name": "PaymentCondition",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome descritivo gerado automaticamente (Ex: Cart\u00e3o de Cr\u00e9dito 3x, PIX, Faturado 2x)"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "Recebimento",
+        "Pagamento"
+      ],
+      "default": "Recebimento",
+      "description": "Recebimento (vendas) ou Pagamento (compras)"
+    },
+    "payment_type": {
+      "type": "string",
+      "enum": [
+        "\u00c0 Vista",
+        "Parcelado",
+        "Bonifica\u00e7\u00e3o"
+      ],
+      "default": "\u00c0 Vista",
+      "description": "Tipo da condi\u00e7\u00e3o de pagamento"
+    },
+    "modality": {
+      "type": "string",
+      "description": "Modalidade: \u00c0 Vista = Dinheiro em Esp\u00e9cie, PIX, Cart\u00e3o de D\u00e9bito | Parcelado = Faturado, Cart\u00e3o de Cr\u00e9dito | Bonifica\u00e7\u00e3o = Permuta, Bonifica\u00e7\u00e3o, Brinde"
+    },
+    "installments": {
+      "type": "number",
+      "default": 1,
+      "description": "N\u00famero de parcelas (apenas para Parcelado)"
+    },
+    "financial_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Taxa financeira percentual da condi\u00e7\u00e3o (apenas para Parcelado)"
+    },
+    "is_legacy": {
+      "type": "boolean",
+      "default": false,
+      "description": "Condi\u00e7\u00e3o de pagamento legada (somente para vendas importadas)"
+    },
+    "bank_account_id": {
+      "type": "string",
+      "description": "Conta banc\u00e1ria vinculada \u00e0 condi\u00e7\u00e3o de pagamento"
+    },
+    "bank_account_name": {
+      "type": "string",
+      "description": "Nome da conta banc\u00e1ria (cache)"
+    }
+  },
+  "required": [
+    "payment_type",
+    "modality",
+    "name"
+  ]
+}

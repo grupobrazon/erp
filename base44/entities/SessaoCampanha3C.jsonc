@@ -1,0 +1,112 @@
+{
+  "name": "SessaoCampanha3C",
+  "type": "object",
+  "properties": {
+    "seller_id": {
+      "type": "string",
+      "description": "ID da vendedora"
+    },
+    "seller_name": {
+      "type": "string",
+      "description": "Nome da vendedora (cache)"
+    },
+    "campaign_id_3c": {
+      "type": "string",
+      "description": "ID da campanha no 3C Plus"
+    },
+    "campaign_name": {
+      "type": "string",
+      "description": "Nome da campanha (cache)"
+    },
+    "login_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora de entrada na campanha"
+    },
+    "logout_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora de sa\u00edda da campanha"
+    },
+    "duration_seconds": {
+      "type": "number",
+      "default": 0,
+      "description": "Dura\u00e7\u00e3o total da sess\u00e3o em segundos (login at\u00e9 logout)"
+    },
+    "active_seconds": {
+      "type": "number",
+      "default": 0,
+      "description": "Tempo ativo em chamada/dispon\u00edvel (sess\u00e3o - pausas)"
+    },
+    "breaks": {
+      "type": "array",
+      "description": "Lista de pausas/intervalos durante a sess\u00e3o",
+      "items": {
+        "type": "object",
+        "properties": {
+          "break_id": {
+            "type": "string"
+          },
+          "break_name": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ended_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration_seconds": {
+            "type": "number",
+            "default": 0
+          }
+        }
+      }
+    },
+    "total_break_seconds": {
+      "type": "number",
+      "default": 0,
+      "description": "Tempo total em pausa (soma de todas as pausas)"
+    },
+    "calls_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Total de chamadas recebidas na sess\u00e3o"
+    },
+    "calls_answered": {
+      "type": "number",
+      "default": 0,
+      "description": "Chamadas atendidas (cliente atendeu)"
+    },
+    "calls_not_answered": {
+      "type": "number",
+      "default": 0,
+      "description": "Chamadas n\u00e3o atendidas / ocupado / caixa postal"
+    },
+    "talk_time_seconds": {
+      "type": "number",
+      "default": 0,
+      "description": "Tempo total em conversa (soma das dura\u00e7\u00f5es das chamadas atendidas)"
+    },
+    "records_made": {
+      "type": "number",
+      "default": 0,
+      "description": "Registros de contato/CRM criados durante a sess\u00e3o"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Ativa",
+        "Encerrada"
+      ],
+      "default": "Ativa",
+      "description": "Ativa = vendedora ainda logada | Encerrada = fez logout"
+    }
+  },
+  "required": [
+    "seller_id",
+    "campaign_id_3c"
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "name": "Equipment",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "C\u00f3digo do equipamento (EQ000001) \u2014 legado"
+    },
+    "patrimony_code": {
+      "type": "string",
+      "description": "C\u00f3digo de patrim\u00f4nio (c\u00f3digo_do_cliente-01, -02, etc.)"
+    },
+    "record_type": {
+      "type": "string",
+      "enum": [
+        "equipamento",
+        "peca"
+      ],
+      "default": "equipamento",
+      "description": "equipamento = gerado por venda de produto que gera patrim\u00f4nio; peca = venda direta de elemento filtrante sem equipamento vinculado"
+    },
+    "imported": {
+      "type": "boolean",
+      "default": false,
+      "description": "Equipamento importado de base legada (ERP antigo) \u2014 permite edi\u00e7\u00e3o manual"
+    },
+    "pending_link": {
+      "type": "boolean",
+      "default": false,
+      "description": "Pe\u00e7a pendente de vincula\u00e7\u00e3o a um equipamento"
+    },
+    "linked_equipment_id": {
+      "type": "string",
+      "description": "ID do equipamento ao qual esta pe\u00e7a foi vinculada"
+    },
+    "serial_number": {
+      "type": "string"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "Cliente atual"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente (cache)"
+    },
+    "address_id": {
+      "type": "string",
+      "description": "Endere\u00e7o de instala\u00e7\u00e3o"
+    },
+    "address_label": {
+      "type": "string",
+      "description": "Label do endere\u00e7o (cache)"
+    },
+    "product_id": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Nome do produto (cache)"
+    },
+    "brand": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "custom_product": {
+      "type": "boolean",
+      "default": false,
+      "description": "Produto de mercado (n\u00e3o \u00e9 produto Brazon do estoque) \u2014 cadastrado manualmente para equipamentos que prestamos manuten\u00e7\u00e3o mas n\u00e3o vendemos"
+    },
+    "sale_id": {
+      "type": "string",
+      "description": "ID da venda que gerou este registro"
+    },
+    "sale_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "installation_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "warranty_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Ativo",
+        "Inativo",
+        "Retirado",
+        "Em manuten\u00e7\u00e3o",
+        "Substitu\u00eddo"
+      ],
+      "default": "Ativo"
+    },
+    "inactive_reason": {
+      "type": "string",
+      "description": "Motivo da inativa\u00e7\u00e3o do equipamento"
+    },
+    "inactive_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data em que o equipamento foi inativado"
+    },
+    "last_maintenance_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "next_maintenance_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "last_maintenance_part_id": {
+      "type": "string",
+      "description": "ID da \u00faltima c\u00e1psula/elemento filtrante usado na manuten\u00e7\u00e3o"
+    },
+    "last_maintenance_part_name": {
+      "type": "string",
+      "description": "Nome da \u00faltima c\u00e1psula/elemento filtrante usado (cache) \u2014 modelo do refil (ex: Neutro Alcalino)"
+    },
+    "refill_type": {
+      "type": "string"
+    },
+    "maintenance_interval_months": {
+      "type": "number"
+    },
+    "product_history": {
+      "type": "array",
+      "description": "Hist\u00f3rico de altera\u00e7\u00f5es do modelo do produto (append-only, nunca apagar)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "old_product_name": {
+            "type": "string"
+          },
+          "old_brand": {
+            "type": "string"
+          },
+          "old_model": {
+            "type": "string"
+          },
+          "new_product_name": {
+            "type": "string"
+          },
+          "new_brand": {
+            "type": "string"
+          },
+          "new_model": {
+            "type": "string"
+          },
+          "changed_by": {
+            "type": "string",
+            "description": "Nome de quem alterou"
+          }
+        }
+      }
+    },
+    "crm_status": {
+      "type": "string",
+      "enum": [
+        "Aguardando Contato",
+        "Contato Realizado",
+        "Agendado",
+        "Sem Resposta",
+        "N\u00e3o Interessado",
+        "Lembrete Pe\u00e7a Extra"
+      ],
+      "default": "Aguardando Contato",
+      "description": "Status do CRM \u2014 controle de contato com o cliente para agendamento de troca. 'Lembrete Pe\u00e7a Extra' = cliente comprou refil extra junto com o equipamento; contato agendado para o vencimento somado de ambos os refis."
+    },
+    "crm_last_contact_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do \u00faltimo contato com o cliente"
+    },
+    "crm_next_contact_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data para retornar o contato (follow-up)"
+    },
+    "crm_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es do CRM (\u00faltimo atendimento, motivo de n\u00e3o interesse, etc.)"
+    },
+    "crm_contact_log": {
+      "type": "array",
+      "description": "Hist\u00f3rico de contatos CRM (append-only, nunca apagar) \u2014 cada contato fica registrado com data, atendente, telefone e observa\u00e7\u00f5es",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Data do contato"
+          },
+          "attendant": {
+            "type": "string",
+            "description": "Nome da atendente que fez o contato"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Telefone utilizado no contato"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status do contato"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Observa\u00e7\u00f5es registradas"
+          },
+          "follow_up_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Data de retorno agendada"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "client_id",
+    "status"
+  ]
+}

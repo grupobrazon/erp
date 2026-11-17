@@ -1,0 +1,65 @@
+{
+  "name": "RegionalVizinhanca",
+  "type": "object",
+  "properties": {
+    "regional": {
+      "type": "string",
+      "description": "Nome da Regional (ex: SP \u2013 Centro, MET \u2013 ABC, BH \u2013 Pampulha)"
+    },
+    "area": {
+      "type": "string",
+      "enum": [
+        "BH Capital",
+        "Grande BH",
+        "SP Capital",
+        "Grande SP"
+      ],
+      "description": "\u00c1rea da Regional \u2014 determina os limites de dist\u00e2ncia aplicados"
+    },
+    "vizinhas": {
+      "type": "array",
+      "description": "Regionais consideradas vizinhas/compat\u00edveis para agendamento no mesmo per\u00edodo",
+      "items": {
+        "type": "string"
+      }
+    },
+    "limite_ideal_km": {
+      "type": "number",
+      "description": "Dist\u00e2ncia ideal (km) \u2014 at\u00e9 aqui: RECOMENDADO (verde)"
+    },
+    "limite_aceitavel_km": {
+      "type": "number",
+      "description": "Dist\u00e2ncia aceit\u00e1vel (km) \u2014 entre ideal e aceit\u00e1vel: ATEN\u00c7\u00c3O (amarelo)"
+    },
+    "limite_bloqueio_km": {
+      "type": "number",
+      "description": "Dist\u00e2ncia m\u00e1xima (km) \u2014 acima: BLOQUEADO (vermelho)"
+    }
+  },
+  "required": [
+    "regional",
+    "area"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

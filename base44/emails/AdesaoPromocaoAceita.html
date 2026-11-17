@@ -1,0 +1,52 @@
+<mjml>
+  <mj-head>
+    <mj-title>Adesão confirmada ao {{promotion_name}}</mj-title>
+    <mj-preview>O termo assinado digitalmente já está disponível para consulta e download.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, Arial, sans-serif" />
+      <mj-section background-color="#ffffff" padding="0 36px" />
+      <mj-text color="#171d26" font-size="15px" line-height="1.6" padding="0" />
+      <mj-button background-color="#0b81b7" color="#000000" border-radius="8px" font-weight="700" inner-padding="14px 28px" align="left" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f9fafb">
+    <mj-section background-color="#0b81b7" padding="20px 36px">
+      <mj-column>
+        <mj-image src="https://media.base44.com/images/public/6a1f6fc98b44d834e281aa51/90e503685_logobrazon.jpg" alt="Brazon Comercial" width="140px" align="left" padding="0" />
+        <mj-text color="#000000" font-size="14px" font-weight="700" padding="8px 0 0 0">Brazon Comercial</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="36px 36px 8px">
+      <mj-column>
+        <mj-text font-size="26px" font-weight="700" line-height="1.2" padding="0">Adesão confirmada, {{client_name}}!</mj-text>
+        <mj-text color="#171d26" font-size="15px" padding="12px 0 0 0">
+          Recebemos seu aceite ao <strong>{{promotion_name}}</strong>. Seu termo assinado digitalmente fica disponível no link abaixo, para consultar ou baixar em PDF quando quiser.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="8px 36px 8px">
+      <mj-column>
+        <mj-text font-size="14px" padding="6px 0 0 0"><strong>Programa:</strong> {{promotion_name}}</mj-text>
+        <mj-text font-size="14px" padding="4px 0 0 0"><strong>Desconto concedido:</strong> {{discount_percent}}%</mj-text>
+        <mj-text font-size="14px" padding="4px 0 0 0"><strong>Data do aceite:</strong> {{accepted_date}}</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="16px 36px 8px">
+      <mj-column>
+        <mj-button href="{{term_link}}">Consultar meu termo</mj-button>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="16px 36px 40px">
+      <mj-column>
+        <mj-divider border-color="#e5e7eb" padding="0 0 16px 0" />
+        <mj-text color="#171d26" font-size="12px" padding="0">
+          Guarde este link: ele é o seu comprovante de adesão. Em caso de dúvidas, fale com a nossa equipe de atendimento.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

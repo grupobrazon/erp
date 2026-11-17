@@ -1,0 +1,86 @@
+{
+  "name": "Maintenance",
+  "type": "object",
+  "properties": {
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_code": {
+      "type": "string"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "technician": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Troca de Refil",
+        "Troca de Elemento Filtrante",
+        "Higieniza\u00e7\u00e3o",
+        "Revis\u00e3o Preventiva",
+        "Manuten\u00e7\u00e3o Corretiva",
+        "Visita T\u00e9cnica"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "parts_used": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "signature_url": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "Realizada",
+        "Reagendada",
+        "Cancelada",
+        "Sem acesso ao local"
+      ]
+    },
+    "service_order_id": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "equipment_id",
+    "client_id",
+    "date",
+    "type"
+  ]
+}

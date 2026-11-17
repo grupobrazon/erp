@@ -1,0 +1,54 @@
+{
+  "name": "ZoneDayOverride",
+  "type": "object",
+  "properties": {
+    "zone_id": {
+      "type": "string",
+      "description": "ID da zona"
+    },
+    "zone_name": {
+      "type": "string",
+      "description": "Nome da zona (cache)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data espec\u00edfica do override"
+    },
+    "technician_count": {
+      "type": "number",
+      "description": "Quantidade de t\u00e9cnicos para este dia (override da capacidade di\u00e1ria da zona)"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Motivo do override (ex: pico de demanda, t\u00e9cnico extra)"
+    }
+  },
+  "required": [
+    "zone_id",
+    "date",
+    "technician_count"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "BankAccount",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome identificador da conta (ex: Conta Ita\u00fa Operacional, Caixa Geral)"
+    },
+    "bank_code": {
+      "type": "string",
+      "description": "C\u00f3digo do banco (ex: 341, 237)"
+    },
+    "bank_name": {
+      "type": "string",
+      "description": "Nome do banco"
+    },
+    "agency": {
+      "type": "string",
+      "description": "Ag\u00eancia"
+    },
+    "account_number": {
+      "type": "string",
+      "description": "N\u00famero da conta"
+    },
+    "account_digit": {
+      "type": "string",
+      "description": "D\u00edgito verificador da conta"
+    },
+    "account_type": {
+      "type": "string",
+      "enum": [
+        "Conta Corrente",
+        "Poupan\u00e7a",
+        "Conta Pagamento"
+      ],
+      "default": "Conta Corrente"
+    },
+    "holder_name": {
+      "type": "string",
+      "description": "Nome do titular"
+    },
+    "cnpj": {
+      "type": "string",
+      "description": "CNPJ vinculado \u00e0 conta (empresa titular)"
+    },
+    "pix_key": {
+      "type": "string",
+      "description": "Chave PIX da conta"
+    },
+    "initial_balance": {
+      "type": "number",
+      "default": 0,
+      "description": "Saldo inicial"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

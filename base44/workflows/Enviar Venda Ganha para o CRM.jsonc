@@ -1,0 +1,41 @@
+{
+  "name": "Enviar Venda Ganha para o CRM",
+  "description": "Quando uma venda \u00e9 declarada como ganho (sai do Or\u00e7amento e n\u00e3o est\u00e1 cancelada), atualiza o contato e a oportunidade no CRM (GoHighLevel) via API, gravando o valor do neg\u00f3cio e marcando o status como Ganho.",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create",
+        "update"
+      ],
+      "entity_name": "Sale"
+    },
+    "condition": "${ (.trigger.event_type == \"create\" or ((.trigger.changed_fields // []) | index(\"stage\") != null)) and .trigger.data.stage != \"Or\u00e7amento\" and .trigger.data.stage != \"Cancelada\" }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "enviar_venda_ganha_crm",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "enviar_lead_crm": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendWonSaleToCrm",
+            "args": {
+              "sale_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Sincronizar venda com o CRM",
+            "description": "API GoHighLevel \u2014 contato + oportunidade (valor e Ganho)"
+          }
+        }
+      }
+    ]
+  }
+}

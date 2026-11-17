@@ -1,0 +1,118 @@
+{
+  "name": "RomaneioTracking",
+  "type": "object",
+  "properties": {
+    "os_id": {
+      "type": "string",
+      "description": "ID da OS que entrou em transporte"
+    },
+    "os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS (cache)"
+    },
+    "sale_order_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido (cache)"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente (cache)"
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "ID do contato no CRM (GoHighLevel) usado no envio do aviso"
+    },
+    "romaneio_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do romaneio em que a OS foi despachada"
+    },
+    "dispatched_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que a OS entrou em 'Em Transporte' e o acompanhamento come\u00e7ou"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Aguardando Rastreio",
+        "Enviado",
+        "Aguardando Resposta",
+        "Expirado",
+        "Sem Envio"
+      ],
+      "default": "Aguardando Rastreio",
+      "description": "Aguardando Rastreio = etiqueta ainda n\u00e3o liberada, o c\u00f3digo de rastreio chega depois | Enviado = c\u00f3digo de rastreio entregue no WhatsApp | Aguardando Resposta = janela do WhatsApp fechada, perguntamos se o cliente pode falar agora | Expirado = prazo encerrado sem c\u00f3digo ou sem resposta | Sem Envio = sem contato no CRM"
+    },
+    "tracking_codes": {
+      "type": "array",
+      "description": "C\u00f3digos de rastreio enviados (ou a enviar) ao cliente",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tracking_message_sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que o c\u00f3digo de rastreio foi enviado ao cliente"
+    },
+    "window_requested_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da PRIMEIRA pergunta ao cliente se ele pode falar agora. \u00c9 o marco usado para saber se a resposta dele j\u00e1 chegou (nunca \u00e9 reescrito nos reenvios)."
+    },
+    "last_ask_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da \u00faltima pergunta enviada ao cliente. A pergunta \u00e9 repetida a cada 24 horas enquanto ele n\u00e3o responde."
+    },
+    "window_request_template_id": {
+      "type": "string",
+      "description": "Modelo aprovado usado na pergunta (cache)"
+    },
+    "attempts": {
+      "type": "number",
+      "default": 0,
+      "description": "Quantas verifica\u00e7\u00f5es j\u00e1 foram feitas"
+    },
+    "last_checked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da \u00faltima verifica\u00e7\u00e3o"
+    },
+    "last_error": {
+      "type": "string",
+      "description": "\u00daltima mensagem de erro devolvida pelo CRM (vazio quando deu tudo certo)"
+    }
+  },
+  "required": [
+    "os_id",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

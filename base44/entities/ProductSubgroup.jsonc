@@ -1,0 +1,47 @@
+{
+  "name": "ProductSubgroup",
+  "type": "object",
+  "properties": {
+    "group_id": {
+      "type": "string",
+      "description": "ID do grupo ao qual pertence"
+    },
+    "group_name": {
+      "type": "string",
+      "description": "Nome do grupo (cache)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nome do subgrupo (Ex: iPure)"
+    },
+    "height": {
+      "type": "number",
+      "description": "Altura padr\u00e3o (cm) \u2014 usada na cota\u00e7\u00e3o de frete dos produtos do subgrupo. Sobrescreve a dimens\u00e3o do grupo."
+    },
+    "width": {
+      "type": "number",
+      "description": "Largura padr\u00e3o (cm) \u2014 usada na cota\u00e7\u00e3o de frete dos produtos do subgrupo. Sobrescreve a dimens\u00e3o do grupo."
+    },
+    "length": {
+      "type": "number",
+      "description": "Comprimento padr\u00e3o (cm) \u2014 usado na cota\u00e7\u00e3o de frete dos produtos do subgrupo. Sobrescreve a dimens\u00e3o do grupo."
+    },
+    "weight": {
+      "type": "number",
+      "description": "Peso padr\u00e3o (kg) \u2014 usado na cota\u00e7\u00e3o de frete dos produtos do subgrupo. Sobrescreve a dimens\u00e3o do grupo."
+    },
+    "cost": {
+      "type": "number",
+      "description": "Custo padr\u00e3o (R$) \u2014 replicado para os produtos do subgrupo ao lan\u00e7ar custo. Sobrescreve o custo do grupo."
+    },
+    "target_margin_percent": {
+      "type": "number",
+      "default": 0,
+      "description": "Margem de lucro alvo (%) para os produtos do subgrupo. Sobrescreve a margem do grupo e a global. Replicada para os produtos do subgrupo ao lan\u00e7ar margem."
+    }
+  },
+  "required": [
+    "group_id",
+    "name"
+  ]
+}

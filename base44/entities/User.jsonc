@@ -1,0 +1,76 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "vendedor",
+        "supervisor",
+        "logistica",
+        "producao",
+        "pos_vendas",
+        "financeiro",
+        "contas_receber",
+        "tecnico"
+      ],
+      "default": "vendedor",
+      "description": "Perfil principal do usu\u00e1rio no ERP Brazon"
+    },
+    "additional_roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "admin",
+          "vendedor",
+          "supervisor",
+          "logistica",
+          "producao",
+          "pos_vendas",
+          "financeiro",
+          "contas_receber",
+          "tecnico"
+        ]
+      },
+      "default": [],
+      "description": "Perfis adicionais do usu\u00e1rio (multi-perfil)"
+    },
+    "extra_menu_access": {
+      "type": "object",
+      "description": "Libera\u00e7\u00e3o adicional de menu por usu\u00e1rio. Mesma estrutura do menuAccessByRole ({ \"Grupo\": true | [\"Item\", ...] }). Mescla-se ao acesso do perfil sem afetar outros usu\u00e1rios.",
+      "additionalProperties": true
+    },
+    "extra_permissions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "estorno_financeiro",
+          "apagar_rota",
+          "adicionar_atendimentos_rota",
+          "estornar_pedido"
+        ]
+      },
+      "default": [],
+      "description": "Permiss\u00f5es individuais concedidas diretamente ao usu\u00e1rio, sem alterar seu perfil. 'estorno_financeiro' permite operar a se\u00e7\u00e3o de Estorno Financeiro (visualizar dados de estorno/pagamentos e anexar comprovantes) no fluxo de cancelamento de vendas. 'apagar_rota' libera o bot\u00e3o de excluir rota de t\u00e9cnico (respeitando a regra: rotas conclu\u00eddas, em andamento ou com check-in do t\u00e9cnico n\u00e3o podem ser exclu\u00eddas). 'adicionar_atendimentos_rota' libera incluir atendimentos em rotas de t\u00e9cnico. 'estornar_pedido' libera o estorno de pedidos para Or\u00e7amento na tela de Vendas, mesmo com perfil de vendedor."
+    },
+    "seller_id": {
+      "type": "string",
+      "description": "ID do vendedor vinculado (quando o perfil inclui vendedor)"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "URL da foto do usu\u00e1rio (cadastrada manualmente quando n\u00e3o vinculado a vendedor)"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Nome de exibi\u00e7\u00e3o definido pelo administrador (sobrescreve full_name na interface)"
+    },
+    "technician_id": {
+      "type": "string",
+      "description": "ID do t\u00e9cnico vinculado (quando o perfil \u00e9 t\u00e9cnico)"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "name": "BankTransaction",
+  "type": "object",
+  "properties": {
+    "bank_account_id": {
+      "type": "string",
+      "description": "ID da conta banc\u00e1ria"
+    },
+    "bank_account_name": {
+      "type": "string",
+      "description": "Nome da conta banc\u00e1ria (cache)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data da transa\u00e7\u00e3o"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Valor da transa\u00e7\u00e3o (sempre positivo)"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "Entrada",
+        "Sa\u00edda"
+      ],
+      "description": "Dire\u00e7\u00e3o do fluxo: Entrada = recebimento, Sa\u00edda = pagamento"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descri\u00e7\u00e3o da transa\u00e7\u00e3o"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "Manual",
+        "Importado",
+        "Recebimento",
+        "Pagamento"
+      ],
+      "default": "Manual",
+      "description": "Origem da transa\u00e7\u00e3o"
+    },
+    "reconciled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Transa\u00e7\u00e3o conciliada com recebimento ou pagamento"
+    },
+    "reconciled_with_type": {
+      "type": "string",
+      "enum": [
+        "receivable",
+        "payable",
+        "none"
+      ],
+      "default": "none",
+      "description": "Tipo do registro conciliado"
+    },
+    "reconciled_with_id": {
+      "type": "string",
+      "description": "ID do registro conciliado"
+    },
+    "reconciled_with_label": {
+      "type": "string",
+      "description": "Label amig\u00e1vel do registro conciliado"
+    },
+    "document_url": {
+      "type": "string",
+      "description": "Comprovante anexado"
+    }
+  },
+  "required": [
+    "bank_account_id",
+    "date",
+    "amount",
+    "direction",
+    "description"
+  ]
+}

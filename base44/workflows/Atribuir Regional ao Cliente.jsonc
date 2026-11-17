@@ -1,0 +1,41 @@
+{
+  "trigger": {
+    "condition": "${ .trigger.event_type == \"create\" or ((.trigger.changed_fields // []) | index(\"city\") != null) or ((.trigger.changed_fields // []) | index(\"neighborhood\") != null) or ((.trigger.changed_fields // []) | index(\"state\") != null) }",
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create",
+        "update"
+      ],
+      "entity_name": "Client"
+    }
+  },
+  "description": "Ao cadastrar ou alterar o endere\u00e7o de um cliente, categoriza automaticamente a Regional (Grande SP) via tabela de munic\u00edpios ou classifica\u00e7\u00e3o do bairro da capital.",
+  "name": "Atribuir Regional ao Cliente",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "atribuir_regional_cliente",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "assign_regional": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "assignClientRegional",
+            "args": {
+              "client_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Categorizar Regional",
+            "description": "Atribui a Regional ao endere\u00e7o do cliente"
+          }
+        }
+      }
+    ]
+  }
+}

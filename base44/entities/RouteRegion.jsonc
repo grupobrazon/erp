@@ -1,0 +1,24 @@
+{
+  "name": "RouteRegion",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da regi\u00e3o de rota (ex: S\u00e3o Paulo, Belo Horizonte)"
+    },
+    "state": {
+      "type": "string",
+      "description": "Estado/UF principal da regi\u00e3o"
+    },
+    "cities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Cidades atendidas pela regi\u00e3o"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

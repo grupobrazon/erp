@@ -1,0 +1,115 @@
+{
+  "name": "Automacao",
+  "type": "object",
+  "properties": {
+    "nome": {
+      "type": "string",
+      "description": "Nome da automa\u00e7\u00e3o"
+    },
+    "descricao": {
+      "type": "string",
+      "description": "Descri\u00e7\u00e3o da automa\u00e7\u00e3o"
+    },
+    "ativo": {
+      "type": "boolean",
+      "default": true,
+      "description": "Se a automa\u00e7\u00e3o est\u00e1 ativa"
+    },
+    "tipo_gatilho": {
+      "type": "string",
+      "enum": [
+        "webhook",
+        "cron",
+        "entidade"
+      ],
+      "description": "Tipo de gatilho da automa\u00e7\u00e3o"
+    },
+    "config_gatilho": {
+      "type": "object",
+      "description": "Configura\u00e7\u00e3o flex\u00edvel do gatilho",
+      "additionalProperties": true
+    },
+    "webhook_token": {
+      "type": "string",
+      "description": "Token \u00fanico para a URL p\u00fablica do webhook"
+    },
+    "cron_expressao": {
+      "type": "string",
+      "description": "Express\u00e3o cron (ex: */30 * * * *)"
+    },
+    "entidade_alvo": {
+      "type": "string",
+      "description": "Nome da entidade observada (gatilho entidade)"
+    },
+    "evento_entidade": {
+      "type": "string",
+      "enum": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "description": "Evento que dispara (gatilho entidade)"
+    },
+    "grafo": {
+      "type": "object",
+      "description": "Fluxo visual { nodes: [], edges: [] }",
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "ultimo_disparo": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp do \u00faltimo disparo"
+    },
+    "total_execucoes": {
+      "type": "number",
+      "default": 0,
+      "description": "Contador total de execu\u00e7\u00f5es"
+    },
+    "total_sucessos": {
+      "type": "number",
+      "default": 0,
+      "description": "Contador de execu\u00e7\u00f5es com sucesso"
+    }
+  },
+  "required": [
+    "nome",
+    "tipo_gatilho"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

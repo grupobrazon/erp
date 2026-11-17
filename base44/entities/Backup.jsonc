@@ -1,0 +1,58 @@
+{
+  "name": "Backup",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora do backup"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL do arquivo de backup (JSON)"
+    },
+    "summary": {
+      "type": "string",
+      "description": "JSON com contagem de registros por entidade"
+    },
+    "total_records": {
+      "type": "number",
+      "description": "Total de registros no backup"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Automatico",
+        "Manual"
+      ],
+      "default": "Automatico",
+      "description": "Tipo de backup"
+    }
+  },
+  "required": [
+    "date",
+    "file_url"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

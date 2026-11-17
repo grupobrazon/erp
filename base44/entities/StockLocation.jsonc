@@ -1,0 +1,13 @@
+{
+  "name": "StockLocation",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do local de estoque"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

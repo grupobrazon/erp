@@ -1,0 +1,78 @@
+{
+  "name": "RomaneioTrocaDemanda",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "C\u00f3digo do romaneio de troca de demanda (RTD000001) \u2014 gerado automaticamente"
+    },
+    "os_id": {
+      "type": "string",
+      "description": "ID da OS que originou a troca de demanda"
+    },
+    "os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS (cache)"
+    },
+    "sale_id": {
+      "type": "string",
+      "description": "ID da venda vinculada \u00e0 OS"
+    },
+    "sale_order_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido (cache)"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente original (o pedido foi trocado \u2014 o produto vai para o estoque)"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente original (cache)"
+    },
+    "items": {
+      "type": "array",
+      "description": "Itens produzidos que ser\u00e3o transferidos do pedido espec\u00edfico para o estoque da empresa",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data da gera\u00e7\u00e3o do romaneio de troca"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Conclu\u00eddo"
+      ],
+      "default": "Pendente",
+      "description": "Status do romaneio de troca: Pendente (itens ainda em produ\u00e7\u00e3o) ou Conclu\u00eddo (itens recebidos no estoque)"
+    },
+    "generated_by": {
+      "type": "string",
+      "description": "Nome de quem gerou o romaneio (produ\u00e7\u00e3o)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es do romaneio de troca"
+    }
+  },
+  "required": [
+    "code",
+    "date"
+  ]
+}

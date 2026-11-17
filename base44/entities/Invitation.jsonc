@@ -1,0 +1,48 @@
+{
+  "name": "Invitation",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "E-mail do convite enviado"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "Nome completo do usu\u00e1rio convidado"
+    },
+    "role": {
+      "type": "string",
+      "description": "Perfil atribu\u00eddo no convite"
+    },
+    "seller_id": {
+      "type": "string",
+      "description": "ID do vendedor vinculado ao convite (quando o usu\u00e1rio poder\u00e1 fazer vendas)"
+    },
+    "technician_id": {
+      "type": "string",
+      "description": "ID do t\u00e9cnico vinculado ao convite (quando o perfil \u00e9 t\u00e9cnico)"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "URL da foto cadastrada no convite (aplicada ao usu\u00e1rio no primeiro acesso)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Aceito"
+      ],
+      "default": "Pendente",
+      "description": "Status do convite"
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data de envio do convite"
+    }
+  },
+  "required": [
+    "email",
+    "role"
+  ]
+}

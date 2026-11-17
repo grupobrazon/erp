@@ -1,0 +1,103 @@
+{
+  "name": "AccountPayable",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "Descri\u00e7\u00e3o da conta (ex: Compra de c\u00e1psulas, Energia el\u00e9trica)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Fornecedor",
+        "Imposto",
+        "Sal\u00e1rio",
+        "Aluguel",
+        "Energia",
+        "Telefone/Internet",
+        "Material",
+        "Manuten\u00e7\u00e3o",
+        "Log\u00edstica",
+        "Comiss\u00e3o",
+        "Outro"
+      ],
+      "default": "Fornecedor"
+    },
+    "chart_of_account_id": {
+      "type": "string",
+      "description": "ID da conta do plano de contas vinculada"
+    },
+    "chart_of_account_code": {
+      "type": "string",
+      "description": "C\u00f3digo da conta do plano de contas (cache)"
+    },
+    "chart_of_account_name": {
+      "type": "string",
+      "description": "Nome da conta do plano de contas (cache)"
+    },
+    "supplier_name": {
+      "type": "string",
+      "description": "Nome do fornecedor/destinat\u00e1rio"
+    },
+    "supplier_document": {
+      "type": "string",
+      "description": "CPF/CNPJ do fornecedor"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Valor total"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de vencimento"
+    },
+    "payment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do pagamento"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Em Aberto",
+        "Pago",
+        "Cancelado"
+      ],
+      "default": "Em Aberto"
+    },
+    "bank_account_id": {
+      "type": "string",
+      "description": "Conta banc\u00e1ria usada para o pagamento"
+    },
+    "bank_account_name": {
+      "type": "string",
+      "description": "Nome da conta banc\u00e1ria (cache)"
+    },
+    "invoice_number": {
+      "type": "string",
+      "description": "N\u00famero da nota fiscal do fornecedor"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es"
+    },
+    "reconciled_transaction_id": {
+      "type": "string",
+      "description": "ID da transa\u00e7\u00e3o banc\u00e1ria conciliada"
+    },
+    "purchase_order_id": {
+      "type": "string",
+      "description": "ID do pedido de compra que gerou esta conta"
+    },
+    "purchase_order_code": {
+      "type": "string",
+      "description": "C\u00f3digo do pedido de compra (cache)"
+    }
+  },
+  "required": [
+    "description",
+    "amount",
+    "due_date"
+  ]
+}

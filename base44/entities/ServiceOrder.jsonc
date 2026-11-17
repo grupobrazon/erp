@@ -1,0 +1,1115 @@
+{
+  "name": "ServiceOrder",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS (OS000001)"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "sale_id": {
+      "type": "string",
+      "description": "ID da venda que gerou esta OS"
+    },
+    "sale_order_number": {
+      "type": "string",
+      "description": "N\u00famero do pedido (cache)"
+    },
+    "remessa_id": {
+      "type": "string",
+      "description": "ID da remessa que originou esta OS (quando gerada de remessa em vez de venda)"
+    },
+    "remessa_code": {
+      "type": "string",
+      "description": "C\u00f3digo da remessa (cache)"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Expedi\u00e7\u00e3o",
+        "Entrega",
+        "Entrega + Instala\u00e7\u00e3o",
+        "Manuten\u00e7\u00e3o"
+      ],
+      "description": "Tipo da OS baseado na modalidade de entrega da venda"
+    },
+    "delivery_modality": {
+      "type": "string",
+      "description": "Modalidade de entrega da venda (cache)"
+    },
+    "delivery_address": {
+      "type": "object",
+      "properties": {
+        "zip_code": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "technician": {
+      "type": "string",
+      "description": "Nome do t\u00e9cnico respons\u00e1vel"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "service_description": {
+      "type": "string"
+    },
+    "service_detail_types": {
+      "type": "array",
+      "description": "Tipos de servi\u00e7o detalhados (o que ser\u00e1 feito na casa do cliente). Para OS de Manuten\u00e7\u00e3o, preenchido na cria\u00e7\u00e3o da OS para liberar o agendamento.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "service_type_id": {
+            "type": "string"
+          },
+          "service_type_name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "service_detail_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o do detalhamento do servi\u00e7o para o t\u00e9cnico (OS de Manuten\u00e7\u00e3o)"
+    },
+    "has_pending_payment": {
+      "type": "boolean",
+      "default": false,
+      "description": "T\u00e9cnico precisa receber pagamento na entrega/instala\u00e7\u00e3o"
+    },
+    "pending_payment_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor pendente a ser recebido pelo t\u00e9cnico"
+    },
+    "pending_payment_moment": {
+      "type": "string",
+      "description": "Momento do recebimento: Na Entrega ou Na Instala\u00e7\u00e3o"
+    },
+    "technician_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o do vendedor para o t\u00e9cnico (originada do cr_notes da venda)"
+    },
+    "logistics_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00e3o da log\u00edstica para o t\u00e9cnico (preenchida pela log\u00edstica, inicia vazia)"
+    },
+    "received_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor recebido pelo t\u00e9cnico"
+    },
+    "received_method": {
+      "type": "string",
+      "description": "Forma de recebimento"
+    },
+    "received_photo_url": {
+      "type": "string",
+      "description": "Foto do dinheiro/comprovante"
+    },
+    "payment_receipt_url": {
+      "type": "string",
+      "description": "Comprovante de pagamento anexado pelo t\u00e9cnico"
+    },
+    "expedition_label_url": {
+      "type": "string",
+      "description": "URL do PDF com todas as etiquetas de envio (Melhor Envio) \u2014 compatibilidade; ver melhor_envio_labels para detalhes por volume"
+    },
+    "melhor_envio_shipment_id": {
+      "type": "string",
+      "description": "ID do pedido no Melhor Envio (primeiro volume \u2014 compatibilidade)"
+    },
+    "melhor_envio_status": {
+      "type": "string",
+      "description": "Status atual do pedido no Melhor Envio (generated, posted, delivered, canceled, etc.) \u2014 sincronizado automaticamente 2x/dia"
+    },
+    "melhor_envio_status_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da \u00faltima sincroniza\u00e7\u00e3o do status no Melhor Envio"
+    },
+    "melhor_envio_labels": {
+      "type": "array",
+      "description": "Etiquetas geradas por volume no Melhor Envio (uma etiqueta por volume do pedido)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "volume_index": {
+            "type": "number",
+            "description": "N\u00famero do volume (1, 2, 3...)"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "label_tag": {
+            "type": "string",
+            "description": "Identifica\u00e7\u00e3o do volume (Ex: Vol. 1 \u2014 Purificador iPure x2)"
+          },
+          "shipment_id": {
+            "type": "string",
+            "description": "ID do carrinho/envio no Melhor Envio"
+          },
+          "tracking_code": {
+            "type": "string",
+            "description": "C\u00f3digo de rastreio do volume"
+          },
+          "carrier": {
+            "type": "string"
+          },
+          "label_url": {
+            "type": "string",
+            "description": "URL do PDF da etiqueta"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "melhor_envio_canceled_labels": {
+      "type": "array",
+      "description": "Hist\u00f3rico de etiquetas canceladas no Melhor Envio (preservado para auditoria quando uma nova etiqueta \u00e9 gerada)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "volume_index": {
+            "type": "number"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "label_tag": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          },
+          "tracking_code": {
+            "type": "string"
+          },
+          "carrier": {
+            "type": "string"
+          },
+          "label_url": {
+            "type": "string"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "canceled_status": {
+            "type": "string",
+            "description": "Status retornado pelo Melhor Envio (ex: canceled)"
+          },
+          "canceled_at_me": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de cancelamento no Melhor Envio"
+          },
+          "detected_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data em que a Base44 detectou o cancelamento"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Motivo do arquivamento (ex: Cancelada no Melhor Envio)"
+          }
+        }
+      }
+    },
+    "reverse_shipments": {
+      "type": "array",
+      "description": "Envios reversos (coleta/devolu\u00e7\u00e3o) gerados dentro desta OS \u2014 quando o produto chegou errado ao cliente e precisa retornar para a empresa. Cada entrada \u00e9 uma etiqueta reversa independente gerada no Melhor Envio (from=cliente, to=empresa, reverse=true). Dispon\u00edvel mesmo para OS conclu\u00edda.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tracking_code": {
+            "type": "string"
+          },
+          "carrier": {
+            "type": "string"
+          },
+          "label_url": {
+            "type": "string",
+            "description": "URL do PDF com as etiquetas reversas"
+          },
+          "shipment_id": {
+            "type": "string",
+            "description": "ID do carrinho/envio no Melhor Envio"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Motivo da devolu\u00e7\u00e3o (produto errado, defeito, etc.)"
+          },
+          "generated_by": {
+            "type": "string",
+            "description": "Nome de quem gerou a coleta reversa"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status no Melhor Envio (generated, posted, delivered, canceled)"
+          }
+        }
+      }
+    },
+    "carrier": {
+      "type": "string",
+      "description": "Transportadora"
+    },
+    "tracking_code": {
+      "type": "string",
+      "description": "C\u00f3digo de rastreio (primeiro volume \u2014 compatibilidade)"
+    },
+    "materials_used": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "signature_url": {
+      "type": "string"
+    },
+    "tech_checkin_lat": {
+      "type": "number",
+      "description": "Latitude do check-in do t\u00e9cnico na casa do cliente"
+    },
+    "tech_checkin_lng": {
+      "type": "number",
+      "description": "Longitude do check-in do t\u00e9cnico"
+    },
+    "tech_checkin_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do check-in do t\u00e9cnico"
+    },
+    "tech_client_doc_photo": {
+      "type": "string",
+      "description": "Foto do documento do cliente tirada pelo t\u00e9cnico"
+    },
+    "tech_service_photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Fotos do servi\u00e7o realizado pelo t\u00e9cnico"
+    },
+    "tech_completion_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de conclus\u00e3o do servi\u00e7o pelo t\u00e9cnico"
+    },
+    "production_needed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indica que a OS foi enviada para produ\u00e7\u00e3o porque n\u00e3o h\u00e1 estoque"
+    },
+    "production_sent_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "production_started_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "production_forecast_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "production_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "production_notes": {
+      "type": "string"
+    },
+    "production_deadline": {
+      "type": "string",
+      "format": "date"
+    },
+    "production_liberated_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "production_queue_removed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Retirada da fila/tela da Produ\u00e7\u00e3o \u2014 flag exclusiva da Produ\u00e7\u00e3o. N\u00c3O altera o status operacional da OS: a OS apenas deixa de aparecer como pend\u00eancia na fila da Produ\u00e7\u00e3o, permanecendo exatamente na etapa em que est\u00e1 em Ordens de Servi\u00e7o e no restante do sistema."
+    },
+    "production_queue_removed_by": {
+      "type": "string",
+      "description": "Nome de quem retirou a OS da fila da Produ\u00e7\u00e3o"
+    },
+    "production_queue_removed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que a OS foi retirada da fila da Produ\u00e7\u00e3o"
+    },
+    "production_cancellation_requested": {
+      "type": "boolean",
+      "default": false,
+      "description": "Log\u00edstica solicitou cancelamento da produ\u00e7\u00e3o para liberar o pedido para rota (entrega de outro item em estoque). A OS permanece na fila da produ\u00e7\u00e3o at\u00e9 a decis\u00e3o, mas fica liberada para rota."
+    },
+    "production_cancellation_reason": {
+      "type": "string",
+      "description": "Motivo da solicita\u00e7\u00e3o de cancelamento da produ\u00e7\u00e3o (escrito pela log\u00edstica)"
+    },
+    "production_cancellation_requested_by": {
+      "type": "string",
+      "description": "Nome de quem solicitou o cancelamento da produ\u00e7\u00e3o (log\u00edstica)"
+    },
+    "production_cancellation_requested_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da solicita\u00e7\u00e3o de cancelamento da produ\u00e7\u00e3o"
+    },
+    "production_cancellation_decision": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Suspensa",
+        "Continuar para Estoque"
+      ],
+      "default": "Pendente",
+      "description": "Decis\u00e3o da produ\u00e7\u00e3o sobre a solicita\u00e7\u00e3o de cancelamento: Suspensa (item descartado/inutilizado) ou Continuar para Estoque (item finalizado vai para o estoque da empresa, gera romaneio de troca de demanda)"
+    },
+    "production_cancellation_decided_by": {
+      "type": "string",
+      "description": "Nome de quem decidiu o cancelamento da produ\u00e7\u00e3o"
+    },
+    "production_cancellation_decided_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da decis\u00e3o de cancelamento da produ\u00e7\u00e3o"
+    },
+    "production_cancellation_decision_notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es da decis\u00e3o de cancelamento da produ\u00e7\u00e3o"
+    },
+    "troca_demanda_romaneio_id": {
+      "type": "string",
+      "description": "ID do Romaneio de Troca de Demanda gerado quando a produ\u00e7\u00e3o decidiu continuar para estoque"
+    },
+    "production_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "event": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status_history": {
+      "type": "array",
+      "description": "Auditoria de mudan\u00e7as de status (a partir de 09/2026): quem realizou, quando, tela/setor de origem, status anterior e novo. Registros anteriores a 09/2026 podem n\u00e3o ter hist\u00f3rico \u2014 nesses casos a movimenta\u00e7\u00e3o \u00e9 exibida apenas como 'atualizada por outro fluxo', sem inventar autor.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actor": {
+            "type": "string",
+            "description": "Nome de quem realizou a movimenta\u00e7\u00e3o"
+          },
+          "source": {
+            "type": "string",
+            "description": "Tela/setor de origem da movimenta\u00e7\u00e3o (ex: Produ\u00e7\u00e3o, Detalhe da OS \u2014 logistica, Expedi\u00e7\u00e3o \u2014 romaneio digital)"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Observa\u00e7\u00e3o da movimenta\u00e7\u00e3o (ex: motivo da reprova\u00e7\u00e3o pelo financeiro)"
+          },
+          "previous_status": {
+            "type": "string",
+            "description": "Status anterior"
+          },
+          "new_status": {
+            "type": "string",
+            "description": "Novo status"
+          }
+        }
+      }
+    },
+    "financial_approved_by": {
+      "type": "string"
+    },
+    "financial_approval_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora da aprova\u00e7\u00e3o financeira"
+    },
+    "financial_hold_previous_status": {
+      "type": "string",
+      "description": "Status da OS antes de ser recolhida para an\u00e1lise financeira (ajuste de vendas parciais \u2014 usado para restaurar a OS ap\u00f3s a aprova\u00e7\u00e3o do financeiro)"
+    },
+    "financial_hold_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que a OS foi recolhida do fluxo operacional para an\u00e1lise financeira"
+    },
+    "stock_confirmed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data em que a log\u00edstica confirmou a verifica\u00e7\u00e3o de estoque"
+    },
+    "route_sent_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data em que a log\u00edstica enviou a OS para agendamento de rota"
+    },
+    "invoiced": {
+      "type": "boolean",
+      "default": false,
+      "description": "Faturamento realizado"
+    },
+    "invoice_type": {
+      "type": "string",
+      "enum": [
+        "Nota Fiscal",
+        "Nota Simples"
+      ]
+    },
+    "invoice_number": {
+      "type": "string"
+    },
+    "invoice_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "nota_simples_number": {
+      "type": "string"
+    },
+    "nota_simples_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "nfe_transmitted": {
+      "type": "boolean",
+      "default": false
+    },
+    "nfe_status": {
+      "type": "string"
+    },
+    "nfe_ref": {
+      "type": "string"
+    },
+    "nfe_serie": {
+      "type": "string"
+    },
+    "nfe_chave": {
+      "type": "string"
+    },
+    "nfe_danfe_url": {
+      "type": "string"
+    },
+    "nfe_xml_url": {
+      "type": "string",
+      "description": "Caminho do XML da NF-e no FocusNFe (usado para enviar o XML ao Melhor Envio \u2014 exig\u00eancia da Azul Cargo Express)"
+    },
+    "nfe_mensagem_sefaz": {
+      "type": "string"
+    },
+    "nfe_cfop": {
+      "type": "string",
+      "description": "CFOP efetivamente utilizado na NF-e (extra\u00eddo do XML autorizado na FocusNFe \u2014 cache de consulta para relat\u00f3rios)"
+    },
+    "nfe_cancelled": {
+      "type": "boolean",
+      "default": false
+    },
+    "nfe_cancel_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nfe_cancel_reason": {
+      "type": "string"
+    },
+    "nfe_cce_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "correction": {
+            "type": "string"
+          },
+          "protocol": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "nfse_transmitted": {
+      "type": "boolean",
+      "default": false,
+      "description": "NFS-e (servi\u00e7o) transmitida via FocusNFe"
+    },
+    "nfse_status": {
+      "type": "string",
+      "description": "Status da NFS-e (autorizado | processando | erro)"
+    },
+    "nfse_ref": {
+      "type": "string",
+      "description": "Refer\u00eancia da NFS-e no FocusNFe"
+    },
+    "nfse_numero": {
+      "type": "string",
+      "description": "N\u00famero da NFS-e"
+    },
+    "nfse_data": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de emiss\u00e3o da NFS-e"
+    },
+    "nfse_codigo_verificacao": {
+      "type": "string",
+      "description": "C\u00f3digo de verifica\u00e7\u00e3o da NFS-e"
+    },
+    "nfse_url": {
+      "type": "string",
+      "description": "URL da NFS-e (PDF)"
+    },
+    "nfse_mensagem_sefaz": {
+      "type": "string",
+      "description": "Mensagem retornada pela prefeitura/SEFAZ na NFS-e"
+    },
+    "nfse_cancelada": {
+      "type": "boolean",
+      "default": false,
+      "description": "NFS-e cancelada"
+    },
+    "nfse_cancel_data": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do cancelamento da NFS-e"
+    },
+    "nfse_cancel_reason": {
+      "type": "string",
+      "description": "Motivo do cancelamento da NFS-e"
+    },
+    "separation_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "exit_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "separation_signature_url": {
+      "type": "string"
+    },
+    "separation_signed_by": {
+      "type": "string"
+    },
+    "route_region_id": {
+      "type": "string"
+    },
+    "route_region_name": {
+      "type": "string"
+    },
+    "route_zone_id": {
+      "type": "string",
+      "description": "ID da zona de rota (sub-regi\u00e3o) atribu\u00edda automaticamente"
+    },
+    "route_zone_name": {
+      "type": "string",
+      "description": "Nome da zona de rota (cache)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Aprova\u00e7\u00e3o Comercial",
+        "Aprova\u00e7\u00e3o Financeira",
+        "Produ\u00e7\u00e3o/Expedi\u00e7\u00e3o",
+        "Aguardando Produ\u00e7\u00e3o",
+        "Produ\u00e7\u00e3o Iniciada",
+        "Produ\u00e7\u00e3o Liberada",
+        "Aguardando Rota",
+        "Agendamento/Rota",
+        "Faturamento",
+        "Liberado para T\u00e9cnico",
+        "OS T\u00e9cnico",
+        "Em Execu\u00e7\u00e3o",
+        "Conclu\u00edda pelo T\u00e9cnico",
+        "Rota Enviada",
+        "Em Rota",
+        "Atendimento Interrompido",
+        "Aguardando Faturamento - P\u00f3s",
+        "OK - Aprov. Financeira",
+        "Faturada",
+        "Aguardando Faturamento Final",
+        "Etiqueta Gerada",
+        "Separa\u00e7\u00e3o",
+        "Sa\u00edda do Estoque",
+        "Em Transporte",
+        "Conclu\u00edda",
+        "Entregue",
+        "Cancelada",
+        "Aguardando Coleta Reversa",
+        "Em Retorno",
+        "Recebida na Empresa",
+        "Produ\u00e7\u00e3o Suspensa",
+        "Produ\u00e7\u00e3o para Estoque"
+      ],
+      "default": "Aprova\u00e7\u00e3o Comercial",
+      "description": "Status da OS."
+    },
+    "finance_rejected": {
+      "type": "boolean",
+      "default": false,
+      "description": "Reprovado pelo financeiro na aprova\u00e7\u00e3o p\u00f3s-rota \u2014 a OS retorna ao p\u00f3s-venda para an\u00e1lise. O p\u00f3s-venda corrige e reenvia ao financeiro (flag limpa)."
+    },
+    "finance_rejected_reason": {
+      "type": "string",
+      "description": "Motivo da reprova\u00e7\u00e3o pelo financeiro (obrigat\u00f3rio na reprova\u00e7\u00e3o)"
+    },
+    "finance_rejected_by": {
+      "type": "string",
+      "description": "Nome de quem reprovou no financeiro"
+    },
+    "finance_rejected_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da reprova\u00e7\u00e3o pelo financeiro"
+    },
+    "maintenance_id": {
+      "type": "string"
+    },
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_code": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "route_id": {
+      "type": "string",
+      "description": "ID da rota de t\u00e9cnico \u00e0 qual esta OS pertence"
+    },
+    "route_order": {
+      "type": "number",
+      "default": 0,
+      "description": "Ordem da OS dentro da rota"
+    },
+    "pinned_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data fixada manualmente \u2014 o motor de rotas sempre coloca esta OS nesta data"
+    },
+    "pinned_reason": {
+      "type": "string",
+      "description": "Motivo da fixa\u00e7\u00e3o (ex: cliente pediu para remarcar)"
+    },
+    "google_event_id": {
+      "type": "string",
+      "description": "ID do evento no Google Calendar do t\u00e9cnico (sincronizado automaticamente)"
+    },
+    "technician_os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS do T\u00e9cnico (T + c\u00f3digo da OS, ex: TOS000270)"
+    },
+    "technician_os_url": {
+      "type": "string",
+      "description": "Arquivo da OS do t\u00e9cnico anexado"
+    },
+    "freight_diff_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Diferen\u00e7a de frete ao trocar transportadora (p\u00f3s-venda)"
+    },
+    "freight_diff_exempt": {
+      "type": "boolean",
+      "default": false,
+      "description": "Diferen\u00e7a de frete isentada pelo p\u00f3s-venda (empresa absorveu)"
+    },
+    "freight_diff_exempt_value": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor da diferen\u00e7a isentada (para relat\u00f3rios)"
+    },
+    "freight_diff_charged": {
+      "type": "boolean",
+      "default": false,
+      "description": "Diferen\u00e7a de frete cobrada do cliente"
+    },
+    "freight_diff_payment_method": {
+      "type": "string",
+      "description": "Forma de pagamento da diferen\u00e7a cobrada do cliente"
+    },
+    "freight_change_reason": {
+      "type": "string",
+      "description": "Motivo da troca de transportadora"
+    },
+    "original_selected_carrier": {
+      "type": "string",
+      "description": "Transportadora original selecionada pelo vendedor"
+    },
+    "original_selected_service": {
+      "type": "string",
+      "description": "Servi\u00e7o original selecionado pelo vendedor"
+    },
+    "original_freight_value": {
+      "type": "number",
+      "description": "Valor do frete original (selecionado pelo vendedor)"
+    },
+    "freight_changed_by": {
+      "type": "string",
+      "description": "Nome de quem alterou a transportadora (p\u00f3s-vendas)"
+    },
+    "freight_changed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da altera\u00e7\u00e3o da transportadora"
+    },
+    "romaneio_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data em que a OS foi inclu\u00edda em um romaneio de expedi\u00e7\u00e3o (impressa)"
+    },
+    "romaneio_dispatched": {
+      "type": "boolean",
+      "default": false,
+      "description": "OS j\u00e1 foi despachada em um romaneio de expedi\u00e7\u00e3o (sai da lista de pendentes)"
+    },
+    "is_reverse": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indica que esta OS \u00e9 uma OS Reversa (c\u00f3pia da OS original com c\u00f3digo + 'R') para acompanhar a devolu\u00e7\u00e3o/coleta reversa de um produto que chegou errado ou com defeito ao cliente."
+    },
+    "reverse_parent_os_id": {
+      "type": "string",
+      "description": "ID da OS original (pai) que originou esta OS Reversa"
+    },
+    "reverse_parent_os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS original (pai) \u2014 cache"
+    },
+    "reverse_reason": {
+      "type": "string",
+      "description": "Motivo da devolu\u00e7\u00e3o (produto errado, defeito, voltagem errada, etc.)"
+    },
+    "reverse_generated_by": {
+      "type": "string",
+      "description": "Nome de quem gerou a OS Reversa"
+    },
+    "reverse_generated_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que a OS Reversa foi gerada"
+    },
+    "reverse_received": {
+      "type": "boolean",
+      "default": false,
+      "description": "Mercadoria devolvida foi recebida na empresa"
+    },
+    "reverse_received_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do recebimento da mercadoria devolvida na empresa"
+    },
+    "reverse_received_by": {
+      "type": "string",
+      "description": "Nome de quem confirmou o recebimento da mercadoria devolvida"
+    },
+    "reverse_resolution": {
+      "type": "string",
+      "enum": [
+        "Pendente",
+        "Troca",
+        "Cancelamento"
+      ],
+      "default": "Pendente",
+      "description": "Resolu\u00e7\u00e3o da devolu\u00e7\u00e3o: Troca (estornar pro estoque + novo pedido) ou Cancelamento (devolver + cancelar a venda)"
+    },
+    "reverse_resolution_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que a resolu\u00e7\u00e3o foi definida"
+    },
+    "maintenance_subtype": {
+      "type": "string",
+      "enum": [
+        "An\u00e1lise",
+        "Garantia",
+        "Assist\u00eancia T\u00e9cnica"
+      ],
+      "description": "Subtipo da OS de Manuten\u00e7\u00e3o/Garantia: An\u00e1lise (ainda n\u00e3o se sabe se \u00e9 garantia ou cobrada), Garantia (sem custo), Assist\u00eancia T\u00e9cnica (cobrada do cliente)"
+    },
+    "is_mother_os": {
+      "type": "boolean",
+      "default": false,
+      "description": "OS m\u00e3e de Manuten\u00e7\u00e3o/Garantia \u2014 pode gerar OS filhas (expedi\u00e7\u00e3o de pe\u00e7a e/ou visita do t\u00e9cnico)"
+    },
+    "parent_os_id": {
+      "type": "string",
+      "description": "ID da OS m\u00e3e que gerou esta OS filha (expedi\u00e7\u00e3o ou visita do t\u00e9cnico)"
+    },
+    "parent_os_code": {
+      "type": "string",
+      "description": "C\u00f3digo da OS m\u00e3e (cache)"
+    },
+    "analysis_status": {
+      "type": "string",
+      "enum": [
+        "Sem An\u00e1lise",
+        "Em An\u00e1lise",
+        "Convertida"
+      ],
+      "default": "Sem An\u00e1lise",
+      "description": "Status da an\u00e1lise: Em An\u00e1lise (ainda em avalia\u00e7\u00e3o), Convertida (j\u00e1 definida como Garantia ou Assist\u00eancia)"
+    },
+    "analysis_converted_to": {
+      "type": "string",
+      "enum": [
+        "Garantia",
+        "Assist\u00eancia T\u00e9cnica"
+      ],
+      "description": "Para que a OS de An\u00e1lise foi convertida ap\u00f3s avalia\u00e7\u00e3o"
+    },
+    "analysis_converted_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora em que a an\u00e1lise foi convertida"
+    },
+    "analysis_items": {
+      "type": "array",
+      "description": "Itens lan\u00e7ados com valor zerado durante o per\u00edodo de an\u00e1lise (pe\u00e7as enviadas para diagn\u00f3stico sem custo)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "product_code": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "number",
+            "default": 0
+          },
+          "total": {
+            "type": "number",
+            "default": 0
+          }
+        }
+      }
+    },
+    "service_fee_charged": {
+      "type": "number",
+      "default": 0,
+      "description": "Valor do servi\u00e7o cobrado do cliente (quando a an\u00e1lise identificou que n\u00e3o \u00e9 garantia)"
+    },
+    "displacement_fee_charged": {
+      "type": "number",
+      "default": 0,
+      "description": "Taxa de deslocamento cobrada do cliente (quando a an\u00e1lise identificou que n\u00e3o \u00e9 garantia)"
+    },
+    "charge_reason": {
+      "type": "string",
+      "description": "Justificativa da cobran\u00e7a (quando o t\u00e9cnico identificou que n\u00e3o \u00e9 garantia)"
+    },
+    "warranty_flow_status": {
+      "type": "string",
+      "enum": [
+        "Aguardando Recebimento",
+        "Recebido na Empresa",
+        "Aguardando Retorno",
+        "Retornado ao Cliente"
+      ],
+      "description": "Status do fluxo de garantia (recebimento e retorno do produto na empresa)"
+    },
+    "warranty_receipt_method": {
+      "type": "string",
+      "enum": [
+        "Codigo Reverso",
+        "Entrega Pessoal"
+      ],
+      "description": "M\u00e9todo de recebimento do produto na empresa"
+    },
+    "warranty_receipt_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do recebimento do produto na empresa"
+    },
+    "warranty_receipt_by": {
+      "type": "string",
+      "description": "Nome de quem confirmou o recebimento do produto"
+    },
+    "warranty_return_method": {
+      "type": "string",
+      "enum": [
+        "Melhor Envio",
+        "Busca Pessoal"
+      ],
+      "description": "M\u00e9todo de retorno do produto ao cliente"
+    },
+    "warranty_return_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do retorno do produto ao cliente"
+    },
+    "warranty_return_by": {
+      "type": "string",
+      "description": "Nome de quem confirmou o retorno do produto ao cliente"
+    },
+    "warranty_return_label_url": {
+      "type": "string",
+      "description": "URL da etiqueta de envio do retorno (Melhor Envio)"
+    },
+    "warranty_return_tracking_code": {
+      "type": "string",
+      "description": "C\u00f3digo de rastreio do retorno (Melhor Envio)"
+    },
+    "warranty_return_shipment_id": {
+      "type": "string",
+      "description": "ID do shipment no Melhor Envio do retorno"
+    },
+    "warranty_return_carrier": {
+      "type": "string",
+      "description": "Transportadora do retorno (Melhor Envio)"
+    },
+    "warranty_remessa_id": {
+      "type": "string",
+      "description": "ID da Remessa criada para o retorno do produto de garantia"
+    },
+    "warranty_remessa_code": {
+      "type": "string",
+      "description": "C\u00f3digo da Remessa de retorno (cache)"
+    },
+    "rescheduled": {
+      "type": "boolean",
+      "default": false,
+      "description": "OS marcada como Reagendada \u2014 o atendimento foi remarcado e a OS foi liberada da rota anterior, ficando livre para entrar em uma nova rota. O hist\u00f3rico completo fica em reschedule_history (nada \u00e9 apagado)."
+    },
+    "reschedule_reason": {
+      "type": "string",
+      "description": "Motivo do \u00faltimo reagendamento"
+    },
+    "reschedule_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora do \u00faltimo reagendamento"
+    },
+    "reschedule_by": {
+      "type": "string",
+      "description": "Nome de quem registrou o reagendamento"
+    },
+    "reschedule_history": {
+      "type": "array",
+      "description": "Hist\u00f3rico de reagendamentos (append-only). Preserva a rota e o status anteriores \u2014 nunca \u00e9 apagado.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "Tela/fluxo de origem (ex: Revis\u00e3o P\u00f3s-Venda, Agenda de Rotas, Detalhe da OS)"
+          },
+          "previous_route_id": {
+            "type": "string"
+          },
+          "previous_route_code": {
+            "type": "string"
+          },
+          "previous_status": {
+            "type": "string"
+          },
+          "new_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "client_id",
+    "date",
+    "type"
+  ]
+}

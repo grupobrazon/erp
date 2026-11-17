@@ -1,0 +1,143 @@
+{
+  "name": "Promotion",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do programa/promo\u00e7\u00e3o (ex: Programa Cliente VIP Brazon)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Programa VIP",
+        "Promo\u00e7\u00e3o de Desconto",
+        "Campanha Sazonal"
+      ],
+      "default": "Promo\u00e7\u00e3o de Desconto",
+      "description": "Tipo do programa. Programa VIP marca o cliente como VIP no cadastro quando ele aceita o termo."
+    },
+    "campaign_label": {
+      "type": "string",
+      "description": "Nome da campanha de ades\u00e3o (ex: Campanha de Ades\u00e3o: Outubro de 2026)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Objetivo/descri\u00e7\u00e3o resumida do programa"
+    },
+    "benefits": {
+      "type": "string",
+      "description": "Benef\u00edcios concedidos ao cliente que aderir (texto resumido exibido no link de ades\u00e3o)"
+    },
+    "discount_percent": {
+      "type": "number",
+      "default": 0,
+      "description": "Percentual de desconto concedido (ex: 20 = 20%)"
+    },
+    "discount_scope": {
+      "type": "string",
+      "description": "Sobre o que o desconto incide (ex: elemento filtrante/refil compat\u00edvel com o equipamento)"
+    },
+    "promotion_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Prazo de in\u00edcio da promo\u00e7\u00e3o"
+    },
+    "promotion_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Prazo final da promo\u00e7\u00e3o (vazio quando vital\u00edcia)"
+    },
+    "is_lifetime": {
+      "type": "boolean",
+      "default": false,
+      "description": "Promo\u00e7\u00e3o vital\u00edcia \u2014 o benef\u00edcio n\u00e3o tem data final, desde que o cliente cumpra as condi\u00e7\u00f5es de manuten\u00e7\u00e3o"
+    },
+    "adhesion_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "In\u00edcio do prazo para o cliente aderir \u00e0 promo\u00e7\u00e3o"
+    },
+    "adhesion_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Fim do prazo para o cliente aderir \u00e0 promo\u00e7\u00e3o"
+    },
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "Todos os clientes",
+        "Clientes selecionados",
+        "Quantidade limitada"
+      ],
+      "default": "Todos os clientes",
+      "description": "P\u00fablico do termo: todos os clientes, apenas os clientes selecionados pelo vendedor (link gerado manualmente) ou uma quantidade limitada de clientes"
+    },
+    "max_adhesions": {
+      "type": "number",
+      "description": "Quantidade m\u00e1xima de ades\u00f5es aceitas (usado quando target_type = Quantidade limitada)"
+    },
+    "alert_days_before": {
+      "type": "number",
+      "default": 30,
+      "description": "Anteced\u00eancia (dias) para o sistema alertar quando a manuten\u00e7\u00e3o do cliente estiver pr\u00f3xima do vencimento \u2014 parametriza\u00e7\u00e3o dos alertas de manuten\u00e7\u00e3o do programa"
+    },
+    "terms_text": {
+      "type": "string",
+      "description": "Termo de ades\u00e3o e condi\u00e7\u00f5es do programa (texto completo exibido e assinado digitalmente pelo cliente)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Ativa",
+        "Inativa",
+        "Encerrada"
+      ],
+      "default": "Ativa",
+      "description": "Situa\u00e7\u00e3o do programa"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "supervisor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "vendedor"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "pos_vendas"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

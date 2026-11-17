@@ -1,0 +1,41 @@
+{
+  "name": "StockByLocation",
+  "type": "object",
+  "properties": {
+    "product_id": {
+      "type": "string",
+      "description": "ID do produto"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Nome do produto (cache)"
+    },
+    "product_code": {
+      "type": "string",
+      "description": "C\u00f3digo do produto (cache)"
+    },
+    "stock_location_id": {
+      "type": "string",
+      "description": "ID do local de estoque"
+    },
+    "stock_location_name": {
+      "type": "string",
+      "description": "Nome do local de estoque (cache)"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 0,
+      "description": "Saldo atual do produto neste local"
+    },
+    "min_stock": {
+      "type": "number",
+      "default": 0,
+      "description": "Estoque m\u00ednimo neste local (opcional)"
+    }
+  },
+  "required": [
+    "product_id",
+    "stock_location_id",
+    "quantity"
+  ]
+}

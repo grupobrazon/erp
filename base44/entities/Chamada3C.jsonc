@@ -1,0 +1,86 @@
+{
+  "name": "Chamada3C",
+  "type": "object",
+  "properties": {
+    "campanha_3c_id": {
+      "type": "string",
+      "description": "ID da campanha 3C Plus relacionada"
+    },
+    "campanha_name": {
+      "type": "string",
+      "description": "Nome da campanha (cache)"
+    },
+    "client_id": {
+      "type": "string",
+      "description": "ID do cliente chamado (vinculado pelo telefone)"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Nome do cliente (cache)"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefone discado"
+    },
+    "call_status": {
+      "type": "string",
+      "enum": [
+        "Atendida",
+        "N\u00e3o Atendida",
+        "Ocupado",
+        "Caixa Postal",
+        "Inv\u00e1lido",
+        "Outro"
+      ],
+      "description": "Resultado da chamada"
+    },
+    "call_status_raw": {
+      "type": "string",
+      "description": "Status original retornado pelo 3C Plus"
+    },
+    "call_duration": {
+      "type": "number",
+      "default": 0,
+      "description": "Dura\u00e7\u00e3o da chamada em segundos"
+    },
+    "call_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data/hora da chamada"
+    },
+    "agent_name": {
+      "type": "string",
+      "description": "Nome do agente/vendedora que atendeu"
+    },
+    "agent_extension": {
+      "type": "string",
+      "description": "Ramal do agente"
+    },
+    "recording_url": {
+      "type": "string",
+      "description": "URL da grava\u00e7\u00e3o da chamada"
+    },
+    "qualified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Chamada qualificada (gerou interesse/atendimento produtivo)"
+    },
+    "qualification_label": {
+      "type": "string",
+      "description": "R\u00f3tulo de qualifica\u00e7\u00e3o retornado pelo 3C Plus"
+    },
+    "raw_payload": {
+      "type": "object",
+      "description": "Payload completo recebido do webhook do 3C Plus",
+      "additionalProperties": true
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es"
+    }
+  },
+  "required": [
+    "campanha_3c_id",
+    "call_status"
+  ]
+}
