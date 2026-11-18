@@ -6,9 +6,12 @@
 #
 # Variáveis (painel do projeto na Hostinger):
 #   GIT_REF                   branch a publicar (padrão: main)
-#   VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY   (públicas)
-#   SUPABASE_SERVICE_ROLE_KEY, GHL_API_TOKEN, ghl_location_id, GOOGLE_MAPS_API_KEY,
-#   FOCUSNFE_TOKEN, MELHOR_ENVIO_TOKEN, MELHOR_ENVIO_USER_AGENT   (segredos)
+#   VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, BASE44_APP_ID   (públicas)
+#   SUPABASE_SERVICE_ROLE_KEY, BASE44_TOKEN, GHL_API_TOKEN, ghl_location_id,
+#   GOOGLE_MAPS_API_KEY, FOCUSNFE_TOKEN, MELHOR_ENVIO_TOKEN, MELHOR_ENVIO_USER_AGENT (segredos)
+#
+# Atualizar: atualize o projeto no painel. O serviço "compose" copia este arquivo do
+# GitHub para a VPS; se ele mudou, atualize uma segunda vez para valer.
 #
 # O HTTPS fica no Caddy da VPS, que alcança o site pela rede "edge" no nome erp-web:80.
 
@@ -46,7 +49,7 @@ services:
       - deploy-key:/keys
 
   web-build:
-    image: node:20-alpine
+    image: node:22-alpine
     restart: "no"
     depends_on:
       source:
@@ -80,10 +83,44 @@ services:
       FOCUSNFE_TOKEN: ${FOCUSNFE_TOKEN}
       MELHOR_ENVIO_TOKEN: ${MELHOR_ENVIO_TOKEN}
       MELHOR_ENVIO_USER_AGENT: ${MELHOR_ENVIO_USER_AGENT}
+      BASE44_APP_ID: ${BASE44_APP_ID:-}
+      BASE44_APP_URL: ${BASE44_APP_URL:-https://brazon-comercial.base44.app}
     command: ["deno", "run", "--node-modules-dir=none", "--allow-net", "--allow-env", "--allow-read", "--allow-write=/deno-dir", "server/main.ts"]
     volumes:
       - src:/src:ro
       - deno-cache:/deno-dir
+
+  # Ponte Base44 -> Supabase (dados e usuários). Fica parada até BASE44_TOKEN existir.
+  sync:
+    image: denoland/deno:2.9.6
+    restart: unless-stopped
+    depends_on:
+      source:
+        condition: service_completed_successfully
+    working_dir: /src
+    environment:
+      DENO_DIR: /deno-dir
+      SUPABASE_URL: ${VITE_SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      BASE44_APP_ID: ${BASE44_APP_ID:-}
+      BASE44_TOKEN: ${BASE44_TOKEN:-}
+      SYNC_INTERVAL_SECONDS: ${SYNC_INTERVAL_SECONDS:-120}
+    command: ["deno", "run", "--node-modules-dir=none", "--allow-net", "--allow-env", "--allow-read", "--allow-write=/deno-dir", "server/sync.ts"]
+    volumes:
+      - src:/src:ro
+      - deno-cache:/deno-dir
+
+  # Mantém o arquivo do projeto na VPS igual ao do GitHub (deploy/vps-compose.yml).
+  compose:
+    image: busybox:1.36
+    restart: "no"
+    depends_on:
+      source:
+        condition: service_completed_successfully
+    command: ["sh", "-c", "if cmp -s /src/deploy/vps-compose.yml /projeto/docker-compose.yml; then echo 'Arquivo do projeto em dia'; else cp /src/deploy/vps-compose.yml /projeto/docker-compose.yml && echo 'Arquivo do projeto atualizado: atualize de novo para aplicar'; fi"]
+    volumes:
+      - src:/src:ro
+      - /docker/erp:/projeto
 
   web:
     image: nginx:1.27-alpine

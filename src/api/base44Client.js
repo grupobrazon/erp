@@ -86,7 +86,14 @@ const auth = {
   },
 
   async loginViaEmailPassword(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    let { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    // Primeiro acesso de quem vem da Base44: confere a senha lá e traz para cá.
+    if (error && error.message === 'Invalid login credentials') {
+      const migrated = await functions.invoke('legacyLogin', { email, password }).catch(() => null);
+      if (migrated?.data?.ok) {
+        ({ data, error } = await supabase.auth.signInWithPassword({ email, password }));
+      }
+    }
     if (error) throw authError(error, 401);
     return { access_token: data.session?.access_token, user: data.user };
   },
