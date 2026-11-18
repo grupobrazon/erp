@@ -1,0 +1,34 @@
+# Proxy da VPS: único dono das portas 80/443. Distribui os domínios para o ERP
+# (rede edge, erp-web:80) e para o Obsidian (rede do projeto cerebro: auth,
+# obsidian, couchdb). Fica separado para que atualizar um sistema não derrube o outro.
+# A configuração dos domínios está em /docker/proxy/Caddyfile.
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443", "443:443/udp"]
+    environment:
+      OBS_HOST: ${OBS_HOST}
+      DB_HOST: ${DB_HOST}
+      ERP_HOST: ${ERP_HOST:-erp.187-53-121-216.sslip.io}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [edge, cerebro]
+
+# Reaproveita os certificados que já existiam (não pede certificados novos).
+volumes:
+  caddy-data:
+    external: true
+    name: cerebro_caddy-data
+  caddy-config:
+    external: true
+    name: cerebro_caddy-config
+
+networks:
+  edge:
+    external: true
+  cerebro:
+    external: true
+    name: cerebro_default

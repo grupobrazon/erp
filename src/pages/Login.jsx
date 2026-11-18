@@ -8,6 +8,7 @@ import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { useAuthProviders } from "@/lib/useAuthProviders";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -33,7 +34,7 @@ export default function Login() {
     base44.auth.loginWithProvider("google", safeReturnTo());
   };
 
-  const googleEnabled = import.meta.env.VITE_AUTH_GOOGLE === "true";
+  const googleEnabled = useAuthProviders().google === true;
 
   return (
     <AuthLayout
