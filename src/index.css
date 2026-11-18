@@ -1,48 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  /* Identidade ERP Brazon: cores tiradas do logo (azul #0089CB, espuma #9FD6E6). */
   :root {
-    --background: 210 20% 98%;
-    --foreground: 215 25% 12%;
+    --background: 204 50% 97%;          /* água clara #F3F8FB */
+    --foreground: 205 60% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 12%;
+    --card-foreground: 205 60% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 12%;
-    --primary: 199 89% 38%;
+    --popover-foreground: 205 60% 12%;
+    --primary: 200 100% 40%;            /* azul Brazon #0089CB */
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 16% 93%;
-    --secondary-foreground: 215 25% 27%;
-    --muted: 210 14% 95%;
-    --muted-foreground: 215 13% 50%;
-    --accent: 172 66% 40%;
+    --secondary: 204 40% 93%;
+    --secondary-foreground: 205 55% 20%;
+    --muted: 204 35% 94%;
+    --muted-foreground: 205 15% 42%;
+    --accent: 168 75% 31%;              /* mineral */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 51%;
+    --destructive: 0 70% 48%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 18% 89%;
-    --input: 214 18% 89%;
-    --ring: 199 89% 38%;
-    --chart-1: 199 89% 38%;
-    --chart-2: 172 66% 40%;
-    --chart-3: 262 52% 55%;
-    --chart-4: 35 92% 55%;
-    --chart-5: 0 72% 51%;
-    --radius: 0.625rem;
-    --font-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --border: 204 30% 88%;
+    --input: 204 30% 85%;
+    --ring: 200 100% 40%;
+    --chart-1: 200 100% 40%;
+    --chart-2: 168 75% 31%;
+    --chart-3: 194 55% 76%;
+    --chart-4: 36 80% 55%;
+    --chart-5: 0 70% 48%;
+    --radius: 0.75rem;
+    --font-heading: 'Onest', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Onest', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Onest', ui-sans-serif, system-ui, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    --sidebar-background: 215 28% 14%;
-    --sidebar-foreground: 210 20% 90%;
-    --sidebar-primary: 199 89% 48%;
+    --sidebar-background: 204 72% 16%;  /* azul profundo #0B2F47 */
+    --sidebar-foreground: 200 40% 90%;
+    --sidebar-primary: 200 100% 40%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 25% 20%;
-    --sidebar-accent-foreground: 210 20% 90%;
-    --sidebar-border: 215 20% 22%;
-    --sidebar-ring: 199 89% 48%;
+    --sidebar-accent: 204 55% 22%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 204 50% 22%;
+    --sidebar-ring: 194 55% 76%;
+    --brand-foam: 194 55% 76%;          /* espuma #9FD6E6 */
   }
 
   .dark {
@@ -108,6 +110,22 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground font-body antialiased;
+  }
+  /* Números alinhados em coluna nas tabelas e valores. */
+  table, .tabular-nums { font-variant-numeric: tabular-nums; }
+  h1, h2, h3 { letter-spacing: -0.01em; }
+  :focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+
+  /* Login: ondas de água que se abrem uma vez ao carregar. */
+  @keyframes brazon-ripple {
+    from { transform: scale(0.82); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .brazon-ripple { transform-origin: center; animation: brazon-ripple 1.4s cubic-bezier(.2,.7,.2,1) both; }
+  .brazon-ripple-2 { animation-delay: .18s; }
+  .brazon-ripple-3 { animation-delay: .36s; }
+  @media (prefers-reduced-motion: reduce) {
+    .brazon-ripple { animation: none; }
   }
 }

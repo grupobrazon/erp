@@ -33,45 +33,29 @@ export default function Login() {
     base44.auth.loginWithProvider("google", safeReturnTo());
   };
 
+  const googleEnabled = import.meta.env.VITE_AUTH_GOOGLE === "true";
+
   return (
     <AuthLayout
       icon={LogIn}
-      title="Bem-vindo"
-      subtitle="Bem-vindo ao sistema Brazon"
+      title="Entrar"
+      subtitle="Use seu e-mail e senha de acesso da Brazon."
       footer={
         <>
-          Não tem uma conta?{" "}
+          Recebeu um convite?{" "}
           <Link to="/register" className="text-primary font-medium hover:underline">
-            Crie uma
+            Criar seu acesso
           </Link>
         </>
       }
     >
-      <Button
-        variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
-        onClick={handleGoogle}
-      >
-        <GoogleIcon className="w-5 h-5 mr-2" />
-        Continuar com o Google
-      </Button>
-
-      <div className="relative mb-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">OU</span>
-        </div>
-      </div>
-
       {error && (
-        <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
+        <div role="alert" className="mb-5 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
           <Label htmlFor="email">E-mail</Label>
           <div className="relative">
@@ -81,10 +65,10 @@ export default function Login() {
               type="email"
               autoComplete="email"
               autoFocus
-              placeholder="voce@exemplo.com"
+              placeholder="voce@grupobrazon.com.br"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-12 bg-card"
               required
             />
           </div>
@@ -92,8 +76,8 @@ export default function Login() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Senha</Label>
-            <Link to="/forgot-password" className="text-xs text-primary hover:underline">
-              Esqueceu a senha?
+            <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+              Esqueci minha senha
             </Link>
           </div>
           <div className="relative">
@@ -102,25 +86,41 @@ export default function Login() {
               id="password"
               type="password"
               autoComplete="current-password"
-              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-12 bg-card"
               required
             />
           </div>
         </div>
-        <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
+        <Button type="submit" className="w-full h-12 text-base font-medium" disabled={loading}>
           {loading ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Entrando...
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" aria-hidden="true" />
+              Entrando
             </>
           ) : (
             "Entrar"
           )}
         </Button>
       </form>
+
+      {googleEnabled && (
+        <>
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-background px-3 text-muted-foreground">ou</span>
+            </div>
+          </div>
+          <Button variant="outline" className="w-full h-12 font-medium bg-card" onClick={handleGoogle}>
+            <GoogleIcon className="w-5 h-5 mr-2" />
+            Entrar com o Google
+          </Button>
+        </>
+      )}
     </AuthLayout>
   );
 }

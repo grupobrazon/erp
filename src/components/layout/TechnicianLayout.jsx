@@ -3,7 +3,7 @@ import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from 
 import { TabsContext } from "@/lib/TabsContext";
 import { useAuth } from "@/lib/AuthContext";
 import { base44 } from "@/api/base44Client";
-import { Droplets, Home, Route as RouteIcon, Wrench, Bell, LogOut, Navigation } from "lucide-react";
+import { Home, Route as RouteIcon, Wrench, Bell, LogOut, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import Inicio from "@/pages/Inicio";
@@ -29,9 +29,9 @@ function TechnicianHeader() {
     <header className="sticky top-0 z-20 bg-sidebar text-sidebar-foreground border-b border-sidebar-border">
       <div className="px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Droplets className="h-7 w-7 text-sidebar-primary" />
+          <img src="/brazon-logo.png" alt="" className="h-8 w-8" />
           <div>
-            <span className="font-heading font-bold text-base text-sidebar-primary-foreground tracking-tight">BRAZON</span>
+            <span className="font-heading font-semibold text-base text-white">ERP Brazon</span>
             <p className="text-[10px] text-sidebar-foreground/60 -mt-0.5">{user?.full_name || "Técnico"}</p>
           </div>
         </div>

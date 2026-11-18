@@ -4,7 +4,7 @@ import { useTabs } from "@/lib/TabsContext";
 import { menuGroups, groupColors } from "@/lib/menuConfig";
 import { getMenuForRoles } from "@/lib/permissions";
 import {
-  ChevronLeft, ChevronRight, Droplets, ChevronDown, ChevronUp, LogOut
+  ChevronLeft, ChevronRight, ChevronDown, ChevronUp, LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { base44 } from "@/api/base44Client";
@@ -42,15 +42,16 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
         {!collapsed && (
-          <div className="flex items-center gap-2">
-            <Droplets className="h-7 w-7 text-sidebar-primary" />
-            <span className="font-heading font-bold text-lg text-sidebar-primary-foreground tracking-tight">BRAZON</span>
+          <div className="flex items-center gap-2.5">
+            <img src="/brazon-logo.png" alt="" className="h-8 w-8" />
+            <span className="font-heading font-semibold text-base text-white">ERP Brazon</span>
           </div>
         )}
-        {collapsed && <Droplets className="h-7 w-7 text-sidebar-primary mx-auto" />}
+        {collapsed && <img src="/brazon-logo.png" alt="ERP Brazon" className="h-8 w-8 mx-auto" />}
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="p-1 rounded hover:bg-sidebar-accent transition-colors"
+          aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </button>
@@ -81,8 +82,8 @@ export default function Sidebar() {
             const className = cn(
               "relative w-full flex items-center justify-start gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm font-medium transition-all duration-200 text-left",
               isActive
-                ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
-                : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+                ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                : "text-sidebar-foreground/75 hover:text-white hover:bg-sidebar-accent"
             );
             return (
               <button
@@ -100,22 +101,22 @@ export default function Sidebar() {
           const hasActive = isChildActive(group.children);
 
           return (
-            <div key={group.label} className={cn("mb-1 mx-2 rounded-xl overflow-hidden ring-1 ring-white/5", color?.tint)}>
+            <div key={group.label} className={cn("mb-1 mx-2 rounded-xl overflow-hidden", isOpen && "bg-white/[0.04]")}>
               {/* Group header */}
               <button
                 onClick={() => !collapsed && toggleGroup(group.label)}
                 className={cn(
                   "w-full flex items-center justify-start gap-3 px-4 py-2.5 mx-0 text-sm font-semibold transition-all duration-200 text-left",
                   hasActive
-                    ? "text-sidebar-primary"
-                    : "text-sidebar-foreground/50 hover:text-sidebar-foreground"
+                    ? "text-white"
+                    : "text-sidebar-foreground/75 hover:text-white"
                 )}
                 title={collapsed ? group.label : undefined}
               >
                 <group.icon className={cn("h-5 w-5 flex-shrink-0", color?.icon, collapsed && "mx-auto")} />
                 {!collapsed && (
                   <>
-                    <span className={cn("flex-1 text-left uppercase text-xs tracking-wider", color?.icon)}>{group.label}</span>
+                    <span className="flex-1 text-left">{group.label}</span>
                     {isOpen ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                   </>
                 )}
@@ -131,13 +132,13 @@ export default function Sidebar() {
                         key={item.path}
                         onClick={() => openTab({ path: item.path, label: item.label, Icon: item.icon, color })}
                         className={cn(
-                          "w-full flex items-center justify-start gap-3 px-4 py-2 mx-0 rounded-lg text-sm font-medium transition-all duration-200 text-left",
+                          "w-full flex items-center justify-start gap-3 pl-11 pr-4 py-2 mx-0 rounded-lg text-sm font-medium transition-all duration-200 text-left",
                           isActive
-                            ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
-                            : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+                            ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                            : "text-sidebar-foreground/75 hover:text-white hover:bg-sidebar-accent"
                         )}
                       >
-                        <item.icon className="h-5 w-5 flex-shrink-0" />
+                        <item.icon className="h-4 w-4 flex-shrink-0 opacity-80" />
                         <span className="text-left">{item.label}</span>
                       </button>
                     );
