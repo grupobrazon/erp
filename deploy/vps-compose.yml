@@ -89,7 +89,7 @@ services:
       MELHOR_ENVIO_USER_AGENT: ${MELHOR_ENVIO_USER_AGENT}
       BASE44_APP_ID: ${BASE44_APP_ID:-}
       BASE44_APP_URL: ${BASE44_APP_URL:-https://brazon-comercial.base44.app}
-    command: ["deno", "run", "--node-modules-dir=none", "--allow-net", "--allow-env", "--allow-read", "--allow-write=/deno-dir", "server/main.ts"]
+    command: ["deno", "run", "--node-modules-dir=none", "--no-lock", "--allow-net", "--allow-env", "--allow-read", "--allow-write=/deno-dir", "server/main.ts"]
     volumes:
       - src:/src:ro
       - deno-cache:/deno-dir
@@ -109,7 +109,7 @@ services:
       BASE44_APP_ID: ${BASE44_APP_ID:-}
       BASE44_TOKEN: ${BASE44_TOKEN:-}
       SYNC_INTERVAL_SECONDS: ${SYNC_INTERVAL_SECONDS:-120}
-    command: ["deno", "run", "--node-modules-dir=none", "--allow-net", "--allow-env", "--allow-read", "--allow-write=/deno-dir", "server/sync.ts"]
+    command: ["deno", "run", "--node-modules-dir=none", "--no-lock", "--allow-net", "--allow-env", "--allow-read", "--allow-write=/deno-dir", "server/sync.ts"]
     volumes:
       - src:/src:ro
       - deno-cache:/deno-dir
