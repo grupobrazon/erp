@@ -27,6 +27,72 @@ const functions = createFunctions({
   sb: supabase, url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY, functionsUrl: FUNCTIONS_URL,
 });
 
+// ---- Login em popup -------------------------------------------------------
+export const OAUTH_POPUP_PARAM = 'oauth_popup';
+const OAUTH_CHANNEL = 'erp-oauth';
+
+function openCenteredPopup() {
+  const w = 480;
+  const h = 640;
+  const left = Math.max(0, (window.screenX || 0) + ((window.outerWidth || w) - w) / 2);
+  const top = Math.max(0, (window.screenY || 0) + ((window.outerHeight || h) - h) / 2);
+  try {
+    return window.open('about:blank', 'erp-oauth', `popup=yes,width=${w},height=${h},left=${left},top=${top}`);
+  } catch {
+    return null;
+  }
+}
+
+// Espera o popup avisar (BroadcastChannel ou postMessage) ou o próprio Supabase
+// avisar que a sessão foi criada. Termina com erro se o login for cancelado.
+function waitForPopupLogin() {
+  return new Promise((resolve, reject) => {
+    let finished = false;
+    let channel = null;
+    let sub = null;
+    const finish = (err) => {
+      if (finished) return;
+      finished = true;
+      window.removeEventListener('message', onMessage);
+      try { channel?.close(); } catch { /* nada */ }
+      try { sub?.unsubscribe(); } catch { /* nada */ }
+      if (err) reject(err); else resolve();
+    };
+    const handle = (msg) => {
+      if (msg?.type === 'signed-in') finish();
+      else if (msg?.type === 'error') finish(new B44Error(msg.message || 'Login com Google cancelado.', 401));
+    };
+    const onMessage = (e) => {
+      if (e.origin === window.location.origin && e.data?.source === OAUTH_CHANNEL) handle(e.data);
+    };
+    window.addEventListener('message', onMessage);
+    try {
+      channel = new BroadcastChannel(OAUTH_CHANNEL);
+      channel.onmessage = (e) => handle(e.data);
+    } catch { /* navegador sem BroadcastChannel */ }
+    ({ data: { subscription: sub } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) finish();
+    }));
+  });
+}
+
+// Dentro do popup, depois que o Google devolve para o ERP: o Supabase troca o
+// código pela sessão; aqui só avisamos a janela principal e fechamos o popup.
+export const isOAuthPopupReturn = typeof window !== 'undefined'
+  && new URLSearchParams(window.location.search).has(OAUTH_POPUP_PARAM);
+
+if (isOAuthPopupReturn) {
+  const params = new URLSearchParams(window.location.search);
+  supabase.auth.getSession().then(({ data }) => {
+    const message = data?.session
+      ? { source: OAUTH_CHANNEL, type: 'signed-in' }
+      : { source: OAUTH_CHANNEL, type: 'error', message: params.get('error_description') || 'Login não concluído.' };
+    try { const ch = new BroadcastChannel(OAUTH_CHANNEL); ch.postMessage(message); ch.close(); } catch { /* nada */ }
+    try { window.opener?.postMessage(message, window.location.origin); } catch { /* nada */ }
+    setTimeout(() => window.close(), 150);
+  });
+}
+
 // Nomes de provedor usados pelo app -> nomes do Supabase.
 const PROVIDERS = { google: 'google', microsoft: 'azure', facebook: 'facebook', apple: 'apple' };
 
@@ -98,15 +164,32 @@ const auth = {
     return { access_token: data.session?.access_token, user: data.user };
   },
 
+  // Login com Google/Microsoft em janela popup. O ERP continua aberto atrás;
+  // quando o login termina, o popup fecha e o ERP entra.
+  // Se o navegador bloquear o popup, faz o caminho normal (página inteira).
   async loginWithProvider(provider, returnTo = '/') {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const target = absolute(returnTo);
+    const extra = provider === 'microsoft' ? { scopes: 'email' } : {};
+    const popup = openCenteredPopup();
+    if (!popup) {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: PROVIDERS[provider] || provider,
+        options: { redirectTo: target, ...extra },
+      });
+      if (error) throw authError(error);
+      return;
+    }
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: PROVIDERS[provider] || provider,
-      options: {
-        redirectTo: absolute(returnTo),
-        ...(provider === 'microsoft' ? { scopes: 'email' } : {}),
-      },
+      options: { redirectTo: absolute(`/login?${OAUTH_POPUP_PARAM}=1`), skipBrowserRedirect: true, ...extra },
     });
-    if (error) throw authError(error);
+    if (error || !data?.url) {
+      popup.close();
+      throw authError(error || { message: 'Não foi possível abrir o login.' });
+    }
+    popup.location.href = data.url;
+    await waitForPopupLogin();
+    window.location.href = target;
   },
 
   // Cadastro: o Supabase envia um código por e-mail, confirmado em verifyOtp.

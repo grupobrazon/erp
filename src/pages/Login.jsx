@@ -30,8 +30,13 @@ export default function Login() {
     }
   };
 
-  const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", safeReturnTo());
+  const handleGoogle = async () => {
+    setError("");
+    try {
+      await base44.auth.loginWithProvider("google", safeReturnTo());
+    } catch (err) {
+      setError(err.message || "Não foi possível entrar com o Google");
+    }
   };
 
   const googleEnabled = useAuthProviders().google === true;

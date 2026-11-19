@@ -1,80 +1,81 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
+import PageLoading from "@/components/PageLoading";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import { getMenuForRoles } from "@/lib/permissions";
 
-import Inicio from "@/pages/Inicio";
-import Alerts from "@/pages/Alerts";
-import Dashboard from "@/pages/Dashboard";
-import Clients from "@/pages/Clients";
-import ClientDetail from "@/pages/ClientDetail";
-import ClientForm from "@/pages/ClientForm";
-import Products from "@/pages/Products";
-import ProductForm from "@/pages/ProductForm";
-import ProductRegistrations from "@/pages/ProductRegistrations";
-import ServiceRegistrations from "@/pages/ServiceRegistrations";
-import SystemRegistrations from "@/pages/SystemRegistrations";
-import Equipment from "@/pages/Equipment";
-import EquipmentForm from "@/pages/EquipmentForm";
-import Sales from "@/pages/Sales";
-import SalesReport from "@/pages/SalesReport";
-import SaleForm from "@/pages/SaleForm";
-import VendaBalcao from "@/pages/VendaBalcao";
-import Stock from "@/pages/Stock";
-import Maintenances from "@/pages/Maintenances";
-import MaintenancePanel from "@/pages/MaintenancePanel";
-import ServiceOrders from "@/pages/ServiceOrders";
-import RotasTecnico from "@/pages/RotasTecnico";
-import AgendaRotas from "@/pages/AgendaRotas";
-import TesteRotasTecnico from "@/pages/TesteRotasTecnico";
-import TesteAgendaRotas from "@/pages/TesteAgendaRotas";
-import TesteOrdensServico from "@/pages/TesteOrdensServico";
-import ProducaoExpedicao from "@/pages/ProducaoExpedicao";
-import DashboardProducao from "@/pages/DashboardProducao";
-import EstrategiaOportunidade from "@/pages/EstrategiaOportunidade";
-import Faturamento from "@/pages/Faturamento";
-import FaturamentoOS from "@/pages/FaturamentoOS";
-import FaturamentoRemessa from "@/pages/FaturamentoRemessa";
-import Remessas from "@/pages/Remessas";
-import NotasFiscais from "@/pages/NotasFiscais";
-import Renewals from "@/pages/Renewals";
-import Receivables from "@/pages/Receivables";
-import ContasPagar from "@/pages/ContasPagar";
-import ConciliacaoBancaria from "@/pages/ConciliacaoBancaria";
-import Compras from "@/pages/Compras";
-import FinancialRegistrations from "@/pages/FinancialRegistrations";
-import SaleConfirmations from "@/pages/SaleConfirmations";
-import Cancelamentos from "@/pages/Cancelamentos";
-import FreteDashboard from "@/pages/FreteDashboard";
-import Agenda from "@/pages/Agenda";
-import Reports from "@/pages/Reports";
-import Import from "@/pages/Import";
-import Settings from "@/pages/Settings";
-import Backups from "@/pages/Backups";
-import UserManagement from "@/pages/UserManagement";
-import PrecificacaoCustos from "@/pages/PrecificacaoCustos";
-import PrecificacaoConfig from "@/pages/PrecificacaoConfig";
-import PrecificacaoTabela from "@/pages/PrecificacaoTabela";
-import TabelaPrecosVendas from "@/pages/TabelaPrecosVendas";
-import Automacoes from "@/pages/Automacoes";
-import AutomacaoEditor from "@/pages/AutomacaoEditor";
-import Distribuicao from "@/pages/Distribuicao";
-import CurvaABC from "@/pages/CurvaABC";
-import RelatorioDistribuicao from "@/pages/RelatorioDistribuicao";
-import MetasDistribuicao from "@/pages/MetasDistribuicao";
-import Campanhas3C from "@/pages/Campanhas3C";
-import PosAtendimentoPreview from "@/pages/PosAtendimentoPreview";
-import RelatorioMelhorEnvio from "@/pages/RelatorioMelhorEnvio";
-import RelatorioTelefones from "@/pages/RelatorioTelefones";
-import RomaneioExpedicao from "@/pages/RomaneioExpedicao";
-import RomaneioTrocaDemanda from "@/pages/RomaneioTrocaDemanda";
-import ExportarProdutosMelhorEnvio from "@/pages/ExportarProdutosMelhorEnvio";
-import ModoTecnico from "@/pages/ModoTecnico";
-import TecnicoTOSExecucao from "@/pages/TecnicoTOSExecucao";
-import LancamentoRotaManual from "@/pages/LancamentoRotaManual";
-import VisaoGeralLogistica from "@/pages/VisaoGeralLogistica";
-import Promotions from "@/pages/Promotions";
-import CampanhasAtlas from "@/pages/CampanhasAtlas";
+const Inicio = lazy(() => import("@/pages/Inicio"));
+const Alerts = lazy(() => import("@/pages/Alerts"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Clients = lazy(() => import("@/pages/Clients"));
+const ClientDetail = lazy(() => import("@/pages/ClientDetail"));
+const ClientForm = lazy(() => import("@/pages/ClientForm"));
+const Products = lazy(() => import("@/pages/Products"));
+const ProductForm = lazy(() => import("@/pages/ProductForm"));
+const ProductRegistrations = lazy(() => import("@/pages/ProductRegistrations"));
+const ServiceRegistrations = lazy(() => import("@/pages/ServiceRegistrations"));
+const SystemRegistrations = lazy(() => import("@/pages/SystemRegistrations"));
+const Equipment = lazy(() => import("@/pages/Equipment"));
+const EquipmentForm = lazy(() => import("@/pages/EquipmentForm"));
+const Sales = lazy(() => import("@/pages/Sales"));
+const SalesReport = lazy(() => import("@/pages/SalesReport"));
+const SaleForm = lazy(() => import("@/pages/SaleForm"));
+const VendaBalcao = lazy(() => import("@/pages/VendaBalcao"));
+const Stock = lazy(() => import("@/pages/Stock"));
+const Maintenances = lazy(() => import("@/pages/Maintenances"));
+const MaintenancePanel = lazy(() => import("@/pages/MaintenancePanel"));
+const ServiceOrders = lazy(() => import("@/pages/ServiceOrders"));
+const RotasTecnico = lazy(() => import("@/pages/RotasTecnico"));
+const AgendaRotas = lazy(() => import("@/pages/AgendaRotas"));
+const TesteRotasTecnico = lazy(() => import("@/pages/TesteRotasTecnico"));
+const TesteAgendaRotas = lazy(() => import("@/pages/TesteAgendaRotas"));
+const TesteOrdensServico = lazy(() => import("@/pages/TesteOrdensServico"));
+const ProducaoExpedicao = lazy(() => import("@/pages/ProducaoExpedicao"));
+const DashboardProducao = lazy(() => import("@/pages/DashboardProducao"));
+const EstrategiaOportunidade = lazy(() => import("@/pages/EstrategiaOportunidade"));
+const Faturamento = lazy(() => import("@/pages/Faturamento"));
+const FaturamentoOS = lazy(() => import("@/pages/FaturamentoOS"));
+const FaturamentoRemessa = lazy(() => import("@/pages/FaturamentoRemessa"));
+const Remessas = lazy(() => import("@/pages/Remessas"));
+const NotasFiscais = lazy(() => import("@/pages/NotasFiscais"));
+const Renewals = lazy(() => import("@/pages/Renewals"));
+const Receivables = lazy(() => import("@/pages/Receivables"));
+const ContasPagar = lazy(() => import("@/pages/ContasPagar"));
+const ConciliacaoBancaria = lazy(() => import("@/pages/ConciliacaoBancaria"));
+const Compras = lazy(() => import("@/pages/Compras"));
+const FinancialRegistrations = lazy(() => import("@/pages/FinancialRegistrations"));
+const SaleConfirmations = lazy(() => import("@/pages/SaleConfirmations"));
+const Cancelamentos = lazy(() => import("@/pages/Cancelamentos"));
+const FreteDashboard = lazy(() => import("@/pages/FreteDashboard"));
+const Agenda = lazy(() => import("@/pages/Agenda"));
+const Reports = lazy(() => import("@/pages/Reports"));
+const Import = lazy(() => import("@/pages/Import"));
+const Settings = lazy(() => import("@/pages/Settings"));
+const Backups = lazy(() => import("@/pages/Backups"));
+const UserManagement = lazy(() => import("@/pages/UserManagement"));
+const PrecificacaoCustos = lazy(() => import("@/pages/PrecificacaoCustos"));
+const PrecificacaoConfig = lazy(() => import("@/pages/PrecificacaoConfig"));
+const PrecificacaoTabela = lazy(() => import("@/pages/PrecificacaoTabela"));
+const TabelaPrecosVendas = lazy(() => import("@/pages/TabelaPrecosVendas"));
+const Automacoes = lazy(() => import("@/pages/Automacoes"));
+const AutomacaoEditor = lazy(() => import("@/pages/AutomacaoEditor"));
+const Distribuicao = lazy(() => import("@/pages/Distribuicao"));
+const CurvaABC = lazy(() => import("@/pages/CurvaABC"));
+const RelatorioDistribuicao = lazy(() => import("@/pages/RelatorioDistribuicao"));
+const MetasDistribuicao = lazy(() => import("@/pages/MetasDistribuicao"));
+const Campanhas3C = lazy(() => import("@/pages/Campanhas3C"));
+const PosAtendimentoPreview = lazy(() => import("@/pages/PosAtendimentoPreview"));
+const RelatorioMelhorEnvio = lazy(() => import("@/pages/RelatorioMelhorEnvio"));
+const RelatorioTelefones = lazy(() => import("@/pages/RelatorioTelefones"));
+const RomaneioExpedicao = lazy(() => import("@/pages/RomaneioExpedicao"));
+const RomaneioTrocaDemanda = lazy(() => import("@/pages/RomaneioTrocaDemanda"));
+const ExportarProdutosMelhorEnvio = lazy(() => import("@/pages/ExportarProdutosMelhorEnvio"));
+const ModoTecnico = lazy(() => import("@/pages/ModoTecnico"));
+const TecnicoTOSExecucao = lazy(() => import("@/pages/TecnicoTOSExecucao"));
+const LancamentoRotaManual = lazy(() => import("@/pages/LancamentoRotaManual"));
+const VisaoGeralLogistica = lazy(() => import("@/pages/VisaoGeralLogistica"));
+const Promotions = lazy(() => import("@/pages/Promotions"));
+const CampanhasAtlas = lazy(() => import("@/pages/CampanhasAtlas"));
 
 function DashboardGuard() {
   const { user } = useAuth();
@@ -86,6 +87,7 @@ function DashboardGuard() {
 
 export default function AuthenticatedRoutes() {
   return (
+    <Suspense fallback={<PageLoading />}>
     <Routes>
       <Route path="/inicio" element={<Inicio />} />
       <Route path="/alertas" element={<Alerts />} />
@@ -165,5 +167,6 @@ export default function AuthenticatedRoutes() {
       <Route path="/automacoes/editar/:id" element={<AutomacaoEditor />} />
       <Route path="*" element={<Navigate to="/inicio" replace />} />
     </Routes>
+    </Suspense>
   );
 }

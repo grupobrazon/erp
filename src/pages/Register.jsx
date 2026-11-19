@@ -80,8 +80,13 @@ export default function Register() {
     }
   };
 
-  const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", safeReturnTo());
+  const handleGoogle = async () => {
+    setError("");
+    try {
+      await base44.auth.loginWithProvider("google", safeReturnTo());
+    } catch (err) {
+      setError(err.message || "Não foi possível entrar com o Google");
+    }
   };
 
   if (showOtp) {

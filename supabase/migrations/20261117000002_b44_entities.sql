@@ -62,10 +62,10 @@ begin
   foreach v_op in array array['create', 'read', 'update', 'delete'] loop
     v_roles := spec -> 'r' -> v_op;
     if v_roles is not null and jsonb_array_length(v_roles) > 0 then
-      v_cond := format('public.b44_has_any_role(%L::text[])',
+      v_cond := format('(select public.b44_has_any_role(%L::text[]))',
                        (select array_agg(x) from jsonb_array_elements_text(v_roles) x));
     else
-      v_cond := 'public.b44_is_active_user()';
+      v_cond := '(select public.b44_is_active_user())';
     end if;
     v_cmd := case v_op when 'create' then 'insert' when 'read' then 'select' else v_op end;
     if v_cmd = 'insert' then

@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import React, { useMemo, lazy, Suspense } from "react";
+import PageLoading from "@/components/PageLoading";
 import { MemoryRouter, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { TabsContext } from "@/lib/TabsContext";
 import { useAuth } from "@/lib/AuthContext";
@@ -6,12 +7,12 @@ import { base44 } from "@/api/base44Client";
 import { Home, Route as RouteIcon, Wrench, Bell, LogOut, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import Inicio from "@/pages/Inicio";
-import Alerts from "@/pages/Alerts";
-import RotasTecnico from "@/pages/RotasTecnico";
-import ModoTecnico from "@/pages/ModoTecnico";
-import TecnicoTOSExecucao from "@/pages/TecnicoTOSExecucao";
-import LancamentoRotaManual from "@/pages/LancamentoRotaManual";
+const Inicio = lazy(() => import("@/pages/Inicio"));
+const Alerts = lazy(() => import("@/pages/Alerts"));
+const RotasTecnico = lazy(() => import("@/pages/RotasTecnico"));
+const ModoTecnico = lazy(() => import("@/pages/ModoTecnico"));
+const TecnicoTOSExecucao = lazy(() => import("@/pages/TecnicoTOSExecucao"));
+const LancamentoRotaManual = lazy(() => import("@/pages/LancamentoRotaManual"));
 
 const NAV_ITEMS = [
   { path: "/inicio", label: "Início", icon: Home },
@@ -106,6 +107,7 @@ function TechnicianInner() {
         <TechnicianHeader />
         <main className="flex-1 overflow-y-auto pb-20">
           <div className="max-w-md mx-auto p-4">
+            <Suspense fallback={<PageLoading />}>
             <Routes>
               <Route path="/inicio" element={<Inicio />} />
               <Route path="/alertas" element={<Alerts />} />
@@ -115,6 +117,7 @@ function TechnicianInner() {
               <Route path="/lancamento-rota-manual" element={<LancamentoRotaManual />} />
               <Route path="*" element={<Navigate to="/inicio" replace />} />
             </Routes>
+            </Suspense>
           </div>
         </main>
         <TechnicianBottomNav />
