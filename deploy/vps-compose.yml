@@ -71,6 +71,10 @@ services:
       source:
         condition: service_completed_successfully
     working_dir: /src
+    # Todas as variáveis do painel (chaves de GHL, NF-e, Melhor Envio, IA, e-mail, credenciais
+    # das automações...) chegam às funções, como os "secrets" da Base44.
+    env_file:
+      - .env
     environment:
       PORT: "8000"
       DENO_DIR: /deno-dir

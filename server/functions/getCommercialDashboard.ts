@@ -1,7 +1,7 @@
 // Gerado de base44/functions/getCommercialDashboard/entry.ts por tools/port_function.py.
 // Para mudar regra de negócio, altere o original e gere de novo.
 import { createClientFromRequest } from "../b44.ts";
-import { buildCommercialDashboard } from "../../base44/shared/commercialDashboard.ts";
+import { buildCommercialDashboard } from "../shared/commercialDashboard.ts";
 
 // Dash Comercial — totais do mês (contagem, faturamento, ranking por vendedor e perda de oportunidade).
 // As regras de contagem ficam em shared/commercialDashboard.ts para serem as mesmas usadas nas

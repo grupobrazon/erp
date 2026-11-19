@@ -1,7 +1,7 @@
 // Gerado de base44/functions/getCommercialDashboardSales/entry.ts por tools/port_function.py.
 // Para mudar regra de negócio, altere o original e gere de novo.
 import { createClientFromRequest } from "../b44.ts";
-import { buildCommercialDashboard } from "../../base44/shared/commercialDashboard.ts";
+import { buildCommercialDashboard } from "../shared/commercialDashboard.ts";
 
 const SCOPES = ["counted", "resale", "pending", "loss", "quote"];
 

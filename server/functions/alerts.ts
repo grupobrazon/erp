@@ -2,7 +2,7 @@
 // Para mudar regra de negócio, altere o original e gere de novo.
 import { createClientFromRequest } from "../b44.ts";
 
-export default async function handler(req) {
+export default (async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
@@ -112,4 +112,4 @@ export default async function handler(req) {
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-}
+});

@@ -7,7 +7,7 @@ import { createClientFromRequest } from "../b44.ts";
  * (sem vínculo ao Painel de Manutenção). Retorna cada venda órfã + os equipamentos ativos
  * do cliente, para vinculação manual retroativa.
  */
-export default async function handler(req) {
+export default (async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
@@ -85,4 +85,4 @@ export default async function handler(req) {
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-}
+});

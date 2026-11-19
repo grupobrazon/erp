@@ -1,7 +1,7 @@
 // Gerado de base44/functions/checkClientDuplicates/entry.ts por tools/port_function.py.
 // Para mudar regra de negócio, altere o original e gere de novo.
 import { createClientFromRequest } from "../b44.ts";
-import { findClientConflicts } from '../../base44/shared/clientDuplicates.ts';
+import { findClientConflicts } from '../shared/clientDuplicates.ts';
 
 // Validação de contatos do cadastro de cliente: avisa quando CPF/CNPJ, e-mail ou
 // telefone já existem em outro cadastro. Nunca bloqueia — só devolve os candidatos.
