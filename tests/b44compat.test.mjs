@@ -97,3 +97,28 @@ test('functions.invoke devolve {data,status} e lança erro com response', async 
   assert.equal(calls.at(-1).url, '/functions/getCommercialDashboard');
   await assert.rejects(f.invoke('falha'), (err) => err.status === 422 && err.message === 'deu ruim' && err.response.data.error === 'deu ruim');
 });
+
+test('filter com opções devolve páginas { items, has_more, next_cursor }', async () => {
+  const calls = [];
+  const all = Array.from({ length: 5 }, (_, i) => ({ id: `r${i}` }));
+  const sb = {
+    rpc: async (name, args) => { calls.push(args); return { data: all.slice(args.p_skip, args.p_skip + args.p_limit), error: null }; },
+  };
+  const e = createEntities(sb);
+  const p1 = await e.Sale.filter({ stage: 'Orçamento' }, { limit: 2 });
+  assert.deepEqual(p1.items.map((r) => r.id), ['r0', 'r1']);
+  assert.equal(p1.has_more, true);
+  assert.equal(calls[0].p_limit, 3);
+  assert.equal(calls[0].p_sort, '-created_date,id');
+  const p2 = await e.Sale.filter({ stage: 'Orçamento' }, { limit: 2, cursor: p1.next_cursor });
+  assert.deepEqual(p2.items.map((r) => r.id), ['r2', 'r3']);
+  const p3 = await e.Sale.filter({ stage: 'Orçamento' }, { limit: 2, cursor: p2.next_cursor, sort: 'name' });
+  assert.deepEqual(p3.items.map((r) => r.id), ['r4']);
+  assert.equal(p3.has_more, false);
+  assert.equal(p3.next_cursor, null);
+  assert.equal(calls[2].p_sort, 'name,id');
+  const l = await e.Sale.list({ limit: 10, fields: ['id'] });
+  assert.equal(l.items.length, 5);
+  assert.deepEqual(calls[3].p_fields, ['id']);
+  await assert.rejects(e.Sale.filter({}, { cursor: 'lixo' }), (err) => err.status === 400);
+});

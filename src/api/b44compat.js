@@ -80,6 +80,16 @@ async function pool(items, size, worker) {
   return results;
 }
 
+const isOptions = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+const encodeCursor = (offset) => btoa(`o:${offset}`);
+function decodeCursor(cursor) {
+  try {
+    const m = /^o:(\d+)$/.exec(atob(String(cursor)));
+    if (m) return Number(m[1]);
+  } catch { /* cursor inválido */ }
+  throw new B44Error('Cursor de paginação inválido', 400);
+}
+
 function entityHandler(sb, entity) {
   const table = () => sb.from(entity);
   const find = async (query, sort, limit, skip, fields) => {
@@ -95,9 +105,26 @@ function entityHandler(sb, entity) {
     return data || [];
   };
 
+  // Formato por páginas do SDK novo da Base44: filter(query, { limit, cursor, sort, fields })
+  // devolve { items, has_more, next_cursor }. O cursor guarda a posição (offset).
+  const paged = async (query, opts) => {
+    const limit = Math.max(1, Math.min(Number(opts.limit) || 50, 5000));
+    const offset = opts.cursor ? decodeCursor(opts.cursor) : Math.max(0, Number(opts.skip) || 0);
+    const sort = opts.sort ? `${opts.sort},id` : '-created_date,id'; // ordem estável entre páginas
+    const rows = await find(query, sort, limit + 1, offset, opts.fields);
+    const has_more = rows.length > limit;
+    return {
+      items: has_more ? rows.slice(0, limit) : rows,
+      has_more,
+      next_cursor: has_more ? encodeCursor(offset + limit) : null,
+    };
+  };
+
   return {
-    list: (sort, limit, skip, fields) => find({}, sort, limit, skip, fields),
-    filter: (query, sort, limit, skip, fields) => find(query, sort, limit, skip, fields),
+    list: (sort, limit, skip, fields) =>
+      (isOptions(sort) ? paged({}, sort) : find({}, sort, limit, skip, fields)),
+    filter: (query, sort, limit, skip, fields) =>
+      (isOptions(sort) ? paged(query, sort) : find(query, sort, limit, skip, fields)),
 
     async get(id) {
       const { data, error } = await table().select('*').eq('id', String(id)).maybeSingle();
